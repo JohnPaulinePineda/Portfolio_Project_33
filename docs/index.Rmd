@@ -1,0 +1,130 @@
+---
+title: 'R : Exploring and Visualizing Extracted Dimensions from Principal Component Algorithms'
+author: "John Pauline Pineda"
+date: "May 28, 2023"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    theme: readable
+    highlight: tango
+    css: doc.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width=15, fig.height=10)
+```
+# **1. Table of Contents**
+|
+| This document explores methods in visualizing extarcted dimensions visualization methods for  dimensionality reduction algorithms for extracting information using various helpful packages in <mark style="background-color: #CCECFF">**R**</mark>.    
+|
+| Dimensionality reduction is a form of unsupervised learning method aimed at reducing the number of features in a data set while retaining as much information as possible for purposes of lessening the complexity of the model, improving the performance of the learning algorithm or for formulating a more intuitive visualization of the data. The algorithms applied in this study (mostly contained in the <mark style="background-color: #CCECFF">**factoextra**</mark>, <mark style="background-color: #CCECFF">**stats**</mark> and <mark style="background-color: #CCECFF">**FactoMineR**</mark> packages) attempt to transform and project the data onto a lower-dimensional space while preserving important information.
+|
+##  1.1 Sample Data
+|
+```{r section_1.1, warning=FALSE, message=FALSE}
+
+```
+
+##  1.2 Data Quality Assessment
+|
+```{r section_1.2, warning=FALSE, message=FALSE}
+
+```
+
+##  1.3 Data Preprocessing
+
+###  1.3.1 Centering and Scaling
+|
+```{r section_1.3.1, warning=FALSE, message=FALSE}
+
+```
+
+## 1.4 Data Exploration
+|
+```{r section_1.4, warning=FALSE, message=FALSE}
+
+```
+
+## 1.5 Dimensionality Reduction
+
+###  1.5.1 Principal Component Analysis (PCA)
+|
+| [Principal Component Analysis](https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0071325) employs a linear transformation that is based on preserving the most variance in the data using the least number of dimensions. The original data set in a higher dimensional space is mapped to a lower dimension space with maximum variance. The process involves the construction of the covariance matrix of the original data set. The eigenvectors of the covariance matrix of the data are referred to as principal axes, and the projection of the data instances on to these principal axes are called the principal components. Dimensionality reduction is obtained by only retaining the axes (dimensions) that account for most of the variance, and discarding all others.
+|
+```{r section_1.5.1, warning=FALSE, message=FALSE}
+
+```
+
+###  1.5.2 Correspondence Analysis (CA)
+|
+```{r section_1.5.2, warning=FALSE, message=FALSE}
+
+```
+
+###  1.5.3 Multiple Correspondence Analysis (MCA)
+|
+```{r section_1.5.3, warning=FALSE, message=FALSE}
+
+```
+
+###  1.5.4 Factor Analysis of Mixed Data (FAMD)
+|
+```{r section_1.5.4, warning=FALSE, message=FALSE}
+
+```
+
+###  1.5.5 Multiple Factor Analysis (MFA)
+|
+```{r section_1.5.5, warning=FALSE, message=FALSE}
+
+```
+
+##  1.6 Algorithm Comparison Summary
+|
+```{r section_1.6, warning=FALSE, message=FALSE}
+
+```
+
+# **2. References**
+|
+| **[Book]** [Applied Predictive Modeling](http://appliedpredictivemodeling.com/) by Max Kuhn and Kjell Johnson
+| **[Book]** [An Introduction to Statistical Learning](https://www.statlearning.com/) by Gareth James, Daniela Witten, Trevor Hastie and Rob Tibshirani
+| **[Book]** [Multivariate Data Visualization with R](http://lmdvr.r-forge.r-project.org/figures/figures.html) by Deepayan Sarkar
+| **[Book]** [Machine Learning](https://bookdown.org/ssjackson300/Machine-Learning-Lecture-Notes/) by Samuel Jackson
+| **[Book]** [Data Modeling Methods](https://bookdown.org/larget_jacob/data-modeling-methods/) by Jacob Larget
+| **[Book]** [Introduction to R and Statistics](https://saestatsteaching.tech/) by University of Western Australia
+| **[Book]** [Feature Engineering and Selection: A Practical Approach for Predictive Models](http://www.feat.engineering/index.html) by Max Kuhn and Kjell Johnson
+| **[Book]** [Introduction to Research Methods](https://bookdown.org/ejvanholm/Textbook/) by Eric van Holm
+| **[R Package]** [AppliedPredictiveModeling](https://cran.r-project.org/web//packages/AppliedPredictiveModeling/AppliedPredictiveModeling.pdf) by Max Kuhn
+| **[R Package]** [caret](https://topepo.github.io/caret/index.html) by Max Kuhn
+| **[R Package]** [rpart](https://mran.microsoft.com/web/packages/rpart/rpart.pdf) by Terry Therneau and Beth Atkinson
+| **[R Package]** [lattice](https://cran.r-project.org/web/packages/lattice/lattice.pdf) by  Deepayan Sarkar
+| **[R Package]** [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html/) by Hadley Wickham
+| **[R Package]** [moments](https://cran.r-project.org/web/packages/moments/index.html) by Lukasz Komsta and Frederick
+| **[R Package]** [skimr](https://cran.r-project.org/web/packages/skimr/skimr.pdf) by  Elin Waring
+| **[R Package]** [RANN](https://cran.r-project.org/web/packages/RANN/RANN.pdf) by  Sunil Arya, David Mount, Samuel Kemp and Gregory Jefferis
+| **[R Package]** [corrplot](https://cran.r-project.org/web/packages/corrplot/corrplot.pdf) by Taiyun Wei
+| **[R Package]** [tidyverse](https://cran.r-project.org/web/packages/tidyverse/tidyverse.pdf) by Hadley Wickham
+| **[R Package]** [lares](https://cran.rstudio.com/web/packages/lares/lares.pdf) by Bernardo Lares
+| **[R Package]** [DMwR](https://mran.microsoft.com/snapshot/2016-05-02/web/packages/DMwR/DMwR.pdf) by Luis Torgo
+| **[R Package]** [gridExtra](https://cran.r-project.org/web/packages/gridExtra/gridExtra.pdf) by Baptiste Auguie and Anton Antonov
+| **[R Package]** [rattle](https://cran.r-project.org/web/packages/rattle/rattle.pdf) by Graham Williams
+| **[R Package]** [RColorBrewer](https://cran.r-project.org/web//packages/RColorBrewer/RColorBrewer.pdf) by Erich Neuwirth
+| **[R Package]** [stats](https://search.r-project.org/R/refmans/stats/html/00Index.html) by R Core Team
+| **[Article]** [6 Dimensionality Reduction Techniques in R (with Examples)](https://cmdlinetips.com/2022/07/dimensionality-reduction-techniques-in-r/) by CMDLineTips Team
+| **[Article]** [6 Dimensionality Reduction Algorithms With Python](https://machinelearningmastery.com/dimensionality-reduction-algorithms-with-python/) by Jason Brownlee
+| **[Article]** [Introduction to Dimensionality Reduction for Machine Learning](https://machinelearningmastery.com/dimensionality-reduction-for-machine-learning/) by Jason Brownlee
+| **[Article]** [Introduction to Dimensionality Reduction](https://www.geeksforgeeks.org/dimensionality-reduction/) by Geeks For Geeks
+| **[Article]** [Principal Component Analysis for Dimensionality Reduction in Python](https://machinelearningmastery.com/principal-components-analysis-for-dimensionality-reduction-in-python/) by Jason Brownlee
+| **[Article]** [Principal Component Analysis Explained Simply](https://blog.bioturing.com/2018/06/14/principal-component-analysis-explained-simply/) by Linh Ngo
+| **[Article]** [A Step-by-Step Explanation of Principal Component Analysis (PCA)](https://builtin.com/data-science/step-step-explanation-principal-component-analysis) by Zakaria Jaadi
+| **[Article]** [What Is Principal Component Analysis (PCA) and How It Is Used?](https://www.sartorius.com/en/knowledge/science-snippets/what-is-principal-component-analysis-pca-and-how-it-is-used-507186) by Sartorius Team
+| **[Article]** [Principal Components Analysis](https://online.stat.psu.edu/stat508/book/export/html/639) by by Penn State Eberly College of Science
+| **[Article]** [Principal Component Analysis – How PCA Algorithms Works, The Concept, Math and Implementation](https://www.machinelearningplus.com/machine-learning/principal-components-analysis-pca-better-explained/) by Selva Prabhakaran
+| **[Publication]** [Analysis of a Complex of Statistical Variables into Principal Components](https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0071325) by Harold Hotelling (Journal of Educational Psychology)
+| **[Course]** [Applied Data Mining and Statistical Learning](https://online.stat.psu.edu/stat508/) by Penn State Eberly College of Science
+|
+|
+|
+|
