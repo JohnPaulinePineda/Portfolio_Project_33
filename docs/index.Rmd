@@ -22,22 +22,35 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=15, fig.height=10)
 |
 ##  1.1 Sample Data
 |
-| The [<mark style="background-color: #EEEEEE;color: #FF0000">**Oscars**</mark>](https://www.kaggle.com/datasets/unanimad/the-oscar-award), [<mark style="background-color: #EEEEEE;color: #FF0000">**Tomatometer**</mark>](https://www.kaggle.com/datasets/andrezaza/clapper-massive-rotten-tomatoes-movies-and-reviews
-) and , [<mark style="background-color: #EEEEEE;color: #FF0000">**IMDB**</mark>](https://www.kaggle.com/datasets/sankha1998/tmdb-top-10000-popular-movies-dataset
-)  datasets obtained from  <mark style="background-color: #CCECFF">**Kaggle**</mark> package was used for this illustrated example.   
+| The [<mark style="background-color: #EEEEEE;color: #FF0000">**Oscars**</mark>](https://www.kaggle.com/datasets/unanimad/the-oscar-award), [<mark style="background-color: #EEEEEE;color: #FF0000">**Tomatometer**</mark>](https://www.kaggle.com/datasets/andrezaza/clapper-massive-rotten-tomatoes-movies-and-reviews) and [<mark style="background-color: #EEEEEE;color: #FF0000">**IMDB**</mark>](https://www.kaggle.com/datasets/sankha1998/tmdb-top-10000-popular-movies-dataset) datasets obtained from  <mark style="background-color: #CCECFF">**Kaggle**</mark> package was used for this illustrated example.   
 |
 | Preliminary dataset assessment:
 |
-| **[A]** 40 rows (observations)
+| **[A]** 126 rows (observations)
 | 
-| **[B]** 6831 columns (variables)
-|      **[B.1]** 1/6831 label = <span style="color: #FF0000">labs</span> variable (factor)
-|             **[B.1.1]** Category 1 = <span style="color: #FF0000">labs=NSCLC</span> 
-|             **[B.1.2]** Category 2 = <span style="color: #FF0000">labs=RENAL</span> 
-|             **[B.1.3]** Category 3 = <span style="color: #FF0000">labs=MELANOMA</span> 
-|             **[B.1.4]** Category 4 = <span style="color: #FF0000">labs=BREAST</span> 
-|             **[B.1.5]** Category 5 = <span style="color: #FF0000">labs=COLON</span> 
-|      **[B.2]** 6830/6831 descriptors = 6830/6830 numeric
+| **[B]** 19 columns (variables)
+|      **[B.1]** 1/19 instance = <span style="color: #FF0000">Film</span> variable (character)
+|      **[B.2]** 1/19 labels = <span style="color: #FF0000">Year</span> variable (factor)
+|      **[B.3]** 1/19 labels = <span style="color: #FF0000">Picture</span> variable (factor)
+|             **[B.3.1]** Category 1 = <span style="color: #FF0000">Picture=WON</span> 
+|             **[B.3.2]** Category 2 = <span style="color: #FF0000">Picture=NOM</span> 
+|      **[B.4]** 16/19 descriptors = 8/16 numeric + 8/16 factor 
+|             **[B.4.1]** <span style="color: #FF0000">Tomatometer_Critic</span> (numeric)
+|             **[B.4.2]** <span style="color: #FF0000">Tomatometer_Audience</span> (numeric)
+|             **[B.4.3]** <span style="color: #FF0000">Tomatometer_Critic_Audience_Gap</span> (numeric)
+|             **[B.4.4]** <span style="color: #FF0000">IMDB_Critic</span> (numeric)
+|             **[B.4.5]** <span style="color: #FF0000">IMDB_Audience</span> (numeric)
+|             **[B.4.6]** <span style="color: #FF0000">IMDB_Critic_Audience_Gap</span> (numeric)
+|             **[B.4.7]** <span style="color: #FF0000">Nominations_Total</span> (numeric)
+|             **[B.4.8]** <span style="color: #FF0000">Nomination_SuccessRate</span> (numeric)
+|             **[B.4.9]** <span style="color: #FF0000">Genre</span> (factor)
+|             **[B.4.10]** <span style="color: #FF0000">Cinematography</span> (factor)
+|             **[B.4.11]** <span style="color: #FF0000">Directing</span> (factor)
+|             **[B.4.12]** <span style="color: #FF0000">Editing</span> (factor)
+|             **[B.4.13]** <span style="color: #FF0000">Screenplay</span> (factor)
+|             **[B.4.14]** <span style="color: #FF0000">Acting</span> (factor)
+|             **[B.4.15]** <span style="color: #FF0000">Design</span> (factor)
+|             **[B.4.16]** <span style="color: #FF0000">Sound</span> (factor)
 |     
 | 
 ```{r section_1.1, warning=FALSE, message=FALSE}

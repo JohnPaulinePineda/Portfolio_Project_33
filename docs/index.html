@@ -515,21 +515,43 @@ the extracted dimensions.<br />
 <h2>1.1 Sample Data</h2>
 <div class="line-block"><br />
 The <a href="https://www.kaggle.com/datasets/unanimad/the-oscar-award"><mark style="background-color: #EEEEEE;color: #FF0000"><strong>Oscars</strong></mark></a>,
-[<mark style="background-color: #EEEEEE;color: #FF0000"><strong>Tomatometer</strong></mark>](<a href="https://www.kaggle.com/datasets/andrezaza/clapper-massive-rotten-tomatoes-movies-and-reviews" class="uri">https://www.kaggle.com/datasets/andrezaza/clapper-massive-rotten-tomatoes-movies-and-reviews</a></div>
-<p>) and , <a href="https://www.kaggle.com/datasets/sankha1998/tmdb-top-10000-popular-movies-dataset"><mark style="background-color: #EEEEEE;color: #FF0000"><strong>IMDB</strong></mark></a>
+<a href="https://www.kaggle.com/datasets/andrezaza/clapper-massive-rotten-tomatoes-movies-and-reviews"><mark style="background-color: #EEEEEE;color: #FF0000"><strong>Tomatometer</strong></mark></a>
+and <a href="https://www.kaggle.com/datasets/sankha1998/tmdb-top-10000-popular-movies-dataset"><mark style="background-color: #EEEEEE;color: #FF0000"><strong>IMDB</strong></mark></a>
 datasets obtained from
 <mark style="background-color: #CCECFF"><strong>Kaggle</strong></mark>
 package was used for this illustrated example.<br />
-| | Preliminary dataset assessment: | | <strong>[A]</strong> 40 rows
-(observations) | | <strong>[B]</strong> 6831 columns (variables) |
-<strong>[B.1]</strong> 1/6831 label = <span style="color: #FF0000">labs</span> variable (factor) |
-<strong>[B.1.1]</strong> Category 1 = <span style="color: #FF0000">labs=NSCLC</span> | <strong>[B.1.2]</strong>
-Category 2 = <span style="color: #FF0000">labs=RENAL</span> |
-<strong>[B.1.3]</strong> Category 3 = <span style="color: #FF0000">labs=MELANOMA</span> | <strong>[B.1.4]</strong>
-Category 4 = <span style="color: #FF0000">labs=BREAST</span> |
-<strong>[B.1.5]</strong> Category 5 = <span style="color: #FF0000">labs=COLON</span> | <strong>[B.2]</strong>
-6830/6831 descriptors = 6830/6830 numeric |<br />
-|</p>
+<br />
+Preliminary dataset assessment:<br />
+<br />
+<strong>[A]</strong> 126 rows (observations)<br />
+<br />
+<strong>[B]</strong> 19 columns (variables)<br />
+     <strong>[B.1]</strong> 1/19 instance = <span style="color: #FF0000">Film</span> variable (character)<br />
+     <strong>[B.2]</strong> 1/19 labels = <span style="color: #FF0000">Year</span> variable (factor)<br />
+     <strong>[B.3]</strong> 1/19 labels = <span style="color: #FF0000">Picture</span> variable (factor)<br />
+            <strong>[B.3.1]</strong> Category 1 = <span style="color: #FF0000">Picture=WON</span><br />
+            <strong>[B.3.2]</strong> Category 2 = <span style="color: #FF0000">Picture=NOM</span><br />
+     <strong>[B.4]</strong> 16/19 descriptors = 8/16 numeric + 8/16
+factor<br />
+            <strong>[B.4.1]</strong> <span style="color: #FF0000">Tomatometer_Critic</span> (numeric)<br />
+            <strong>[B.4.2]</strong> <span style="color: #FF0000">Tomatometer_Audience</span> (numeric)<br />
+            <strong>[B.4.3]</strong> <span style="color: #FF0000">Tomatometer_Critic_Audience_Gap</span>
+(numeric)<br />
+            <strong>[B.4.4]</strong> <span style="color: #FF0000">IMDB_Critic</span> (numeric)<br />
+            <strong>[B.4.5]</strong> <span style="color: #FF0000">IMDB_Audience</span> (numeric)<br />
+            <strong>[B.4.6]</strong> <span style="color: #FF0000">IMDB_Critic_Audience_Gap</span> (numeric)<br />
+            <strong>[B.4.7]</strong> <span style="color: #FF0000">Nominations_Total</span> (numeric)<br />
+            <strong>[B.4.8]</strong> <span style="color: #FF0000">Nomination_SuccessRate</span> (numeric)<br />
+            <strong>[B.4.9]</strong> <span style="color: #FF0000">Genre</span> (factor)<br />
+            <strong>[B.4.10]</strong> <span style="color: #FF0000">Cinematography</span> (factor)<br />
+            <strong>[B.4.11]</strong> <span style="color: #FF0000">Directing</span> (factor)<br />
+            <strong>[B.4.12]</strong> <span style="color: #FF0000">Editing</span> (factor)<br />
+            <strong>[B.4.13]</strong> <span style="color: #FF0000">Screenplay</span> (factor)<br />
+            <strong>[B.4.14]</strong> <span style="color: #FF0000">Acting</span> (factor)<br />
+            <strong>[B.4.15]</strong> <span style="color: #FF0000">Design</span> (factor)<br />
+            <strong>[B.4.16]</strong> <span style="color: #FF0000">Sound</span> (factor)<br />
+<br />
+</div>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">##################################</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading R libraries</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">##################################</span></span>
