@@ -407,7 +407,7 @@ summary(Oscars.PCA)
 |
 | [Principal Component Analysis](https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0071325) employs a linear transformation that is based on preserving the most variance in the data using the least number of dimensions. The original data set in a higher dimensional space is mapped to a lower dimension space with maximum variance. The process involves the construction of the covariance matrix of the original data set. The eigenvectors of the covariance matrix of the data are referred to as principal axes, and the projection of the data instances on to these principal axes are called the principal components. Dimensionality reduction is obtained by only retaining the axes (dimensions) that account for most of the variance, and discarding all others.
 |
-```{r section_1.5.1, warning=TRUE, message=TRUE}
+```{r section_1.5.1, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset
 ##################################
@@ -431,7 +431,7 @@ DR_PCA <- PCA(SD_PCA[,c(1:6)],
 ##################################
 # Formulating the Scree Plot
 ##################################
-(DR_PCA_ScreePlot <- fviz_eig(DR_PCA, addlabels = TRUE, ylim = c(0, 100)) +
+(DR_PCA_VariableScreePlot <- fviz_eig(DR_PCA, addlabels = TRUE, ylim = c(0, 100)) +
   labs(title = "PCA : Scree Plot",
        subtitle = "Top 2 Principal Components",
        y = "Percentage of Explained Variances",
@@ -456,7 +456,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
 # between the descriptor variables
 # and top principal components
 ##################################
-(DR_PCA_CorrelationCircle <- fviz_pca_var(DR_PCA, 
+(DR_PCA_VariableCorrelationCircle <- fviz_pca_var(DR_PCA, 
                                          col.var = DR_PCA_KMEANS_CLUSTER, 
                                          palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
                                          legend.title = "Cluster") +
@@ -472,7 +472,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
 # of the descriptor variables
 # for the Top 2 principal components
 ##################################
-(DR_PCA_PC1Contributors <- fviz_contrib(DR_PCA, 
+(DR_PCA_PC1VariableContributors <- fviz_contrib(DR_PCA, 
                                  choice = "var", 
                                  axes = 1) +
   labs(title = "PCA : Variable Contribution",
@@ -481,7 +481,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
 
-(DR_PCA_PC2Contributors <- fviz_contrib(DR_PCA, 
+(DR_PCA_PC2VariableContributors <- fviz_contrib(DR_PCA, 
                                  choice = "var", 
                                  axes = 2) +
   labs(title = "PCA : Variable Contribution",
@@ -490,16 +490,8 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
 
-##################################
-# Gathering all PCA plots
-##################################
-grid.arrange(DR_PCA_ScreePlot, 
-             DR_PCA_CorrelationCircle, 
-             DR_PCA_PC1Contributors, 
-             DR_PCA_PC2Contributors, 
-             ncol = 2)
 
-(fviz_pca_ind(DR_PCA,
+(DR_PCA_VariableCorrelationCircleByPicture <- fviz_pca_ind(DR_PCA,
              geom.ind = "text",
              col.ind = SD_PCA$Picture,
              repel = TRUE, 
@@ -511,11 +503,11 @@ grid.arrange(DR_PCA_ScreePlot,
   theme_classic() +
   theme(legend.position="top"))
 
-(fviz_pca_ind(DR_PCA,
-             geom.ind = "point",
-             col.ind = SD_PCA$Picture,
-             addEllipses = TRUE, 
-             legend.title = "Picture") +
+(DR_PCA_VariableCorrelationCircleByYear <- fviz_pca_ind(DR_PCA,
+             geom.ind = "text",
+             col.ind = SD_PCA$Year,
+             repel = TRUE, 
+             legend.title = "Year") +
   labs(title = "PCA : Correlation Circle",
        subtitle = "Principal Components Versus Individuals",
        y = "Principal Component 2",
@@ -523,7 +515,8 @@ grid.arrange(DR_PCA_ScreePlot,
   theme_classic() +
   theme(legend.position="top"))
 
-(fviz_contrib(DR_PCA, 
+
+(DR_PCA_PC1IndividualContributors <- fviz_contrib(DR_PCA, 
               choice = "ind", 
               axes = 1, 
               top = 10) +
@@ -533,7 +526,7 @@ grid.arrange(DR_PCA_ScreePlot,
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
 
-(fviz_contrib(DR_PCA, 
+(DR_PCA_PC2IndividualContributors <- fviz_contrib(DR_PCA, 
               choice = "ind", 
               axes = 2, 
               top = 10) +
