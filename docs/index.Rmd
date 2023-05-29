@@ -1,7 +1,7 @@
 ---
 title: 'R : Exploring and Visualizing Extracted Dimensions from Principal Component Algorithms'
 author: "John Pauline Pineda"
-date: "May 28, 2023"
+date: "June 02, 2023"
 output: 
   html_document:
     toc: true
@@ -16,9 +16,9 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=15, fig.height=10)
 ```
 # **1. Table of Contents**
 |
-| This document explores methods in visualizing extarcted dimensions visualization methods for  dimensionality reduction algorithms for extracting information using various helpful packages in <mark style="background-color: #CCECFF">**R**</mark>.    
+| This document explores methods in visualizing extracted dimensions from principal component algorithms using various helpful packages in <mark style="background-color: #CCECFF">**R**</mark>.    
 |
-| Dimensionality reduction is a form of unsupervised learning method aimed at reducing the number of features in a data set while retaining as much information as possible for purposes of lessening the complexity of the model, improving the performance of the learning algorithm or for formulating a more intuitive visualization of the data. The algorithms applied in this study (mostly contained in the <mark style="background-color: #CCECFF">**factoextra**</mark>, <mark style="background-color: #CCECFF">**stats**</mark> and <mark style="background-color: #CCECFF">**FactoMineR**</mark> packages) attempt to transform and project the data onto a lower-dimensional space while preserving important information.
+| Dimensionality reduction is a form of unsupervised learning method aimed at reducing the number of features in a data set while retaining as much information as possible for purposes of lessening the complexity of the model, improving the performance of the learning algorithm or for formulating a more intuitive visualization of the data. The algorithms applied in this study (mostly contained in the <mark style="background-color: #CCECFF">**factoextra**</mark>, <mark style="background-color: #CCECFF">**stats**</mark> and <mark style="background-color: #CCECFF">**FactoMineR**</mark> packages) attempt to transform and project the data onto a lower-dimensional space while exploring visualization alternatives for the extracted dimensions.
 |
 ##  1.1 Sample Data
 |
