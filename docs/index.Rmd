@@ -431,12 +431,12 @@ DR_PCA <- PCA(SD_PCA.Numeric,
 ##################################
 # Formulating the Scree Plot
 ##################################
-(DR_PCA_ScreePlot <- fviz_eig(DR_PCA, addlabels = TRUE, ylim = c(0, 100))+
+DR_PCA_ScreePlot <- fviz_eig(DR_PCA, addlabels = TRUE, ylim = c(0, 100)) +
   labs(title = "PCA : Scree Plot",
        subtitle = "Top 2 Principal Components",
        y = "Percentage of Explained Variances",
-       x = "Dimensions") +
-  theme_classic())
+       x = "Principal Components") +
+  theme_classic()
 
 ##################################
 # Extracting the PCA active variables
@@ -444,16 +444,60 @@ DR_PCA <- PCA(SD_PCA.Numeric,
 (DR_PCA_VAR <- get_pca_var(DR_PCA))
 
 ##################################
+# Formulating clusters of the
+# PCA active variables
+##################################
+set.seed(123)
+DR_PCA_KMEANS <- kmeans(DR_PCA_VAR$coord, centers=3, nstart=25)
+DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster) 
+
+##################################
 # Extracting the correlation 
 # between the descriptor variables
 # and top principal components
 ##################################
-(DR_PCA_CorrelationCircle <- fviz_pca_var(DR_PCA, col.var = "black")+
+DR_PCA_CorrelationCircle <- fviz_pca_var(DR_PCA, 
+                                         col.var = DR_PCA_KMEANS_CLUSTER, 
+                                         palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
+                                         legend.title = "Cluster") +
   labs(title = "PCA : Correlation Circle",
-       subtitle = "Principal Components Versus Active Variable",
+       subtitle = "Principal Components Versus Predictor Clusters",
        y = "Principal Component 2",
        x = "Principal Component 1") +
-  theme_classic())
+  theme_classic() +
+  theme(legend.position="top")
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 2 principal components
+##################################
+DR_PCA_PC1Contributors <- fviz_contrib(DR_PCA, 
+                                 choice = "var", 
+                                 axes = 1) +
+  labs(title = "PCA : Variable Contribution",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic()
+
+DR_PCA_PC2Contributors <- fviz_contrib(DR_PCA, 
+                                 choice = "var", 
+                                 axes = 2) +
+  labs(title = "PCA : Variable Contribution",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic()
+
+##################################
+# Gathering all PCA plots
+##################################
+grid.arrange(DR_PCA_ScreePlot, 
+             DR_PCA_CorrelationCircle, 
+             DR_PCA_PC1Contributors, 
+             DR_PCA_PC2Contributors, 
+             ncol = 3)
+
+
 
 ```
 
