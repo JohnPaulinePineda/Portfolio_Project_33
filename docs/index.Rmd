@@ -445,6 +445,7 @@ DR_PCA_VAR <- get_pca_var(DR_PCA)
 
 ##################################
 # Extracting the coordinates
+# representing the loadings
 # for the descriptor variables
 ##################################
 DR_PCA_VAR$coord
@@ -585,6 +586,7 @@ DR_PCA_IND <- get_pca_ind(DR_PCA)
 
 ##################################
 # Extracting the coordinates
+# representing the scores
 # for the individuals
 ##################################
 DR_PCA_IND$coord
@@ -683,6 +685,23 @@ DR_PCA_IND$contrib
        x = "Descriptors") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Formulating the Biplot 
+# using the individual scores
+# and descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_PCA_Biplot <- fviz_pca_biplot(DR_PCA, 
+              label="var",
+              habillage = SD_PCA$Picture, 
+              legend.title = "Picture") +
+  labs(title = "PCA : Biplot",
+       subtitle = "Individual Scores versus Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic() +
+  theme(legend.position="top"))
 
 ```
 
