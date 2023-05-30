@@ -407,6 +407,30 @@ summary(Oscars.PCA)
 |
 | [Principal Component Analysis](https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0071325) employs a linear transformation that is based on preserving the most variance in the data using the least number of dimensions. The original data set in a higher dimensional space is mapped to a lower dimension space with maximum variance. The process involves the construction of the covariance matrix of the original data set. The eigenvectors of the covariance matrix of the data are referred to as principal axes, and the projection of the data instances on to these principal axes are called the principal components. Dimensionality reduction is obtained by only retaining the axes (dimensions) that account for most of the variance, and discarding all others.
 |
+| **[A]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
+|      **[A.1]** <span style="color: #FF0000">PC1</span> = 37%
+|      **[A.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 65%
+|      **[A.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 82%
+| 
+| **[B]** With eigenvalues sufficiently greater than 1, only <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> will be used in the subsequent exploratory analysis.
+|      **[B.1]** <span style="color: #FF0000">PC1</span> = 2.22
+|      **[B.1]** <span style="color: #FF0000">PC2</span> = 1.67
+|
+| **[C]** <span style="color: #FF0000">PC1</span> can be characterized by the following descriptor variables, ranked based on importance and statistical significance:
+|      **[C.1]** High <span style="color: #FF0000">Tomatometer_Critic</span>
+|      **[C.2]** High <span style="color: #FF0000">IMDB_Audience</span>
+|      **[C.3]** High <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[C.4]** High <span style="color: #FF0000">IMDB_Critic</span> 
+|      **[C.5]** High <span style="color: #FF0000">Nomination_SuccessRate</span> 
+|      **[C.6]** High <span style="color: #FF0000">Nominations_Total</span>
+| 
+| **[D]** <span style="color: #FF0000">PC2</span> can be characterized by the following descriptor variables, ranked based on importance and statistical significance:
+|      **[D.1]** High <span style="color: #FF0000">IMDB_Critic</span>
+|      **[D.2]** High <span style="color: #FF0000">Tomatometer_Critic</span>
+|      **[D.3]** Low <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[D.4]** Low <span style="color: #FF0000">Tomatometer_Audience</span> 
+|      **[D.5]** Low <span style="color: #FF0000">IMDB_Audience</span> 
+| 
 ```{r section_1.5.1, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset
@@ -430,11 +454,29 @@ DR_PCA <- PCA(SD_PCA[,c(1:6)],
 
 ##################################
 # Formulating the Scree Plot
+# for the variances
 ##################################
-(DR_PCA_VariableScreePlot <- fviz_eig(DR_PCA, addlabels = TRUE, ylim = c(0, 100)) +
-  labs(title = "PCA : Scree Plot",
+(DR_PCA_VarianceScreePlot <- fviz_eig(DR_PCA, 
+                                      addlabels = TRUE, 
+                                      ylim = c(0, 100),
+                                      choice = c("variance")) +
+  labs(title = "PCA : Scree Plot of Explained Variances",
        subtitle = "Top 2 Principal Components",
        y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_PCA_EigenvalueScreePlot <- fviz_eig(DR_PCA, 
+                                      addlabels = TRUE, 
+                                      ylim = c(0, 6),
+                                      choice = c("eigenvalue")) +
+  labs(title = "PCA : Scree Plot of Eigenvalues",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
        x = "Principal Components") +
   theme_classic())
 
