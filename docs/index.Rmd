@@ -441,11 +441,38 @@ DR_PCA <- PCA(SD_PCA[,c(1:6)],
 ##################################
 # Extracting the PCA active variables
 ##################################
-(DR_PCA_VAR <- get_pca_var(DR_PCA))
+DR_PCA_VAR <- get_pca_var(DR_PCA)
+
+##################################
+# Extracting the coordinates
+# for the descriptors
+##################################
+DR_PCA_VAR$coord
+
+##################################
+# Extracting the correlations 
+# between the descriptor variables
+# and principal component dimensions
+##################################
+DR_PCA_VAR$cor
+
+##################################
+# Extracting the quality of representation
+# for the descriptor variables
+# on the factor map 
+##################################
+DR_PCA_VAR$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the descriptor variables
+# to the principal components
+##################################
+DR_PCA_VAR$contrib
 
 ##################################
 # Formulating clusters of the
-# PCA active variables
+# descriptor variables
 ##################################
 set.seed(123)
 DR_PCA_KMEANS <- kmeans(DR_PCA_VAR$coord, centers=3, nstart=25)
@@ -453,7 +480,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
 
 ##################################
 # Extracting the correlation 
-# between the descriptor variables
+# between the descriptors
 # and top principal components
 ##################################
 (DR_PCA_VariableCorrelationCircle <- fviz_pca_var(DR_PCA, 
@@ -461,7 +488,23 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
                                          palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
                                          legend.title = "Cluster") +
   labs(title = "PCA : Correlation Circle",
-       subtitle = "Principal Components Versus Predictor Clusters",
+       subtitle = "Principal Components Versus Descriptor Variable Clusters",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the quality of representation 
+# for the descriptor variables
+# on the factor map 
+##################################
+(DR_PCA_VariableSquaredCorrelationCircle <- fviz_pca_var(DR_PCA, 
+                                         col.var = "cos2", 
+                                         gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                                         legend.title = "Squared Coordinates") +
+  labs(title = "PCA : Squared Correlation Circle",
+       subtitle = "Descriptor Variabble Representation Quality",
        y = "Principal Component 2",
        x = "Principal Component 1") +
   theme_classic() +
@@ -475,7 +518,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
 (DR_PCA_PCVariableContributors <- fviz_contrib(DR_PCA, 
                                  choice = "var", 
                                  axes = 1:2) +
-  labs(title = "PCA : Variable Contribution",
+  labs(title = "PCA : Descriptor Variable Contribution",
        subtitle = "Principal Components 1 and 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -489,7 +532,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
 (DR_PCA_PC1VariableContributors <- fviz_contrib(DR_PCA, 
                                  choice = "var", 
                                  axes = 1) +
-  labs(title = "PCA : Variable Contribution",
+  labs(title = "PCA : Descriptor Variable Contribution",
        subtitle = "Principal Component 1 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -503,7 +546,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
 (DR_PCA_PC2VariableContributors <- fviz_contrib(DR_PCA, 
                                  choice = "var", 
                                  axes = 2) +
-  labs(title = "PCA : Variable Contribution",
+  labs(title = "PCA : Descriptor Variable Contribution",
        subtitle = "Principal Component 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
