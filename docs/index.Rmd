@@ -470,7 +470,21 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
 ##################################
 # Extracting the contribution 
 # of the descriptor variables
-# for the Top 2 principal components
+# for the the Top 1 and 2 principal components
+##################################
+(DR_PCA_PCVariableContributors <- fviz_contrib(DR_PCA, 
+                                 choice = "var", 
+                                 axes = 1:2) +
+  labs(title = "PCA : Variable Contribution",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
 ##################################
 (DR_PCA_PC1VariableContributors <- fviz_contrib(DR_PCA, 
                                  choice = "var", 
@@ -481,6 +495,11 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
 
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
 (DR_PCA_PC2VariableContributors <- fviz_contrib(DR_PCA, 
                                  choice = "var", 
                                  axes = 2) +
@@ -490,32 +509,62 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
 
-
-(DR_PCA_VariableCorrelationCircleByPicture <- fviz_pca_ind(DR_PCA,
+##################################
+# Extracting the correlation 
+# between the individual instances
+# grouped by Picture categories
+# and top principal components
+##################################
+(DR_PCA_IndividualCorrelationCircleByPicture <- fviz_pca_ind(DR_PCA,
              geom.ind = "text",
              col.ind = SD_PCA$Picture,
              repel = TRUE, 
              legend.title = "Picture") +
   labs(title = "PCA : Correlation Circle",
-       subtitle = "Principal Components Versus Individuals",
+       subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
        x = "Principal Component 1") +
   theme_classic() +
   theme(legend.position="top"))
 
-(DR_PCA_VariableCorrelationCircleByYear <- fviz_pca_ind(DR_PCA,
+##################################
+# Extracting the correlation 
+# between the individual instances
+# grouped by Year categories
+# and top principal components
+##################################
+(DR_PCA_IndividualCorrelationCircleByYear <- fviz_pca_ind(DR_PCA,
              geom.ind = "text",
              col.ind = SD_PCA$Year,
              repel = TRUE, 
              legend.title = "Year") +
   labs(title = "PCA : Correlation Circle",
-       subtitle = "Principal Components Versus Individuals",
+       subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
        x = "Principal Component 1") +
   theme_classic() +
   theme(legend.position="top"))
 
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_PCA_PCIndividualContributors <- fviz_contrib(DR_PCA, 
+              choice = "ind", 
+              axes = 1:2, 
+              top = 10) +
+  labs(title = "PCA : Individual Contribution",
+       subtitle = "Principal Components 1 ad 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
 
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
 (DR_PCA_PC1IndividualContributors <- fviz_contrib(DR_PCA, 
               choice = "ind", 
               axes = 1, 
@@ -526,6 +575,11 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
 
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
 (DR_PCA_PC2IndividualContributors <- fviz_contrib(DR_PCA, 
               choice = "ind", 
               axes = 2, 
