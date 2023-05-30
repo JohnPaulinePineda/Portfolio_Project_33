@@ -445,7 +445,7 @@ DR_PCA_VAR <- get_pca_var(DR_PCA)
 
 ##################################
 # Extracting the coordinates
-# for the descriptors
+# for the descriptor variables
 ##################################
 DR_PCA_VAR$coord
 
@@ -480,7 +480,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
 
 ##################################
 # Extracting the correlation 
-# between the descriptors
+# between the descriptor variables
 # and top principal components
 ##################################
 (DR_PCA_VariableCorrelationCircle <- fviz_pca_var(DR_PCA, 
@@ -525,6 +525,16 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
 
 ##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+DR_PCA_VariableContributionTest <- dimdesc(DR_PCA, 
+                                           axes = c(1,2), 
+                                           proba = 0.05)
+
+##################################
 # Extracting the contribution 
 # of the descriptor variables
 # for the Top 1 principal component
@@ -539,6 +549,14 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
 
 ##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+DR_PCA_VariableContributionTest$Dim.1
+
+##################################
 # Extracting the contribution 
 # of the descriptor variables
 # for the Top 2 principal component
@@ -551,6 +569,39 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
        x = "Descriptors") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+DR_PCA_VariableContributionTest$Dim.2
+
+##################################
+# Extracting the PCA active individuals
+##################################
+DR_PCA_IND <- get_pca_ind(DR_PCA)
+
+##################################
+# Extracting the coordinates
+# for the individuals
+##################################
+DR_PCA_IND$coord
+
+##################################
+# Extracting the quality of representation
+# for the individuals
+# on the factor map 
+##################################
+DR_PCA_IND$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the individuals
+# to the principal components
+##################################
+DR_PCA_IND$contrib
 
 ##################################
 # Extracting the correlation 
