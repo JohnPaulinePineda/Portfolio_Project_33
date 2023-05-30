@@ -416,20 +416,20 @@ summary(Oscars.PCA)
 |      **[B.1]** <span style="color: #FF0000">PC1</span> = 2.22
 |      **[B.1]** <span style="color: #FF0000">PC2</span> = 1.67
 |
-| **[C]** <span style="color: #FF0000">PC1</span> can be characterized by the following descriptor variables, ranked based on importance and statistical significance:
-|      **[C.1]** High <span style="color: #FF0000">Tomatometer_Critic</span>
-|      **[C.2]** High <span style="color: #FF0000">IMDB_Audience</span>
-|      **[C.3]** High <span style="color: #FF0000">Tomatometer_Audience</span>
-|      **[C.4]** High <span style="color: #FF0000">IMDB_Critic</span> 
-|      **[C.5]** High <span style="color: #FF0000">Nomination_SuccessRate</span> 
-|      **[C.6]** High <span style="color: #FF0000">Nominations_Total</span>
+| **[C]** <span style="color: #FF0000">PC1</span> can be characterized by the following descriptor variables, ranked based on contribution and statistical significance:
+|      **[C.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 23.09%
+|      **[C.2]** High <span style="color: #FF0000">IMDB_Audience</span> = 22.92%
+|      **[C.3]** High <span style="color: #FF0000">Tomatometer_Audience</span> = 19.56%
+|      **[C.4]** High <span style="color: #FF0000">IMDB_Critic</span> = 14.87%
+|      **[C.5]** High <span style="color: #FF0000">Nomination_SuccessRate</span> = 13.73%
+|      **[C.6]** High <span style="color: #FF0000">Nominations_Total</span> = 5.82%
 | 
 | **[D]** <span style="color: #FF0000">PC2</span> can be characterized by the following descriptor variables, ranked based on importance and statistical significance:
-|      **[D.1]** High <span style="color: #FF0000">IMDB_Critic</span>
-|      **[D.2]** High <span style="color: #FF0000">Tomatometer_Critic</span>
-|      **[D.3]** Low <span style="color: #FF0000">Nomination_SuccessRate</span>
-|      **[D.4]** Low <span style="color: #FF0000">Tomatometer_Audience</span> 
-|      **[D.5]** Low <span style="color: #FF0000">IMDB_Audience</span> 
+|      **[D.1]** High <span style="color: #FF0000">IMDB_Critic</span> = 36.44%
+|      **[D.2]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 22.50%
+|      **[D.3]** Low <span style="color: #FF0000">IMDB_Audience</span> = 16.37
+|      **[D.4]** Low <span style="color: #FF0000">Tomatometer_Audience</span> = 15.68%
+|      **[D.5]** Low <span style="color: #FF0000">Nomination_SuccessRate</span> = 8.54%
 | 
 ```{r section_1.5.1, warning=FALSE, message=FALSE}
 ##################################
@@ -448,7 +448,7 @@ DR_PCA <- PCA(SD_PCA[,c(1:6)],
               graph = FALSE)
 
 ##################################
-# Obtaining the PCA Eigenvalues
+# Obtaining the PCA eigenvalues
 ##################################
 (DR_PCA_EV <- get_eigenvalue(DR_PCA))
 
@@ -481,7 +481,8 @@ DR_PCA <- PCA(SD_PCA[,c(1:6)],
   theme_classic())
 
 ##################################
-# Extracting the PCA active variables
+# Extracting the PCA 
+# descriptor variable loadings
 ##################################
 DR_PCA_VAR <- get_pca_var(DR_PCA)
 
@@ -622,7 +623,7 @@ DR_PCA_VariableContributionTest$Dim.1
 DR_PCA_VariableContributionTest$Dim.2
 
 ##################################
-# Extracting the PCA active individuals
+# Extracting the PCA individual scores
 ##################################
 DR_PCA_IND <- get_pca_ind(DR_PCA)
 
@@ -631,21 +632,21 @@ DR_PCA_IND <- get_pca_ind(DR_PCA)
 # representing the scores
 # for the individuals
 ##################################
-DR_PCA_IND$coord
+DR_PCA_IND$coord[,c("Dim.1","Dim.2")]
 
 ##################################
 # Extracting the quality of representation
 # for the individuals
 # on the factor map 
 ##################################
-DR_PCA_IND$cos2
+DR_PCA_IND$cos2[,c("Dim.1","Dim.2")]
 
 ##################################
 # Extracting the contributions 
 # (in percentage) of the individuals
 # to the principal components
 ##################################
-DR_PCA_IND$contrib
+DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
 
 ##################################
 # Extracting the correlation 
