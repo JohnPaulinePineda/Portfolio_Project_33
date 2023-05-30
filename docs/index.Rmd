@@ -427,7 +427,7 @@ summary(Oscars.PCA)
 | **[D]** <span style="color: #FF0000">PC2</span> can be characterized by the following descriptor variables, ranked based on importance and statistical significance:
 |      **[D.1]** High <span style="color: #FF0000">IMDB_Critic</span> = 36.44%
 |      **[D.2]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 22.50%
-|      **[D.3]** Low <span style="color: #FF0000">IMDB_Audience</span> = 16.37
+|      **[D.3]** Low <span style="color: #FF0000">IMDB_Audience</span> = 16.37%
 |      **[D.4]** Low <span style="color: #FF0000">Tomatometer_Audience</span> = 15.68%
 |      **[D.5]** Low <span style="color: #FF0000">Nomination_SuccessRate</span> = 8.54%
 | 
@@ -548,7 +548,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
                                          gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
                                          legend.title = "Squared Coordinates") +
   labs(title = "PCA : Squared Correlation Circle",
-       subtitle = "Descriptor Variabble Representation Quality",
+       subtitle = "Descriptor Variable Representation Quality",
        y = "Principal Component 2",
        x = "Principal Component 1") +
   theme_classic() +
