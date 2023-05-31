@@ -565,7 +565,7 @@ DR_PCA <- PCA(SD_PCA[,c(1:6)],
                                       addlabels = TRUE, 
                                       ylim = c(0, 100),
                                       choice = c("variance")) +
-  labs(title = "PCA : Scree Plot of Explained Variances",
+  labs(title = "Principal Component Analysis : Scree Plot of Explained Variances",
        subtitle = "Top 2 Principal Components",
        y = "Percentage of Explained Variances",
        x = "Principal Components") +
@@ -579,7 +579,7 @@ DR_PCA <- PCA(SD_PCA[,c(1:6)],
                                       addlabels = TRUE, 
                                       ylim = c(0, 6),
                                       choice = c("eigenvalue")) +
-  labs(title = "PCA : Scree Plot of Eigenvalues",
+  labs(title = "Principal Component Analysis : Scree Plot of Eigenvalues",
        subtitle = "Top 2 Principal Components",
        y = "Eigenvalues",
        x = "Principal Components") +
@@ -628,7 +628,7 @@ DR_PCA_VAR$contrib
                                          col.var = "cos2", 
                                          gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
                                          legend.title = "Squared Coordinates") +
-  labs(title = "PCA : Squared Correlation Circle",
+  labs(title = "Principal Component Analysis : Squared Correlation Circle",
        subtitle = "Descriptor Variable Representation Quality",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -652,7 +652,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
                                          col.var = DR_PCA_KMEANS_CLUSTER, 
                                          palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
                                          legend.title = "Cluster") +
-  labs(title = "PCA : Correlation Circle",
+  labs(title = "Principal Component Analysis : Correlation Circle",
        subtitle = "Principal Components Versus Descriptor Variable Clusters",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -667,7 +667,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
 (DR_PCA_PCVariableContributors <- fviz_contrib(DR_PCA, 
                                  choice = "var", 
                                  axes = 1:2) +
-  labs(title = "PCA : Descriptor Variable Contribution",
+  labs(title = "Principal Component Analysis : Descriptor Variable Contribution",
        subtitle = "Principal Components 1 and 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -691,7 +691,7 @@ DR_PCA_VariableContributionTest <- dimdesc(DR_PCA,
 (DR_PCA_PC1VariableContributors <- fviz_contrib(DR_PCA, 
                                  choice = "var", 
                                  axes = 1) +
-  labs(title = "PCA : Descriptor Variable Contribution",
+  labs(title = "Principal Component Analysis : Descriptor Variable Contribution",
        subtitle = "Principal Component 1 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -713,7 +713,7 @@ DR_PCA_VariableContributionTest$Dim.1
 (DR_PCA_PC2VariableContributors <- fviz_contrib(DR_PCA, 
                                  choice = "var", 
                                  axes = 2) +
-  labs(title = "PCA : Descriptor Variable Contribution",
+  labs(title = "Principal Component Analysis : Descriptor Variable Contribution",
        subtitle = "Principal Component 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -765,7 +765,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
              repel = TRUE, 
              legend.title = "Picture",
               addEllipses = TRUE) +
-  labs(title = "PCA : Correlation Circle",
+  labs(title = "Principal Component Analysis : Correlation Circle",
        subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -784,7 +784,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
              repel = TRUE, 
              legend.title = "Year",
               addEllipses = TRUE) +
-  labs(title = "PCA : Correlation Circle",
+  labs(title = "Principal Component Analysis : Correlation Circle",
        subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -800,7 +800,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
               choice = "ind", 
               axes = 1:2, 
               top = 10) +
-  labs(title = "PCA : Individual Contribution",
+  labs(title = "Principal Component Analysis : Individual Contribution",
        subtitle = "Principal Components 1 ad 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -815,7 +815,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
               choice = "ind", 
               axes = 1, 
               top = 10) +
-  labs(title = "PCA : Individual Contribution",
+  labs(title = "Principal Component Analysis : Individual Contribution",
        subtitle = "Principal Component 1 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -830,7 +830,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
               choice = "ind", 
               axes = 2, 
               top = 10) +
-  labs(title = "PCA : Individual Contribution",
+  labs(title = "Principal Component Analysis : Individual Contribution",
        subtitle = "Principal Component 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -847,7 +847,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
               habillage = SD_PCA$Picture, 
               legend.title = "Picture",
               addEllipses = TRUE) +
-  labs(title = "PCA : Biplot",
+  labs(title = "Principal Component Analysis : Biplot",
        subtitle = "Individual Scores versus Descriptor Variable Loadings",
        x = "Principal Component 1",
        y = "Principal Component 2") +
@@ -895,7 +895,7 @@ DR_CA_Cinematography <- CA(SD_CA_Cinematography,
                                                     addlabels = TRUE, 
                                                     ylim = c(0, 100),
                                                     choice = c("variance")) +
-  labs(title = "CA : Scree Plot of Explained Variances",
+  labs(title = "Correspondence Analysis : Scree Plot of Explained Variances (Cinematography)",
        subtitle = "Top 2 Principal Components",
        y = "Percentage of Explained Variances",
        x = "Principal Components") +
@@ -909,7 +909,7 @@ DR_CA_Cinematography <- CA(SD_CA_Cinematography,
                                                       addlabels = TRUE,
                                                       ylim = c(0, 6),
                                                       choice = c("eigenvalue")) +
-  labs(title = "CA : Scree Plot of Eigenvalues",
+  labs(title = "Correspondence Analysis : Scree Plot of Eigenvalues (Cinematography)",
        subtitle = "Top 2 Principal Components",
        y = "Eigenvalues",
        x = "Principal Components") +
@@ -950,7 +950,7 @@ DR_CA_Cinematography_ROW$contrib
 (DR_CA_Cinematography_ROW_PCVariableContributors <- fviz_contrib(DR_CA_Cinematography, 
                                                              choice = "row", 
                                                              axes = 1:2) +
-  labs(title = "CA : Row Descriptor Variable Contribution",
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Cinematography)",
        subtitle = "Principal Components 1 and 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -964,7 +964,7 @@ DR_CA_Cinematography_ROW$contrib
 (DR_CA_Cinematography_ROW_PC1VariableContributors <- fviz_contrib(DR_CA_Cinematography, 
                                                              choice = "row", 
                                                              axes = 1) +
-  labs(title = "CA : Row Descriptor Variable Contribution",
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Cinematography)",
        subtitle = "Principal Component 1 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -978,7 +978,7 @@ DR_CA_Cinematography_ROW$contrib
 (DR_CA_Cinematography_ROW_PC2VariableContributors <- fviz_contrib(DR_CA_Cinematography, 
                                                              choice = "row", 
                                                              axes = 2) +
-  labs(title = "CA : Row Descriptor Variable Contribution",
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Cinematography)",
        subtitle = "Principal Component 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -1019,7 +1019,7 @@ DR_CA_Cinematography_COL$contrib
 (DR_CA_Cinematography_COL_PCVariableContributors <- fviz_contrib(DR_CA_Cinematography, 
                                                              choice = "col", 
                                                              axes = 1:2) +
-  labs(title = "CA : Column Descriptor Variable Contribution",
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Cinematography)",
        subtitle = "Principal Components 1 and 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -1033,7 +1033,7 @@ DR_CA_Cinematography_COL$contrib
 (DR_CA_Cinematography_COL_PC1VariableContributors <- fviz_contrib(DR_CA_Cinematography, 
                                                              choice = "col", 
                                                              axes = 1) +
-  labs(title = "CA : Column Descriptor Variable Contribution",
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Cinematography)",
        subtitle = "Principal Component 1 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -1047,7 +1047,7 @@ DR_CA_Cinematography_COL$contrib
 (DR_CA_Cinematography_COL_PC2VariableContributors <- fviz_contrib(DR_CA_Cinematography, 
                                                              choice = "col", 
                                                              axes = 2) +
-  labs(title = "CA : Col Descriptor Variable Contribution",
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Cinematography)",
        subtitle = "Principal Component 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
@@ -1063,7 +1063,7 @@ DR_CA_Cinematography_COL$contrib
               label="all",
               geom = "text",
               repel = TRUE) +
-  labs(title = "CA : Symmetric Biplot",
+  labs(title = "Correspondence Analysis : Symmetric Biplot (Cinematography)",
        subtitle = "Row versus Column Descriptor Variable Loadings",
        x = "Principal Component 1",
        y = "Principal Component 2") +
@@ -1080,7 +1080,7 @@ DR_CA_Cinematography_COL$contrib
               geom = "text",
               repel = TRUE,
               map = "symbiplot") +
-  labs(title = "CA : Asymmetric Biplot",
+  labs(title = "Correspondence Analysis : Asymmetric Biplot (Cinematography)",
        subtitle = "Row versus Column Descriptor Variable Loadings",
        x = "Principal Component 1",
        y = "Principal Component 2") +
