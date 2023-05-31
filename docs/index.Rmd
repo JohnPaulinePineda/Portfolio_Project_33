@@ -424,7 +424,7 @@ summary(Oscars.PCA)
 |      **[C.5]** High <span style="color: #FF0000">Nomination_SuccessRate</span> = 13.73%
 |      **[C.6]** High <span style="color: #FF0000">Nominations_Total</span> = 5.82%
 | 
-| **[D]** <span style="color: #FF0000">PC2</span> can be described as having high critic scores but low audience scores and oscar wins, or having low critic scores but high audience scores and oscar wins, as characterized by the following descriptor variables, ranked based on importance and statistical significance:
+| **[D]** <span style="color: #FF0000">PC2</span> can be described as having high critic scores but low audience scores and oscar winnability rate, or having low critic scores but high audience scores and oscar winnability rate, as characterized by the following descriptor variables, ranked based on importance and statistical significance:
 |      **[D.1]** High <span style="color: #FF0000">IMDB_Critic</span> = 36.44%
 |      **[D.2]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 22.50%
 |      **[D.3]** Low <span style="color: #FF0000">IMDB_Audience</span> = 16.37%
@@ -433,15 +433,22 @@ summary(Oscars.PCA)
 |
 | **[E]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
 |      **[E.1]** Critic and audience scores are the most represented descriptor variables for both principal components.
-|             **[E.1.1]** <span style="color: #FF0000">IMDB_Critic</span>)
-|             **[E.1.2]** <span style="color: #FF0000">Tomatometer_Critic</span>)
-|             **[E.1.3]** <span style="color: #FF0000">IMDB_Audience</span>)
-|             **[E.1.4]** <span style="color: #FF0000">Tomatometer_Audience</span>)
-|      **[E.2]** 3 clusters were formulated based on the correlations between descriptor variables:
-|             **[E.2.1]** Cluster 1 : <span style="color: #FF0000">IMDB_Critic</span>) and <span style="color: #FF0000">Tomatometer_Critic</span>) indicating that critic scores are consistent for both sources (Tomatometer and IMDB)
-|             **[E.2.2]** Cluster 2 : <span style="color: #FF0000">IMDB_Audience</span>), <span style="color: #FF0000">Tomatometer_Audience</span>) and <span style="color: #FF0000">Nomination_SuccessRate</span>) indicating that audience scores are consistent for both sources (Tomatometer and IMDB), and are correlated with oscar wins.
-|             **[E.2.3]** Cluster 3 : <span style="color: #FF0000">Nominations_Total</span>) indicating that the number of oscar nominations are not correlated with critic and audience scores, as well as oscar wins.
-| 
+|             **[E.1.1]** <span style="color: #FF0000">IMDB_Critic</span>
+|             **[E.1.2]** <span style="color: #FF0000">Tomatometer_Critic</span>
+|             **[E.1.3]** <span style="color: #FF0000">IMDB_Audience</span>
+|             **[E.1.4]** <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[E.2]** Descriptor variables demonstrated correlation and clustered around three groups:
+|             **[E.2.1]** Cluster 1 (<span style="color: #FF0000">IMDB_Critic</span>, <span style="color: #FF0000">Tomatometer_Critic</span>) indicates that critic scores are consistent for both sources (Tomatometer and IMDB).
+|             **[E.2.2]** Cluster 2 (<span style="color: #FF0000">IMDB_Audience</span>, <span style="color: #FF0000">Tomatometer_Audience</span>, <span style="color: #FF0000">Nomination_SuccessRate</span>) indicates that audience scores are consistent for both sources (Tomatometer and IMDB) and are positively correlated with oscar winnability rate.
+|             **[E.2.3]** Cluster 3 (<span style="color: #FF0000">Nominations_Total</span>) indicates that the number of oscar nominations is not correlated with critic and audience scores, as well as oscar winnability rate.
+|
+| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
+|      **[F.1]** Movies which won the oscar best picture award (e.g. Parasite, The King's Speech, 12 Years a Slave, Spotlight, The Artist, Argo, The Hurt Locker and Everything Everywhere All At Once) generally had higher critic scores, audience scores, oscar nominations and oscar winnability rate, than those movies which were not given such an award. Other movie nominees which had the same characteristics included Toy Story 3, The Grand Budapest Hotel, The Father, La La Land, Gravity and Up.
+|      **[F.2]** Other Movies which won the oscar best picture award (e.g. Moonlight and The Shape of Water) had higher critic scores but generally lower audience scores. Other movie nominees which had the same characteristics included Roma, Boyhood, Drive My Car, The Irishman, Minari and Manchester by the Sea.
+|      **[F.3]** Other Movies which won the oscar best picture award (e.g. Green Book and CODA) had higher audience scores but generally lower critic scores. Other movie nominees which had the same characteristics included Inception, Dune, Top Gun: Maverick, Django Unchaied, Ford V Ferrari and Dallas Buyers Club.
+|      **[F.4]** Movie nominees which had both generally lower critic and audience scores including Extremely Loud & Incredibly Close, Don't Look Up, Vice and Triangle of Sadness highly contributed the variances captured by <span style="color: #FF0000">PC1</span>. Movie nominees which had had extremely lower critic scores but reasonably audience scores including Bohemian Rhapsody, The Blind Side and Joker highly contributed the variances captured by <span style="color: #FF0000">PC2</span>.
+|      **[F.5]** There is no clear pattern in characteristics when movies are grouped by the year or release.
+|
 ```{r section_1.5.1, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset
@@ -669,7 +676,8 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
              geom.ind = "text",
              col.ind = SD_PCA$Picture,
              repel = TRUE, 
-             legend.title = "Picture") +
+             legend.title = "Picture",
+              addEllipses = TRUE) +
   labs(title = "PCA : Correlation Circle",
        subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
@@ -687,7 +695,8 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
              geom.ind = "text",
              col.ind = SD_PCA$Year,
              repel = TRUE, 
-             legend.title = "Year") +
+             legend.title = "Year",
+              addEllipses = TRUE) +
   labs(title = "PCA : Correlation Circle",
        subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
@@ -749,7 +758,8 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
 (DR_PCA_Biplot <- fviz_pca_biplot(DR_PCA, 
               label="var",
               habillage = SD_PCA$Picture, 
-              legend.title = "Picture") +
+              legend.title = "Picture",
+              addEllipses = TRUE) +
   labs(title = "PCA : Biplot",
        subtitle = "Individual Scores versus Descriptor Variable Loadings",
        x = "Principal Component 1",
