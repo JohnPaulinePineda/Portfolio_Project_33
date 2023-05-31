@@ -412,11 +412,11 @@ summary(Oscars.PCA)
 |      **[A.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 65%
 |      **[A.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 82%
 | 
-| **[B]** With eigenvalues sufficiently greater than 1, only <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> will be used in the subsequent exploratory analysis.
+| **[B]** With eigenvalues sufficiently greater than 1, only <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> were used in the subsequent exploratory analysis.
 |      **[B.1]** <span style="color: #FF0000">PC1</span> = 2.22
 |      **[B.1]** <span style="color: #FF0000">PC2</span> = 1.67
 |
-| **[C]** <span style="color: #FF0000">PC1</span> can be characterized by the following descriptor variables, ranked based on contribution and statistical significance:
+| **[C]** <span style="color: #FF0000">PC1</span> was characterized by the following descriptor variables, ranked based on contribution and statistical significance:
 |      **[C.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 23.09%
 |      **[C.2]** High <span style="color: #FF0000">IMDB_Audience</span> = 22.92%
 |      **[C.3]** High <span style="color: #FF0000">Tomatometer_Audience</span> = 19.56%
@@ -424,7 +424,7 @@ summary(Oscars.PCA)
 |      **[C.5]** High <span style="color: #FF0000">Nomination_SuccessRate</span> = 13.73%
 |      **[C.6]** High <span style="color: #FF0000">Nominations_Total</span> = 5.82%
 | 
-| **[D]** <span style="color: #FF0000">PC2</span> can be characterized by the following descriptor variables, ranked based on importance and statistical significance:
+| **[D]** <span style="color: #FF0000">PC2</span> was characterized by the following descriptor variables, ranked based on importance and statistical significance:
 |      **[D.1]** High <span style="color: #FF0000">IMDB_Critic</span> = 36.44%
 |      **[D.2]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 22.50%
 |      **[D.3]** Low <span style="color: #FF0000">IMDB_Audience</span> = 16.37%
