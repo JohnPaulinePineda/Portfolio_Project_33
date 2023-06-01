@@ -424,61 +424,59 @@ Oscars.CA.Screenplay <- Oscars[,c("Genre",
 (Oscars.CA.Screenplay <- as.data.frame.matrix(
   table(Oscars.CA.Screenplay$Genre,Oscars.CA.Screenplay$Screenplay)))
 
-
-
-
-
-
-
-
-
 ##################################
 # Formulating dataset for
 # Multiple Correspondence Analysis
 ##################################
-Oscars.MCA <- Oscars[,c("Genre",
-                       "Picture",
-                       "Cinematography",
-                       "Editing",
-                       "Screenplay")]
-
-(Oscars.MCA.Picture <- as.data.frame.matrix(
-  table(Oscars.MCA$Genre,Oscars.MCA$Picture)))
-colnames(Oscars.MCA.Picture) <- c("Picture_NOM",
-                                 "Picture_WON")
-Oscars.MCA.Picture$Film <- rownames(Oscars.MCA.Picture)
-Oscars.MCA.Picture <- Oscars.MCA.Picture[,c(3,1,2)]
-
-(Oscars.MCA.Cinematography <- as.data.frame.matrix(
-  table(Oscars.MCA$Genre,Oscars.MCA$Cinematography)))
-colnames(Oscars.MCA.Cinematography) <- c("Cinematography_NNOM",
-                                        "Cinematography_NOM",
-                                        "Cinematography_WON")
-Oscars.MCA.Cinematography$Film <- rownames(Oscars.MCA.Cinematography)
-
-(Oscars.MCA.Editing <- as.data.frame.matrix(
-  table(Oscars.MCA$Genre,Oscars.MCA$Editing)))
-colnames(Oscars.MCA.Editing) <- c("Editing_NNOM",
-                                 "Editing_NOM",
-                                 "Editing_WON")
-Oscars.MCA.Editing$Film <- rownames(Oscars.MCA.Editing)
-
-
-(Oscars.MCA.Screenplay <- as.data.frame.matrix(
-  table(Oscars.MCA$Genre,Oscars.MCA$Screenplay)))
-colnames(Oscars.MCA.Screenplay) <- c("Screenplay_NNOM",
-                                    "Screenplay_NOM",
-                                    "Screenplay_WON")
-Oscars.MCA.Screenplay$Film <- rownames(Oscars.MCA.Screenplay)
-
-Oscars.MCA <- left_join(Oscars.MCA.Picture,Oscars.MCA.Cinematography)
-Oscars.MCA <- left_join(Oscars.MCA,Oscars.MCA.Editing)
-Oscars.MCA <- left_join(Oscars.MCA,Oscars.MCA.Cinematography)
-(Oscars.MCA <- left_join(Oscars.MCA,Oscars.MCA.Screenplay))
+Oscars.MCA <- Oscars[,c("Cinematography",
+                        "Directing",
+                        "Editing",
+                        "Screenplay",
+                        "Year",
+                        "Picture")]
+row.names(Oscars.MCA) <- Oscars$Film
 dim(Oscars.MCA)
 str(Oscars.MCA)
 summary(Oscars.MCA)
 
+##################################
+# Formulating dataset for
+# Multiple Factor Analysis
+##################################
+Oscars.MFA <- Oscars[,c("Cinematography",
+                        "Directing",
+                        "Editing",
+                        "Screenplay",
+                        "Acting",
+                        "Design",
+                        "Sound",
+                        "Year",
+                        "Picture")]
+row.names(Oscars.MFA) <- Oscars$Film
+dim(Oscars.MFA)
+str(Oscars.MFA)
+summary(Oscars.MFA)
+
+##################################
+# Formulating dataset for
+# Factor Analysis OF Mixed Data
+##################################
+Oscars.FAMD <- Oscars[,c("Tomatometer_Critic",
+                        "Tomatometer_Audience",
+                        "IMDB_Critic",
+                        "IMDB_Audience",
+                        "Nominations_Total",
+                        "Nomination_SuccessRate",
+                        "Cinematography",
+                        "Directing",
+                        "Editing",
+                        "Screenplay",
+                        "Year",
+                        "Picture")]
+row.names(Oscars.FAMD) <- Oscars$Film
+dim(Oscars.FAMD)
+str(Oscars.FAMD)
+summary(Oscars.FAMD)
 
 ```
 
@@ -542,9 +540,6 @@ summary(Oscars.MCA)
 ##################################
 SD_PCA <- Oscars.PCA
 
-SD_PCA.Numeric <- Oscars.PCA[,sapply(Oscars.PCA, is.numeric)]
-colnames(SD_PCA.Numeric)
-  
 ##################################
 # Performing PCA
 ##################################
@@ -762,9 +757,10 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
 (DR_PCA_IndividualCorrelationCircleByPicture <- fviz_pca_ind(DR_PCA,
              geom.ind = "text",
              col.ind = SD_PCA$Picture,
+             palette = c("#888888","#5544FF"),
              repel = TRUE, 
              legend.title = "Picture",
-              addEllipses = TRUE) +
+              addEllipses = FALSE) +
   labs(title = "Principal Component Analysis : Correlation Circle",
        subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
@@ -783,7 +779,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
              col.ind = SD_PCA$Year,
              repel = TRUE, 
              legend.title = "Year",
-              addEllipses = TRUE) +
+              addEllipses = FALSE) +
   labs(title = "Principal Component Analysis : Correlation Circle",
        subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
@@ -801,7 +797,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
               axes = 1:2, 
               top = 10) +
   labs(title = "Principal Component Analysis : Individual Contribution",
-       subtitle = "Principal Components 1 ad 2 Contributors",
+       subtitle = "Principal Components 1 and 2 Contributors",
        x = "Descriptors") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90,hjust = 1)))
@@ -842,11 +838,14 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
 # and descriptor variable loadings
 # for the Top 1 and Top 2 principal components
 ##################################
-(DR_PCA_Biplot <- fviz_pca_biplot(DR_PCA, 
-              label="var",
+(DR_PCA_Biplot <- fviz_pca_biplot(DR_PCA,
+              label = c("var","ind"),
+              repel = TRUE,
               habillage = SD_PCA$Picture, 
+              palette = c("#888888","#5544FF"),
+              col.var = "#FF5050",
               legend.title = "Picture",
-              addEllipses = TRUE) +
+              addEllipses = FALSE) +
   labs(title = "Principal Component Analysis : Biplot",
        subtitle = "Individual Scores versus Descriptor Variable Loadings",
        x = "Principal Component 1",
@@ -1772,6 +1771,315 @@ DR_CA_Screenplay_COL$contrib
 ###  1.5.3 Multiple Correspondence Analysis (MCA)
 |
 ```{r section_1.5.3, warning=FALSE, message=FALSE}
+##################################
+# Loading dataset
+##################################
+SD_MCA <- Oscars.MCA
+
+##################################
+# Performing MCA
+##################################
+DR_MCA <- MCA(SD_MCA[,c(1:4)],
+              graph = FALSE)
+
+##################################
+# Obtaining the MCA eigenvalues
+##################################
+(DR_MCA_EV <- get_eigenvalue(DR_MCA))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_MCA_VarianceScreePlot <- fviz_eig(DR_MCA, 
+                                      addlabels = TRUE, 
+                                      ylim = c(0, 100),
+                                      choice = c("variance")) +
+  labs(title = "Multiple Correspondence Analysis : Scree Plot of Explained Variances",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_MCA_EigenvalueScreePlot <- fviz_eig(DR_MCA, 
+                                      addlabels = TRUE, 
+                                      ylim = c(0, 6),
+                                      choice = c("eigenvalue")) +
+  labs(title = "Multiple Correspondence Analysis : Scree Plot of Eigenvalues",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the MCA 
+# descriptor variable loadings
+##################################
+DR_MCA_VAR <- get_mca_var(DR_MCA)
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the descriptor variables
+##################################
+DR_MCA_VAR$coord
+
+##################################
+# Extracting the quality of representation
+# for the descriptor variables
+# on the factor map 
+##################################
+DR_MCA_VAR$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the descriptor variables
+# to the principal components
+##################################
+DR_MCA_VAR$contrib
+
+##################################
+# Extracting the quality of representation 
+# for the descriptor variables
+# on the factor map 
+##################################
+(DR_MCA_VariableSquaredCorrelationCircle <- fviz_mca_var(DR_MCA, 
+                                         col.var = "cos2", 
+                                         gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                                         legend.title = "Squared Coordinates") +
+  labs(title = "Multiple Correspondence Analysis : Squared Correlation Circle",
+       subtitle = "Descriptor Variable Representation Quality",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Formulating clusters of the
+# descriptor variables
+##################################
+set.seed(123)
+DR_MCA_KMEANS <- kmeans(DR_MCA_VAR$coord, centers=3, nstart=25)
+DR_MCA_KMEANS_CLUSTER <- as.factor(DR_MCA_KMEANS$cluster) 
+
+##################################
+# Extracting the correlation 
+# between the descriptor variables
+# and top principal components
+##################################
+(DR_MCA_VariableCorrelationCircle <- fviz_mca_var(DR_MCA, 
+                                         col.var = DR_MCA_KMEANS_CLUSTER, 
+                                         palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
+                                         legend.title = "Cluster") +
+  labs(title = "Multiple Correspondence Analysis : Correlation Circle",
+       subtitle = "Principal Components Versus Descriptor Variable Clusters",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_MCA_PCVariableContributors <- fviz_contrib(DR_MCA, 
+                                 choice = "var", 
+                                 axes = 1:2) +
+  labs(title = "Multiple Correspondence Analysis : Descriptor Variable Contribution",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+DR_MCA_VariableContributionTest <- dimdesc(DR_MCA, 
+                                           axes = c(1,2), 
+                                           proba = 0.05)
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+(DR_MCA_PC1VariableContributors <- fviz_contrib(DR_MCA, 
+                                 choice = "var", 
+                                 axes = 1) +
+  labs(title = "Multiple Correspondence Analysis : Descriptor Variable Contribution",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+DR_MCA_VariableContributionTest$'Dim 1'
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+(DR_MCA_PC2VariableContributors <- fviz_contrib(DR_MCA, 
+                                 choice = "var", 
+                                 axes = 2) +
+  labs(title = "Multiple Correspondence Analysis : Descriptor Variable Contribution",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+DR_MCA_VariableContributionTest$'Dim 2'
+
+##################################
+# Extracting the MCA individual scores
+##################################
+DR_MCA_IND <- get_mca_ind(DR_MCA)
+
+##################################
+# Extracting the coordinates
+# representing the scores
+# for the individuals
+##################################
+DR_MCA_IND$coord[,c("Dim 1","Dim 2")]
+
+##################################
+# Extracting the quality of representation
+# for the individuals
+# on the factor map
+##################################
+DR_MCA_IND$cos2[,c("Dim 1","Dim 2")]
+
+##################################
+# Extracting the contributions
+# (in percentage) of the individuals
+# to the principal components
+##################################
+DR_MCA_IND$contrib[,c("Dim 1","Dim 2")]
+
+##################################
+# Extracting the correlation
+# between the individual instances
+# grouped by Picture categories
+# and top principal components
+##################################
+(DR_MCA_IndividualCorrelationCircleByPicture <- fviz_mca_ind(DR_MCA,
+             geom.ind = "text",
+             col.ind = SD_MCA$Picture,
+             palette = c("#888888","#5544FF"),
+             repel = TRUE,
+             legend.title = "Picture",
+              addEllipses = FALSE) +
+  labs(title = "Multiple Correspondence Analysis : Correlation Circle",
+       subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the correlation
+# between the individual instances
+# grouped by Year categories
+# and top principal components
+##################################
+(DR_MCA_IndividualCorrelationCircleByYear <- fviz_mca_ind(DR_MCA,
+             geom.ind = "text",
+             col.ind = SD_MCA$Year,
+             repel = TRUE,
+             legend.title = "Year",
+              addEllipses = FALSE) +
+  labs(title = "Multiple Correspondence Analysis : Correlation Circle",
+       subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the contribution
+# of the descriptor variables
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_MCA_PCIndividualContributors <- fviz_contrib(DR_MCA,
+              choice = "ind",
+              axes = 1:2,
+              top = 10) +
+  labs(title = "Multiple Correspondence Analysis : Individual Contribution",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+(DR_MCA_PC1IndividualContributors <- fviz_contrib(DR_MCA,
+              choice = "ind",
+              axes = 1,
+              top = 10) +
+  labs(title = "Multiple Correspondence Analysis : Individual Contribution",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+(DR_MCA_PC2IndividualContributors <- fviz_contrib(DR_MCA,
+              choice = "ind",
+              axes = 2,
+              top = 10) +
+  labs(title = "Multiple Correspondence Analysis : Individual Contribution",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Formulating the Biplot
+# using the individual scores
+# and descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_MCA_Biplot <- fviz_mca_biplot(DR_MCA,
+              label = c("var","ind"),
+              repel = TRUE,
+              habillage = SD_MCA$Picture,
+              palette = c("#888888","#5544FF"),
+              col.var = "#FF5050",
+              legend.title = "Picture",
+              addEllipses = FALSE) +
+  labs(title = "Multiple Correspondence Analysis : Biplot",
+       subtitle = "Individual Scores versus Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic() +
+  theme(legend.position="top"))
 
 ```
 
