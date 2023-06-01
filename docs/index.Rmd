@@ -2179,7 +2179,7 @@ DR_MFA_VAR$contrib
 
 ##################################
 # Extracting the dimensions
-# for the descriptor variables
+# for the qunatitative descriptor variables
 # on the factor map 
 ##################################
 (DR_MFA_QuantitativeVariableGroups <- fviz_mfa_var(DR_MFA, 
@@ -2191,10 +2191,27 @@ DR_MFA_VAR$contrib
   theme_classic() +
   theme(legend.position="top"))
 
+##################################
+# Graphing the individual instances
+# from quantitative descriptor variables
+# on the factor map 
+##################################
+(DR_MFA_QuantitativeIndividualGroups <- fviz_mfa_ind(DR_MFA, 
+                                       partial = "all",
+                                       geom = "text",
+                                       repel = TRUE,
+                                       habillage = SD_MFA$Picture, 
+                                       palette = c("#888888","#5544FF")) +
+  labs(title = "Multiple Factor Analysis : Individuals for Quantitative Variable Groups",
+       subtitle = "Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
 
 ##################################
 # Extracting the dimensions
-# for the descriptor variables
+# for the qualitative descriptor variables
 # on the factor map 
 ##################################
 (DR_MFA_QualitativeVariableGroups <- fviz_mfa_var(DR_MFA, 
@@ -2205,6 +2222,20 @@ DR_MFA_VAR$contrib
        x = "Principal Component 1") +
   theme_classic() +
   theme(legend.position="top"))
+
+##################################
+# Graphing the individual instances
+# from qualitative descriptor variables
+# on the factor map 
+##################################
+# (DR_MFA_QualitativeIndividualGroups <- fviz_mfa_quali_biplot(DR_MFA, 
+#                                        geom = "text") +
+#   labs(title = "Multiple Factor Analysis : Individuals for Qualitative Variable Groups",
+#        subtitle = "Descriptor Variable Principal Components",
+#        y = "Principal Component 2",
+#        x = "Principal Component 1") +
+#   theme_classic() +
+#   theme(legend.position="top"))
 
 ```
 
