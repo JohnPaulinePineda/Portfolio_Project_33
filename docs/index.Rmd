@@ -2136,6 +2136,75 @@ DR_MFA <- MFA(SD_MFA[,c(1:9)],
        x = "Principal Components") +
   theme_classic())
 
+##################################
+# Extracting the MFA 
+# descriptor variable loadings
+##################################
+DR_MFA_VAR <- get_mfa_var(DR_MFA)
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the descriptor variables
+##################################
+DR_MFA_VAR$coord
+
+##################################
+# Extracting the quality of representation
+# for the descriptor variables
+# on the factor map 
+##################################
+DR_MFA_VAR$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the descriptor variables
+# to the principal components
+##################################
+DR_MFA_VAR$contrib
+
+##################################
+# Extracting the dimensions
+# for the descriptor variables
+# on the factor map 
+##################################
+(DR_MFA_VariableGroups <- fviz_mfa_var(DR_MFA, 
+                                       choice = "group") +
+  labs(title = "Multiple Factor Analysis : Variable Groups",
+       subtitle = "Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the dimensions
+# for the descriptor variables
+# on the factor map 
+##################################
+(DR_MFA_QuantitativeVariableGroups <- fviz_mfa_var(DR_MFA, 
+                                       choice = "quanti.var") +
+  labs(title = "Multiple Factor Analysis : Quantitative Variable Groups",
+       subtitle = "Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+
+##################################
+# Extracting the dimensions
+# for the descriptor variables
+# on the factor map 
+##################################
+(DR_MFA_QualitativeVariableGroups <- fviz_mfa_var(DR_MFA, 
+                                       choice = "quali.var") +
+  labs(title = "Multiple Factor Analysis : Qualitative Variable Groups",
+       subtitle = "Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
 
 ```
 
