@@ -1540,7 +1540,232 @@ DR_CA_Editing_COL$contrib
        y = "Principal Component 2") +
   theme_classic())
 
+##################################
+# Loading dataset for Screenplay
+##################################
+SD_CA_Screenplay <- Oscars.CA.Screenplay
 
+balloonplot(t(as.table(as.matrix(SD_CA_Screenplay))),
+            main="Screenplay by Film Genre",
+            xlab="Screenplay",
+            ylab="Genre",
+            label=FALSE,
+            show.margins=FALSE)
+
+##################################
+# Conducting a Chi-Square Test
+##################################
+(SD_CA_Screenplay_CHSQ <- chisq.test(SD_CA_Screenplay))
+  
+##################################
+# Performing CA
+##################################
+DR_CA_Screenplay <- CA(SD_CA_Screenplay,
+                           graph = FALSE)
+
+##################################
+# Obtaining the CA eigenvalues
+##################################
+(DR_CA_Screenplay_EV <- get_eigenvalue(DR_CA_Screenplay))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_CA_Screenplay_VarianceScreePlot <- fviz_eig(DR_CA_Screenplay, 
+                                                    addlabels = TRUE, 
+                                                    ylim = c(0, 100),
+                                                    choice = c("variance")) +
+  labs(title = "Correspondence Analysis : Scree Plot of Explained Variances (Screenplay)",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_CA_Screenplay_EigenvalueScreePlot <- fviz_eig(DR_CA_Screenplay, 
+                                                      addlabels = TRUE,
+                                                      ylim = c(0, 6),
+                                                      choice = c("eigenvalue")) +
+  labs(title = "Correspondence Analysis : Scree Plot of Eigenvalues (Screenplay)",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the CA 
+# results for row descriptor variables
+##################################
+(DR_CA_Screenplay_ROW <- get_ca_row(DR_CA_Screenplay))
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the row descriptor variabless
+##################################
+DR_CA_Screenplay_ROW$coord
+
+##################################
+# Extracting the quality of representation
+# for the row descriptor variables
+# on the factor map 
+##################################
+DR_CA_Screenplay_ROW$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the row descriptor variables
+# to the principal components
+##################################
+DR_CA_Screenplay_ROW$contrib
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_CA_Screenplay_ROW_PCVariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "row", 
+                                                             axes = 1:2) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 1 principal component
+##################################
+(DR_CA_Screenplay_ROW_PC1VariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "row", 
+                                                             axes = 1) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 2 principal component
+##################################
+(DR_CA_Screenplay_ROW_PC2VariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "row", 
+                                                             axes = 2) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the CA 
+# results for column descriptor variables
+##################################
+(DR_CA_Screenplay_COL <- get_ca_col(DR_CA_Screenplay))
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the column descriptor variabless
+##################################
+DR_CA_Screenplay_COL$coord
+
+##################################
+# Extracting the quality of representation
+# for the column descriptor variables
+# on the factor map 
+##################################
+DR_CA_Screenplay_COL$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the column descriptor variables
+# to the principal components
+##################################
+DR_CA_Screenplay_COL$contrib
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_CA_Screenplay_COL_PCVariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "col", 
+                                                             axes = 1:2) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 1 principal component
+##################################
+(DR_CA_Screenplay_COL_PC1VariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "col", 
+                                                             axes = 1) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 2 principal component
+##################################
+(DR_CA_Screenplay_COL_PC2VariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "col", 
+                                                             axes = 2) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Formulating the Symmetric Biplot 
+# using the row and column
+# descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_CA_SymmetricBiplot <- fviz_ca_biplot(DR_CA_Screenplay, 
+              label="all",
+              geom = "text",
+              repel = TRUE) +
+  labs(title = "Correspondence Analysis : Symmetric Biplot (Screenplay)",
+       subtitle = "Row versus Column Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic())
+
+##################################
+# Formulating the Asymmetric Biplot 
+# using the row and column
+# descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_CA_SymmetricBiplot <- fviz_ca_biplot(DR_CA_Screenplay, 
+              label="all",
+              geom = "text",
+              repel = TRUE,
+              map = "symbiplot") +
+  labs(title = "Correspondence Analysis : Asymmetric Biplot (Screenplay)",
+       subtitle = "Row versus Column Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic())
 
 ```
 
