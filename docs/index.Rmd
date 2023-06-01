@@ -443,7 +443,9 @@ summary(Oscars.MCA)
 # Formulating dataset for
 # Multiple Factor Analysis
 ##################################
-Oscars.MFA <- Oscars[,c("Cinematography",
+Oscars.MFA <- Oscars[,c("Nominations_Total",
+                        "Nomination_SuccessRate",
+                        "Cinematography",
                         "Directing",
                         "Editing",
                         "Screenplay",
@@ -2083,15 +2085,63 @@ DR_MCA_IND$contrib[,c("Dim 1","Dim 2")]
 
 ```
 
-###  1.5.4 Factor Analysis of Mixed Data (FAMD)
-|
-```{r section_1.5.4, warning=FALSE, message=FALSE}
-
-```
-
 ###  1.5.5 Multiple Factor Analysis (MFA)
 |
 ```{r section_1.5.5, warning=FALSE, message=FALSE}
+
+##################################
+# Loading dataset
+##################################
+SD_MFA <- Oscars.MFA
+
+##################################
+# Performing MFA
+##################################
+DR_MFA <- MFA(SD_MFA[,c(1:9)],
+              group=c(2,2,3,2),
+              type =c("s","n","n","n"),
+              name.group = c("Recognitions","Technicalities","Storytelling","Aesthetics"),
+              graph = FALSE)
+
+##################################
+# Obtaining the MFA eigenvalues
+##################################
+(DR_MFA_EV <- get_eigenvalue(DR_MFA))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_MFA_VarianceScreePlot <- fviz_eig(DR_MFA,
+                                      addlabels = TRUE,
+                                      ylim = c(0, 100),
+                                      choice = c("variance")) +
+  labs(title = "Multiple Factor Analysis : Scree Plot of Explained Variances",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_MFA_EigenvalueScreePlot <- fviz_eig(DR_MFA,
+                                      addlabels = TRUE,
+                                      ylim = c(0, 6),
+                                      choice = c("eigenvalue")) +
+  labs(title = "Multiple Factor Analysis : Scree Plot of Eigenvalues",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+
+```
+
+###  1.5.4 Factor Analysis of Mixed Data (FAMD)
+|
+```{r section_1.5.4, warning=FALSE, message=FALSE}
 
 ```
 
