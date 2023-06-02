@@ -445,15 +445,14 @@ summary(Oscars.MCA)
 ##################################
 Oscars.MFA <- Oscars[,c("Nominations_Total",
                         "Nomination_SuccessRate",
+                        "Picture",
                         "Cinematography",
                         "Directing",
                         "Editing",
                         "Screenplay",
                         "Acting",
                         "Design",
-                        "Sound",
-                        "Year",
-                        "Picture")]
+                        "Sound")]
 row.names(Oscars.MFA) <- Oscars$Film
 dim(Oscars.MFA)
 str(Oscars.MFA)
@@ -541,6 +540,7 @@ summary(Oscars.FAMD)
 # Loading dataset
 ##################################
 SD_PCA <- Oscars.PCA
+str(SD_PCA)
 
 ##################################
 # Performing PCA
@@ -864,6 +864,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
 # Loading dataset for Cinematography
 ##################################
 SD_CA_Cinematography <- Oscars.CA.Cinematography
+str(SD_CA_Cinematography)
 
 balloonplot(t(as.table(as.matrix(SD_CA_Cinematography))),
             main="Cinematography by Film Genre",
@@ -1091,6 +1092,7 @@ DR_CA_Cinematography_COL$contrib
 # Loading dataset for Directing
 ##################################
 SD_CA_Directing <- Oscars.CA.Directing
+str(SD_CA_Directing)
 
 balloonplot(t(as.table(as.matrix(SD_CA_Directing))),
             main="Directing by Film Genre",
@@ -1318,6 +1320,7 @@ DR_CA_Directing_COL$contrib
 # Loading dataset for Editing
 ##################################
 SD_CA_Editing <- Oscars.CA.Editing
+str(SD_CA_Editing)
 
 balloonplot(t(as.table(as.matrix(SD_CA_Editing))),
             main="Editing by Film Genre",
@@ -1545,6 +1548,7 @@ DR_CA_Editing_COL$contrib
 # Loading dataset for Screenplay
 ##################################
 SD_CA_Screenplay <- Oscars.CA.Screenplay
+str(SD_CA_Screenplay)
 
 balloonplot(t(as.table(as.matrix(SD_CA_Screenplay))),
             main="Screenplay by Film Genre",
@@ -1777,6 +1781,7 @@ DR_CA_Screenplay_COL$contrib
 # Loading dataset
 ##################################
 SD_MCA <- Oscars.MCA
+str(SD_MCA)
 
 ##################################
 # Performing MCA
@@ -2085,20 +2090,21 @@ DR_MCA_IND$contrib[,c("Dim 1","Dim 2")]
 
 ```
 
-###  1.5.5 Multiple Factor Analysis (MFA)
+###  1.5.4 Multiple Factor Analysis (MFA)
 |
-```{r section_1.5.5, warning=FALSE, message=FALSE}
+```{r section_1.5.4, warning=FALSE, message=FALSE}
 
 ##################################
 # Loading dataset
 ##################################
 SD_MFA <- Oscars.MFA
+str(SD_MFA)
 
 ##################################
 # Performing MFA
 ##################################
-DR_MFA <- MFA(SD_MFA[,c(1:9)],
-              group=c(2,2,3,2),
+DR_MFA <- MFA(SD_MFA[,c(1:10)],
+              group=c(2,3,3,2),
               type =c("s","n","n","n"),
               name.group = c("Recognitions","Technicalities","Storytelling","Aesthetics"),
               graph = FALSE)
@@ -2224,24 +2230,30 @@ DR_MFA_VAR$contrib
   theme(legend.position="top"))
 
 ##################################
-# Graphing the individual instances
-# from qualitative descriptor variables
-# on the factor map 
+# Formulating the Biplot
+# using the individual scores
+# and qualitative descriptor variable loadings
+# for the Top 1 and Top 2 principal components
 ##################################
-# (DR_MFA_QualitativeIndividualGroups <- fviz_mfa_quali_biplot(DR_MFA, 
-#                                        geom = "text") +
-#   labs(title = "Multiple Factor Analysis : Individuals for Qualitative Variable Groups",
-#        subtitle = "Descriptor Variable Principal Components",
-#        y = "Principal Component 2",
-#        x = "Principal Component 1") +
-#   theme_classic() +
-#   theme(legend.position="top"))
+Group <- as.factor(SD_MFA[,"Picture"])
+(DR_MCA_QualitativeIndividualGroups <- fviz_mfa_quali_biplot(DR_MFA,
+                                                             repel = FALSE,
+                                                             geom = "text",
+                                                             habillage = Group,
+                                                             palette = c("#888888","#5544FF"),
+                                                             col.var = "#FF5050") +
+  labs(title = "Multiple Factor Analysis : Individuals for Quantitative Variable Groups",
+       subtitle = "Individual Scores versus Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic() +
+  theme(legend.position="top"))
 
 ```
 
-###  1.5.4 Factor Analysis of Mixed Data (FAMD)
+###  1.5.5Factor Analysis of Mixed Data (FAMD)
 |
-```{r section_1.5.4, warning=FALSE, message=FALSE}
+```{r section_1.5.5, warning=FALSE, message=FALSE}
 
 ```
 
