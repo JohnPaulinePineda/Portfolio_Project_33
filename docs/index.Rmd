@@ -460,7 +460,7 @@ summary(Oscars.MFA)
 
 ##################################
 # Formulating dataset for
-# Factor Analysis OF Mixed Data
+# Factor Analysis of Mixed Data
 ##################################
 Oscars.FAMD <- Oscars[,c("Tomatometer_Critic",
                         "Tomatometer_Audience",
@@ -2253,9 +2253,122 @@ Picture <- as.factor(SD_MFA[,"Picture"])
 
 ```
 
-###  1.5.5Factor Analysis of Mixed Data (FAMD)
+###  1.5.5 Factor Analysis of Mixed Data (FAMD)
 |
 ```{r section_1.5.5, warning=FALSE, message=FALSE}
+##################################
+# Loading dataset
+##################################
+SD_FAMD <- Oscars.FAMD
+str(SD_FAMD)
+
+##################################
+# Performing FAMD
+##################################
+DR_FAMD <- FAMD(SD_FAMD[,c(1:10)],
+              graph = FALSE)
+
+##################################
+# Obtaining the FAMD eigenvalues
+##################################
+(DR_FAMD_EV <- get_eigenvalue(DR_FAMD))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_FAMD_VarianceScreePlot <- fviz_eig(DR_FAMD,
+                                      addlabels = TRUE,
+                                      ylim = c(0, 100),
+                                      choice = c("variance")) +
+  labs(title = "Factor Analysis of Mixed Data : Scree Plot of Explained Variances",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_FAMD_EigenvalueScreePlot <- fviz_eig(DR_FAMD,
+                                      addlabels = TRUE,
+                                      ylim = c(0, 6),
+                                      choice = c("eigenvalue")) +
+  labs(title = "Factor Analysis of Mixed Data : Scree Plot of Eigenvalues",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the FAMD 
+# descriptor variable loadings
+##################################
+DR_FAMD_VAR <- get_famd_var(DR_FAMD)
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the descriptor variables
+##################################
+DR_FAMD_VAR$coord
+
+##################################
+# Extracting the quality of representation
+# for the descriptor variables
+# on the factor map 
+##################################
+DR_FAMD_VAR$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the descriptor variables
+# to the principal components
+##################################
+DR_FAMD_VAR$contrib
+
+##################################
+# Extracting the quality of representation 
+# for the descriptor variables
+# on the factor map 
+##################################
+(DR_FAMD_VariableSquaredCorrelationCircle <- fviz_famd_var(DR_FAMD, 
+                                         col.var = "cos2", 
+                                         gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                                         legend.title = "Squared Coordinates") +
+  labs(title = "Factor Analysis of Mixed Data : Squared Correlation Circle",
+       subtitle = "Descriptor Variable Representation Quality",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Formulating clusters of the
+# descriptor variables
+##################################
+set.seed(123)
+DR_FAMD_KMEANS <- kmeans(DR_FAMD_VAR$coord, centers=5, nstart=25)
+DR_FAMD_KMEANS_CLUSTER <- as.factor(DR_FAMD_KMEANS$cluster) 
+
+##################################
+# Extracting the correlation 
+# between the descriptor variables
+# and top principal components
+##################################
+(DR_FAMD_VariableCorrelationCircle <- fviz_famd_var(DR_FAMD, 
+                                         col.var = DR_FAMD_KMEANS_CLUSTER, 
+                                         palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
+                                         legend.title = "Cluster") +
+  labs(title = "Factor Analysis of Mixed Data : Correlation Circle",
+       subtitle = "Principal Components Versus Descriptor Variable Clusters",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+
 
 ```
 
