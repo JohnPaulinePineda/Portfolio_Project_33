@@ -2202,7 +2202,8 @@ DR_MFA_VAR$contrib
                                        geom = "text",
                                        repel = TRUE,
                                        habillage = SD_MFA$Picture, 
-                                       palette = c("#888888","#5544FF")) +
+                                       palette = c("#888888","#5544FF"),
+                                       legend.title = "Picture") +
   labs(title = "Multiple Factor Analysis : Individuals for Qualitative Variable Groups",
        subtitle = "Qualitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
@@ -2570,6 +2571,9 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 | **[Article]** [What Is Principal Component Analysis (PCA) and How It Is Used?](https://www.sartorius.com/en/knowledge/science-snippets/what-is-principal-component-analysis-pca-and-how-it-is-used-507186) by Sartorius Team
 | **[Article]** [Principal Components Analysis](https://online.stat.psu.edu/stat508/book/export/html/639) by by Penn State Eberly College of Science
 | **[Article]** [Principal Component Analysis – How PCA Algorithms Works, The Concept, Math and Implementation](https://www.machinelearningplus.com/machine-learning/principal-components-analysis-pca-better-explained/) by Selva Prabhakaran
+| **[Article]** [FAMD - Factor Analysis of Mixed Data in R: Essentials](http://sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/115-famd-factor-analysis-of-mixed-data-in-r-essentials/) by Alboukadel Kassambara
+| **[Article]** [Factor Analysis of Mixed Data Explained](https://everything.explained.today/Factor_analysis_of_mixed_data/) by Everything Explained Today Team
+| **[Article]** [Factorial Analysis of Mixed Data](https://www.xlstat.com/en/solutions/features/factorial-analysis-of-mixed-data) by XLSTAT Team
 | **[Publication]** [Analysis of a Complex of Statistical Variables into Principal Components](https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0071325) by Harold Hotelling (Journal of Educational Psychology)
 | **[Course]** [Applied Data Mining and Statistical Learning](https://online.stat.psu.edu/stat508/) by Penn State Eberly College of Science
 |
