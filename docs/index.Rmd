@@ -2191,7 +2191,7 @@ DR_MFA_VAR$contrib
 (DR_MFA_QuantitativeVariableGroups <- fviz_mfa_var(DR_MFA, 
                                        choice = "quanti.var") +
   labs(title = "Multiple Factor Analysis : Quantitative Variable Groups",
-       subtitle = "Descriptor Variable Principal Components",
+       subtitle = "Quantitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
   theme_classic() +
@@ -2199,17 +2199,17 @@ DR_MFA_VAR$contrib
 
 ##################################
 # Graphing the individual instances
-# from quantitative descriptor variables
+# from qualitative descriptor variables
 # on the factor map 
 ##################################
-(DR_MFA_QuantitativeIndividualGroups <- fviz_mfa_ind(DR_MFA, 
+(DR_MFA_QualitativeIndividualGroups <- fviz_mfa_ind(DR_MFA, 
                                        partial = "all",
                                        geom = "text",
                                        repel = TRUE,
                                        habillage = SD_MFA$Picture, 
                                        palette = c("#888888","#5544FF")) +
-  labs(title = "Multiple Factor Analysis : Individuals for Quantitative Variable Groups",
-       subtitle = "Descriptor Variable Principal Components",
+  labs(title = "Multiple Factor Analysis : Individuals for Qualitative Variable Groups",
+       subtitle = "Qualitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
   theme_classic() +
@@ -2221,9 +2221,10 @@ DR_MFA_VAR$contrib
 # on the factor map 
 ##################################
 (DR_MFA_QualitativeVariableGroups <- fviz_mfa_var(DR_MFA, 
-                                       choice = "quali.var") +
+                                       choice = "quali.var",
+                                       geom = "text") +
   labs(title = "Multiple Factor Analysis : Qualitative Variable Groups",
-       subtitle = "Descriptor Variable Principal Components",
+       subtitle = "Qualitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
   theme_classic() +
@@ -2235,15 +2236,16 @@ DR_MFA_VAR$contrib
 # and qualitative descriptor variable loadings
 # for the Top 1 and Top 2 principal components
 ##################################
-Group <- as.factor(SD_MFA[,"Picture"])
-(DR_MCA_QualitativeIndividualGroups <- fviz_mfa_quali_biplot(DR_MFA,
-                                                             repel = FALSE,
-                                                             geom = "text",
-                                                             habillage = Group,
-                                                             palette = c("#888888","#5544FF"),
-                                                             col.var = "#FF5050") +
-  labs(title = "Multiple Factor Analysis : Individuals for Quantitative Variable Groups",
-       subtitle = "Individual Scores versus Descriptor Variable Loadings",
+Picture <- as.factor(SD_MFA[,"Picture"])
+(DR_MCA_QualitativeBiplot <- fviz_mfa_quali_biplot(DR_MFA,
+                                                   repel = TRUE,
+                                                   geom = "text",
+                                                   habillage = Picture,
+                                                   palette = c("#888888","#5544FF"),
+                                                   col.var = "#FF5050",
+                                                   legend.title = "Picture") +
+  labs(title = "Multiple Factor Analysis : Biplot",
+       subtitle = "Individual Scores versus Qualitative Descriptor Variable Loadings",
        x = "Principal Component 1",
        y = "Principal Component 2") +
   theme_classic() +
