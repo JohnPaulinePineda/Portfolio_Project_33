@@ -2581,6 +2581,9 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 | **[Article]** [Correspondence Analysis](https://www.ibm.com/docs/en/spss-statistics/28.0.0?topic=edition-correspondence-analysis) by IBM Team
 | **[Article]** [Understanding and Applying Correspondence Analysis](https://www.infoq.com/articles/knime-correspondence-analysis/) by Maarit Widmann and Alfredo Roccato
 | **[Article]** [Correspondence Analysis](https://www.ibm.com/docs/en/spss-statistics/28.0.0?topic=edition-correspondence-analysis) by IBM Team
+| **[Article]** [Multiple Correspondence Analysis (MCA)](https://www.xlstat.com/en/solutions/features/multiple-correspondence-analysis-mca) by XLSTAT Team
+| **[Article]** [Multiple Correspondence Analysis](https://www.ibm.com/docs/en/spss-statistics/25.0.0?topic=application-multiple-correspondence-analysis) by IBM Team
+| **[Article]** [Multiple Factor Analysis (MFA)](https://www.xlstat.com/en/solutions/features/multiple-factor-analysis-mfa) by XLSTAT Team
 | **[Article]** [FAMD - Factor Analysis of Mixed Data in R: Essentials](http://sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/115-famd-factor-analysis-of-mixed-data-in-r-essentials/) by Alboukadel Kassambara
 | **[Article]** [Factor Analysis of Mixed Data Explained](https://everything.explained.today/Factor_analysis_of_mixed_data/) by Everything Explained Today Team
 | **[Article]** [Factor Analysis of Mixed Data](https://rpubs.com/nchelaru/famd) by Nancy Chelaru
