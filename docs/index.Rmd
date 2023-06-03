@@ -528,7 +528,7 @@ summary(Oscars.FAMD)
 |      **[F.2]** Other Movies which won the oscar best picture award (e.g. Moonlight and The Shape of Water) had higher critic scores but generally lower audience scores. Other movie nominees which had the same characteristics included Roma, Boyhood, Drive My Car, The Irishman, Minari and Manchester by the Sea.
 |      **[F.3]** Other Movies which won the oscar best picture award (e.g. Green Book and CODA) had higher audience scores but generally lower critic scores. Other movie nominees which had the same characteristics included Inception, Dune, Top Gun: Maverick, Django Unchaied, Ford V Ferrari and Dallas Buyers Club.
 |      **[F.4]** Movie nominees which had both generally lower critic and audience scores including Extremely Loud & Incredibly Close, Don't Look Up, Vice and Triangle of Sadness highly contributed the variances captured by <span style="color: #FF0000">PC1</span>. Movie nominees which had had extremely lower critic scores but reasonably audience scores including Bohemian Rhapsody, The Blind Side and Joker highly contributed the variances captured by <span style="color: #FF0000">PC2</span>.
-|      **[F.5]** There is no clear pattern in characteristics when movies are grouped by the year or release.
+|      **[F.5]** There is no clear pattern in characteristics when movies are grouped by the year of release.
 |
 ```{r section_1.5.1, warning=FALSE, message=FALSE}
 ##################################
@@ -853,6 +853,8 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
 ```
 
 ###  1.5.2 Correspondence Analysis (CA)
+|
+| [Correspondence Analysis](https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/abs/connection-between-correlation-and-contingency/D3A75249B56AF5DDC436938F1B6EABD1) employs a statistical method for summarizing tables and analyzing the relationship between two or more categorical variables. It is a data visualization technique that aims to find patterns and associations between the categories of different variables. A contingency table is created to represent the frequencies or counts of the categories of the variables. The contingency table is then transformed into a matrix of proportions or percentages to normalize the data by computing row and column averages, expected values and residuals. The method then calculates the principal components of the normalized matrix and maps the variables and categories onto a two-dimensional plot based on their proximity to each other. The plot displays the patterns and associations between the variables and categories, with closer proximity indicating a stronger relationship.
 |
 ```{r section_1.5.2, warning=FALSE, message=FALSE}
 ##################################
@@ -1771,6 +1773,8 @@ DR_CA_Screenplay_COL$contrib
 
 ###  1.5.3 Multiple Correspondence Analysis (MCA)
 |
+| [Multiple Correspondence Analysis](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) performs a series of transformations which allows for the computation of the coordinates of the categories of the qualitative variables, as well as the coordinates of the observations in a representation space that is optimal for a criterion based on inertia. The method assigns optimal scale values (category quantifications) to each category of each variable in such a way that overall, on average, the categories have maximum spread. Because categories of a variable receive as many scorings as there are dimensions, the variables in the analysis are assumed to be multiple nominal in optimal scaling level. It also assigns scores to the objects in the analysis in such a way that the category quantifications are the averages, or centroids, of the object scores of objects in that category. The resulting solution shows objects within the same category plotted close together and objects in different categories plotted far apart. Each object is as close as possible to the category points of categories that apply to the object. In this way, the categories divide the objects into homogeneous subgroups. Variables are considered homogeneous when they classify objects in the same categories into the same subgroups.
+|
 ```{r section_1.5.3, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset
@@ -2591,7 +2595,7 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 | **[Article]** [Factor Analysis of Mixed Data](https://medium.com/m/global-identity-2?redirectUrl=https%3A%2F%2Ftowardsdatascience.com%2Ffactor-analysis-of-mixed-data-5ad5ce98663c) by Sohel Mahmood
 | **[Article]** [FAMD: How To Generalize PCA to Categorical and Numerical Data](https://www.xlstat.com/en/solutions/features/factorial-analysis-of-mixed-data) by William Blaufuks
 | **[Publication]** [Analysis of a Complex of Statistical Variables into Principal Components](https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0071325) by Harold Hotelling (Journal of Educational Psychology)
-| **[Publication]** [A Connection between Correlation and Contingency](https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/abs/connection-between-correlation-and-contingency/D3A75249B56AF5DDC436938F1B6EABD1) by Hartley Hirschfeld (Mathematical Proceedings of the Cambridge Philosophical Society)
+| **[Publication]** [A Connection between Correlation and Contingency](https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/abs/connection-between-correlation-and-contingency/D3A75249B56AF5DDC436938F1B6EABD1) by Herman Hartley Hirschfeld (Mathematical Proceedings of the Cambridge Philosophical Society)
 | **[Publication]** [Mixed Data for Factor Analysis](http://archive.numdam.org/item/RSA_2004__52_4_93_0/) by Jerome Pages (Journal of Applied Statistics)
 | **[Course]** [Applied Data Mining and Statistical Learning](https://online.stat.psu.edu/stat508/) by Penn State Eberly College of Science
 |
