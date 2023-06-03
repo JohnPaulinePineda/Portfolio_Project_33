@@ -2536,6 +2536,7 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 # **2. References**
 |
 | **[Book]** [Multiple Factor Analysis by Example Using R](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) by Jerome Pages
+| **[Book]** [Nonlinear Principal Component Analysis and Its Applications](https://link.springer.com/book/10.1007/978-981-10-0159-8#toc) by Yuichi Mori, Masahiro Kuroda and Naomichi Makino
 | **[Book]** [Applied Predictive Modeling](http://appliedpredictivemodeling.com/) by Max Kuhn and Kjell Johnson
 | **[Book]** [An Introduction to Statistical Learning](https://www.statlearning.com/) by Gareth James, Daniela Witten, Trevor Hastie and Rob Tibshirani
 | **[Book]** [Multivariate Data Visualization with R](http://lmdvr.r-forge.r-project.org/figures/figures.html) by Deepayan Sarkar
@@ -2570,8 +2571,16 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 | **[Article]** [Principal Component Analysis Explained Simply](https://blog.bioturing.com/2018/06/14/principal-component-analysis-explained-simply/) by Linh Ngo
 | **[Article]** [A Step-by-Step Explanation of Principal Component Analysis (PCA)](https://builtin.com/data-science/step-step-explanation-principal-component-analysis) by Zakaria Jaadi
 | **[Article]** [What Is Principal Component Analysis (PCA) and How It Is Used?](https://www.sartorius.com/en/knowledge/science-snippets/what-is-principal-component-analysis-pca-and-how-it-is-used-507186) by Sartorius Team
-| **[Article]** [Principal Components Analysis](https://online.stat.psu.edu/stat508/book/export/html/639) by by Penn State Eberly College of Science
+| **[Article]** [Principal Components Analysis](https://online.stat.psu.edu/stat508/book/export/html/639) by Penn State Eberly College of Science
 | **[Article]** [Principal Component Analysis – How PCA Algorithms Works, The Concept, Math and Implementation](https://www.machinelearningplus.com/machine-learning/principal-components-analysis-pca-better-explained/) by Selva Prabhakaran
+| **[Article]** [How Correspondence Analysis Works (A Simple Explanation)](https://www.displayr.com/how-correspondence-analysis-works/) by Tim Bock
+| **[Article]** [Understanding Correspondence Analysis: A Comprehensive Guide for 2023](https://www.displayr.com/understanding-correspondence-analysis-a-comprehensive-guide/) by Matilda Sarah
+| **[Article]** [Correspondence Analysis: What is it, and how can I use it to measure my Brand? (Part 1 of 2)](https://www.qualtrics.com/eng/correspondence-analysis-what-is-it-and-how-can-i-use-it-to-measure-my-brand-part-1-of-2/) by Qualtrics Team
+| **[Article]** [Correspondence Analysis: What is it, and how can I use it to measure my Brand? (Part 2 of 2)](https://www.qualtrics.com/eng/correspondence-analysis-what-is-it-and-how-can-i-use-it-to-measure-my-brand-part-2-of-2/) by Qualtrics Team
+| **[Article]** [Correspondence Analysis Explained](https://everything.explained.today/Correspondence_analysis/) by Everything Explained Today Team
+| **[Article]** [Correspondence Analysis](https://www.ibm.com/docs/en/spss-statistics/28.0.0?topic=edition-correspondence-analysis) by IBM Team
+| **[Article]** [Understanding and Applying Correspondence Analysis](https://www.infoq.com/articles/knime-correspondence-analysis/) by Maarit Widmann and Alfredo Roccato
+| **[Article]** [Correspondence Analysis](https://www.ibm.com/docs/en/spss-statistics/28.0.0?topic=edition-correspondence-analysis) by IBM Team
 | **[Article]** [FAMD - Factor Analysis of Mixed Data in R: Essentials](http://sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/115-famd-factor-analysis-of-mixed-data-in-r-essentials/) by Alboukadel Kassambara
 | **[Article]** [Factor Analysis of Mixed Data Explained](https://everything.explained.today/Factor_analysis_of_mixed_data/) by Everything Explained Today Team
 | **[Article]** [Factor Analysis of Mixed Data](https://rpubs.com/nchelaru/famd) by Nancy Chelaru
@@ -2579,6 +2588,7 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 | **[Article]** [Factor Analysis of Mixed Data](https://medium.com/m/global-identity-2?redirectUrl=https%3A%2F%2Ftowardsdatascience.com%2Ffactor-analysis-of-mixed-data-5ad5ce98663c) by Sohel Mahmood
 | **[Article]** [FAMD: How To Generalize PCA to Categorical and Numerical Data](https://www.xlstat.com/en/solutions/features/factorial-analysis-of-mixed-data) by William Blaufuks
 | **[Publication]** [Analysis of a Complex of Statistical Variables into Principal Components](https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0071325) by Harold Hotelling (Journal of Educational Psychology)
+| **[Publication]** [A Connection between Correlation and Contingency](https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/abs/connection-between-correlation-and-contingency/D3A75249B56AF5DDC436938F1B6EABD1) by Hartley Hirschfeld (Mathematical Proceedings of the Cambridge Philosophical Society)
 | **[Publication]** [Mixed Data for Factor Analysis](http://archive.numdam.org/item/RSA_2004__52_4_93_0/) by Jerome Pages (Journal of Applied Statistics)
 | **[Course]** [Applied Data Mining and Statistical Learning](https://online.stat.psu.edu/stat508/) by Penn State Eberly College of Science
 |
