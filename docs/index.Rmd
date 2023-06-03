@@ -479,6 +479,47 @@ summary(Oscars.FAMD)
 ## 1.4 Data Exploration
 |
 ```{r section_1.4, warning=FALSE, message=FALSE}
+##################################
+# Loading dataset
+##################################
+DE_Oscars <- Oscars
+str(DE_Oscars)
+
+##################################
+# Exploratory analysis
+# among numeric descriptors
+# grouped by Picture
+##################################
+splom(~DE_Oscars[,c(3:10)],
+      groups = DE_Oscars$Picture,
+      pch = 16,
+      cex = 1,
+      alpha = 0.45,
+      varnames = c("T_CTC", "T_AUD", "T_GAP",
+                  "I_CTC", "I_AUD", "I_GAP",
+                  "NOM", "WIN%"),
+      auto.key = list(points = TRUE, space = "right"),
+      main = "Exploratory Analysis Between Picture and Numeric Predictors",
+      xlab = "Scatterplot Matrix of Numeric Predictors")
+
+##################################
+# Exploratory analysis
+# among numeric descriptors
+# grouped by Year
+##################################
+splom(~DE_Oscars[,c(3:10)],
+      groups = DE_Oscars$Year,
+      pch = 16,
+      cex = 1,
+      alpha = 0.45,
+      varnames = c("T_CTC", "T_AUD", "T_GAP",
+                  "I_CTC", "I_AUD", "I_GAP",
+                  "NOM", "WIN%"),
+      auto.key = list(points = TRUE, space = "right"),
+      main = "Exploratory Analysis Between Year and Numeric Predictors",
+      xlab = "Scatterplot Matrix of Numeric Predictors")
+
+
 
 ```
 
@@ -1773,7 +1814,7 @@ DR_CA_Screenplay_COL$contrib
 
 ###  1.5.3 Multiple Correspondence Analysis (MCA)
 |
-| [Multiple Correspondence Analysis](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) performs a series of transformations which allows for the computation of the coordinates of the categories of the qualitative variables, as well as the coordinates of the observations in a representation space that is optimal for a criterion based on inertia. The method assigns optimal scale values (category quantifications) to each category of each variable in such a way that overall, on average, the categories have maximum spread. Because categories of a variable receive as many scorings as there are dimensions, the variables in the analysis are assumed to be multiple nominal in optimal scaling level. It also assigns scores to the objects in the analysis in such a way that the category quantifications are the averages, or centroids, of the object scores of objects in that category. The resulting solution shows objects within the same category plotted close together and objects in different categories plotted far apart. Each object is as close as possible to the category points of categories that apply to the object. In this way, the categories divide the objects into homogeneous subgroups. Variables are considered homogeneous when they classify objects in the same categories into the same subgroups.
+| [Multiple Correspondence Analysis](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) performs a series of transformations which allows for the computation of the coordinates of the categories of the qualitative variables, as well as the coordinates of the observations in a representation space that is optimal for a criterion based on inertia. The method, which is a generalization of the Correspondence Analysis (CA) to multiple qualitative variables, assigns optimal scale values (category quantifications) to each category of each variable in such a way that overall, on average, the categories have maximum spread. Because categories of a variable receive as many scorings as there are dimensions, the variables in the analysis are assumed to be multiple nominal in optimal scaling level. It also assigns scores to the objects in the analysis in such a way that the category quantifications are the averages, or centroids, of the object scores of objects in that category. The resulting solution shows objects within the same category plotted close together and objects in different categories plotted far apart. Each object is as close as possible to the category points of categories that apply to the object. In this way, the categories divide the objects into homogeneous subgroups. Variables are considered homogeneous when they classify objects in the same categories into the same subgroups.
 |
 ```{r section_1.5.3, warning=FALSE, message=FALSE}
 ##################################
