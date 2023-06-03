@@ -480,7 +480,7 @@ summary(Oscars.FAMD)
 |
 | Exploratory data analysis:
 |
-| **[A]** Critic and audience scores including their gaps from both sources are correlated.
+| **[A]** Critic and audience scores including their gaps from both sources were correlated.
 |      **[A.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> = High <span style="color: #FF0000">IMDB_Critic</span>
 |      **[A.2]** High <span style="color: #FF0000">Tomatometer_Audience</span> = High <span style="color: #FF0000">IMDB_Audience</span>
 |      **[A.3]** Low <span style="color: #FF0000">Tomatometer_Critic_Audience_Gap</span> = Low <span style="color: #FF0000">IMDB_Critic_Audience_Gap</span>
@@ -948,6 +948,15 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
 ###  1.5.2 Correspondence Analysis (CA)
 |
 | [Correspondence Analysis](https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/abs/connection-between-correlation-and-contingency/D3A75249B56AF5DDC436938F1B6EABD1) employs a statistical method for summarizing tables and analyzing the relationship between two or more categorical variables. It is a data visualization technique that aims to find patterns and associations between the categories of different variables. A contingency table is created to represent the frequencies or counts of the categories of the variables. The contingency table is then transformed into a matrix of proportions or percentages to normalize the data by computing row and column averages, expected values and residuals. The method then calculates the principal components of the normalized matrix and maps the variables and categories onto a two-dimensional plot based on their proximity to each other. The plot displays the patterns and associations between the variables and categories, with closer proximity indicating a stronger relationship.
+|
+| **[A]** Evaluating both <span style="color: #FF0000">Cinematography</span> and <span style="color: #FF0000">Genre</span> descriptors, <span style="color: #FF0000">Cinematography=WON</span> was observed to be associated with <span style="color: #FF0000">Genre=Sci-Fi</span> and <span style="color: #FF0000">Genre=Adventure</span>. These included Sci-Fi movies like Avatar, Inception, Gravity and Dune; and adventure movies like Life of Pi and Hugo.
+|
+| **[B]** Evaluating both <span style="color: #FF0000">Directing</span> and <span style="color: #FF0000">Genre</span> descriptors, <span style="color: #FF0000">Directing=WON</span> was observed to be associated with <span style="color: #FF0000">Genre=Western</span> and <span style="color: #FF0000">Genre=Musical</span>. These included Western movies like The Revenant and The Power of the Dog; and musical movies like La La Land.
+|
+| **[C]** Evaluating both <span style="color: #FF0000">Editing</span> and <span style="color: #FF0000">Genre</span> descriptors, <span style="color: #FF0000">Editing=WON</span> was observed to be associated with <span style="color: #FF0000">Genre=War</span> and <span style="color: #FF0000">Genre=Music</span>. These included war movies like The Hurt Locker, Hacksaw Ridge and Dunkirk; and music movies like Whiplash and The Sound of Metal.
+|
+| **[D]** Evaluating both <span style="color: #FF0000">Screenplay</span> and <span style="color: #FF0000">Genre</span> descriptors, <span style="color: #FF0000">Screenplay=WON</span> was observed to be associated with <span style="color: #FF0000">Genre=LGBTQ+</span>, <span style="color: #FF0000">Genre=Thriller</span> and <span style="color: #FF0000">Genre=Comedy</span>. These included LGBTQ+ movies like Moonlight and Call me By Your Name; thriller movies like Get Out, Parasite and Promising Young Woman; and comedy movies like The Descendants, Her, Birdman or (The Unexpected Virtue of Ignorance), The Big Short, BlacKkKlansman, Green Book, Jojo Rabbit and Everything Everywhere All at Once.
+
 |
 ```{r section_1.5.2, warning=FALSE, message=FALSE}
 ##################################
