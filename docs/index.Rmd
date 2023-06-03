@@ -482,16 +482,16 @@ summary(Oscars.FAMD)
 ##################################
 # Loading dataset
 ##################################
-DE_Oscars <- Oscars
-str(DE_Oscars)
+EDA_Oscars <- Oscars
+str(EDA_Oscars)
 
 ##################################
 # Exploratory analysis
-# among numeric descriptors
+# among quantitative descriptors
 # grouped by Picture
 ##################################
-splom(~DE_Oscars[,c(3:10)],
-      groups = DE_Oscars$Picture,
+splom(~EDA_Oscars[,c(3:10)],
+      groups = EDA_Oscars$Picture,
       pch = 16,
       cex = 1,
       alpha = 0.45,
@@ -499,16 +499,16 @@ splom(~DE_Oscars[,c(3:10)],
                   "I_CTC", "I_AUD", "I_GAP",
                   "NOM", "WIN%"),
       auto.key = list(points = TRUE, space = "right"),
-      main = "Exploratory Analysis Between Picture and Numeric Predictors",
-      xlab = "Scatterplot Matrix of Numeric Predictors")
+      main = "Exploratory Analysis Between Picture and Quantitative Descriptors",
+      xlab = "Scatterplot Matrix of Quantitative Descriptors")
 
 ##################################
 # Exploratory analysis
-# among numeric descriptors
+# among quantitative descriptors
 # grouped by Year
 ##################################
-splom(~DE_Oscars[,c(3:10)],
-      groups = DE_Oscars$Year,
+splom(~EDA_Oscars[,c(3:10)],
+      groups = EDA_Oscars$Year,
       pch = 16,
       cex = 1,
       alpha = 0.45,
@@ -516,10 +516,48 @@ splom(~DE_Oscars[,c(3:10)],
                   "I_CTC", "I_AUD", "I_GAP",
                   "NOM", "WIN%"),
       auto.key = list(points = TRUE, space = "right"),
-      main = "Exploratory Analysis Between Year and Numeric Predictors",
-      xlab = "Scatterplot Matrix of Numeric Predictors")
+      main = "Exploratory Analysis Between Year and Quantitative Descriptors",
+      xlab = "Scatterplot Matrix of Quantitative Descriptors")
 
+##################################
+# Exploratory analysis
+# among qualitative descriptors
+# grouped by Picture
+##################################
 
+##################################
+# Creating a function to formulate
+# the proportions table
+##################################
+EDA.PropTable.Function <- function(FactorVar) {
+  EDA.Bar.Source.FactorVar <- EDA_Oscars[,c("Picture",
+                                          FactorVar)]
+  EDA.Bar.Source.FactorVar.Prop <- as.data.frame(prop.table(table(EDA.Bar.Source.FactorVar), 2))
+  names(EDA.Bar.Source.FactorVar.Prop)[2] <- "Status"
+  EDA.Bar.Source.FactorVar.Prop$Variable <- rep(FactorVar,nrow(EDA.Bar.Source.FactorVar.Prop))
+  
+  return(EDA.Bar.Source.FactorVar.Prop)
+}
+
+(EDA.Bar.Source.FactorVar.Prop <- rbind(EDA.PropTable.Function(names(EDA_Oscars)[14]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[15]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[16]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[17]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[18]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[19]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[20])))
+
+(EDA.Barchart.FactorVar <- barchart(EDA.Bar.Source.FactorVar.Prop[,3] ~
+                                      EDA.Bar.Source.FactorVar.Prop[,2] |
+                                      EDA.Bar.Source.FactorVar.Prop[,4],
+                                      data=EDA.Bar.Source.FactorVar.Prop,
+                                      groups = EDA.Bar.Source.FactorVar.Prop[,1],
+                                      stack=TRUE,
+                                      ylab = "Proportion",
+                                      layout=(c(3,3)),
+      auto.key = list(points = TRUE, space = "right"),
+      main = "Exploratory Analysis Between Picture and Qualitative Descriptors",
+      xlab = "Bar Chart of Qualitative Descriptors"))
 
 ```
 
