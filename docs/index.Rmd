@@ -478,6 +478,20 @@ summary(Oscars.FAMD)
 
 ## 1.4 Data Exploration
 |
+| Exploratory data analysis:
+|
+| **[A]** Critic and audience scores including their gaps from both sources are correlated.
+|      **[A.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> = High <span style="color: #FF0000">IMDB_Critic</span>
+|      **[A.2]** High <span style="color: #FF0000">Tomatometer_Audience</span> = High <span style="color: #FF0000">IMDB_Audience</span>
+|      **[A.3]** Low <span style="color: #FF0000">Tomatometer_Critic_Audience_Gap</span> = Low <span style="color: #FF0000">IMDB_Critic_Audience_Gap</span>
+|
+| **[B]** Movies which won the best picture award generally had the following characteristics:
+|      **[B.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> and <span style="color: #FF0000">IMDB_Critic</span> scores
+|      **[B.2]** High <span style="color: #FF0000">Tomatometer_Audience</span> and <span style="color: #FF0000">IMDB_Audience</span> scores
+|      **[B.3]** Low <span style="color: #FF0000">Tomatometer_Critic_Audience_Gap</span> and <span style="color: #FF0000">IMDB_Critic_Audience_Gap</span> scores
+|      **[B.4]** High <span style="color: #FF0000">Nominations_Total</span> and <span style="color: #FF0000">Nomination_SuccessRate</span> scores
+|      **[B.5]** Winners for the <span style="color: #FF0000">Directing</span> and <span style="color: #FF0000">Screenplay</span> categories
+|
 ```{r section_1.4, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset
