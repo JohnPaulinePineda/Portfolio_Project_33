@@ -1880,13 +1880,13 @@ DR_CA_Screenplay_COL$contrib
 |      **[A.1]** <span style="color: #FF0000">PC1</span> = 20%
 |      **[A.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 37%
 |      **[A.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 52%
-| 
+|
 | **[B]** Due to the high number of descriptors and levels, no eigenvalue was sufficiently greater than 1. Nevertheless, all subsequent analysis was only proceeded for <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span>.
 |
 | **[C]** <span style="color: #FF0000">PC1</span> can be described as having been collectively awarded in the directing and cinematography categories, as characterized by the following descriptor variables, ranked based on contribution:
 |      **[C.1]** <span style="color: #FF0000">Directing=WON</span> = 31.74%
 |      **[C.2]** <span style="color: #FF0000">Cinematography=WON</span> = 13.58%
-| 
+|
 | **[D]** <span style="color: #FF0000">PC2</span> can be described as having been awarded in the editing category but was not nominated in the screenplay category, as characterized by the following descriptor variables, ranked based on contribution:
 |      **[D.1]** <span style="color: #FF0000">Screenplay=NNOM</span> = 29.12%
 |      **[D.2]** <span style="color: #FF0000">Editing=WON</span> = 18.01%
@@ -1899,7 +1899,7 @@ DR_CA_Screenplay_COL$contrib
 |             **[E.1.4]** <span style="color: #FF0000">Editing=WON</span>
 |      **[E.2]** Descriptor variables demonstrated correlation and clustered around two groups:
 |             **[E.2.1]** Cluster 1 (<span style="color: #FF0000">Directing=WON</span>, <span style="color: #FF0000">Cinematography=WON</span>) indicates that winning the directing award is associated with equally winning the cinematography.
-|             **[E.2.2]** Cluster 2 (<span style="color: #FF0000">Editing=WON</span>, <span style="color: #FF0000">Screenplay=NNOM</span>) indicates that winners awarded with best in editing were not nominated for screenplay.
+|             **[E.2.2]** Cluster 2 (<span style="color: #FF0000">Editing=WON</span>, <span style="color: #FF0000">Screenplay=NNOM</span>) indicates that winners awarded with best in editing will not be nominated for screenplay.
 |
 | **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
 |      **[F.1]** Movies which won for direction also won for cinematography (e.g. Life of Pi, Gravity, Birdman or (The Unexpected Virtue of Ignorance), The Revenant, La La Land and Roma).
@@ -2222,6 +2222,31 @@ DR_MCA_IND$contrib[,c("Dim 1","Dim 2")]
 ###  1.5.4 Multiple Factor Analysis (MFA)
 |
 | [Multiple Factor Analysis](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) evaluates several groups of variables simultaneously, and to obtain results, in particular, charts, that allow studying the relationship between the observations, the variables, and groups. Within a group, the variables must be of the same type (quantitative table, qualitative table or frequency table), but the groups can be of different types. The method is a synthesis of the PCA (Principal Component Analysis) for quantitative tables, the MCA (Multiple Correspondence Analysis) for qualitative tables and the CA (Correspondence Analysis) for frequency tables. The process involves successively carrying out for each table a PCA, an MCA or a CA according to the type of the variables of the table. The method stores the value of the first eigenvalue of each analysis to then weight the various tables in the second part of the analysis. A weighted PCA is carried out a  on the columns of all the tables, knowing that the tables of qualitative variables are transformed into complete disjunctive tables, each indicator variable having a weight that is a function of the frequency of the corresponding category. The weighting of the tables prevents that the tables which include more variables weight too much in the analysis. The method allows visualization in a two or three-dimensional space, the groups (each group being represented by a point), the variables, the principal axes of the analyses of the first phase, and the individuals. In addition, one can study the impact of the other tables on an observation by simultaneously visualizing the observation described by all the variables and the projected observations described by the variables of only one group.
+|
+| **[A]** Among the assigned group of descriptor variables, relationships observed are as follows:
+|      **[A.1]** Association between two groups of descriptors were noted = <span style="color: #FF0000">Group=Technicalities</span> comprised of <span style="color: #FF0000">Picture</span>, <span style="color: #FF0000">Cinematography</span> and <span style="color: #FF0000">Directing</span>; and <span style="color: #FF0000">Group=Aesthetics</span> comprised of <span style="color: #FF0000">Design</span> and <span style="color: #FF0000">Sound</span>.
+|      **[A.2]** <span style="color: #FF0000">Group=Recognitions</span> comprised of <span style="color: #FF0000">Nominations_Total</span> and <span style="color: #FF0000">Nomination_SuccessRate</span> was not associated with other groups.
+|      **[A.3]** <span style="color: #FF0000">Group=Storytelling</span> comprised of <span style="color: #FF0000">Editing</span>, <span style="color: #FF0000">Acting</span>and <span style="color: #FF0000">Screenplay</span> was not associated with other groups.
+|
+| **[B]** <span style="color: #FF0000">PC1</span> can be described as having been collectively awarded in all categories, as characterized by the following descriptor variables:
+|      **[B.1]** High <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[B.2]** High <span style="color: #FF0000">Nominations_Total</span>
+|      **[B.3]** <span style="color: #FF0000">Picture=WON</span>
+|      **[B.4]** <span style="color: #FF0000">Editing=WON</span>
+|      **[B.5]** <span style="color: #FF0000">Sound=WON</span>
+|      **[B.6]** <span style="color: #FF0000">Directing=WON</span>
+|      **[B.7]** <span style="color: #FF0000">Cinematography=WON</span>
+|      **[B.7]** <span style="color: #FF0000">Design=WON</span>
+|
+| **[C]** <span style="color: #FF0000">PC2</span> can be described as having won best picture as well as editing and sound awards, but with a few number of nominations but won directing, cinematography and design awards, as characterized by the following descriptor variables:
+|      **[C.1]** High <span style="color: #FF0000">Nomination_SuccessRate</span> with:
+|             **[C.1.1]** <span style="color: #FF0000">Picture=WON</span>
+|             **[C.1.2]** <span style="color: #FF0000">Editing=WON</span>
+|             **[C.1.3]** <span style="color: #FF0000">Sound=WON</span>
+|      **[C.2]** Low <span style="color: #FF0000">Nominations_Total</span> with:
+|             **[C.2.1]** <span style="color: #FF0000">Directing=WON</span>
+|             **[C.2.2]** <span style="color: #FF0000">Cinematography=WON</span>
+|             **[C.2.3]** <span style="color: #FF0000">Design=WON</span>
 |
 ```{r section_1.5.4, warning=FALSE, message=FALSE}
 
