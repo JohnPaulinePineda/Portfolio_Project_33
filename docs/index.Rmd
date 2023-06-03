@@ -1,7 +1,7 @@
 ---
 title: 'R : Exploring and Visualizing Extracted Dimensions from Principal Component Algorithms'
 author: "John Pauline Pineda"
-date: "June 10, 2023"
+date: "June 4, 2023"
 output: 
   html_document:
     toc: true
@@ -372,6 +372,64 @@ if (length(names(DQA.Descriptors.Numeric))==0) {
 ##  1.3 Data Preprocessing
 
 ###  1.3.1 Dataset Formulation
+|
+| Data Preparation:
+|
+| **[A]** Different data formats and descriptor variables were considered depending on the dimensionality reduction method used in the analysis.
+|
+| **[B]** Principal Component Analysis: Matrix data with the following variables:
+|      **[B.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[B.2]** Quantitative PCA Descriptor: <span style="color: #FF0000">Tomatometer_Critic</span>
+|      **[B.3]** Quantitative PCA Descriptor: <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[B.4]** Quantitative PCA Descriptor: <span style="color: #FF0000">IMDB_Critic</span>
+|      **[B.5]** Quantitative PCA Descriptor: <span style="color: #FF0000">IMDB_Audience</span>
+|      **[B.6]** Quantitative PCA Descriptor: <span style="color: #FF0000">Nominations_Total</span>
+|      **[B.7]** Quantitative PCA Descriptor: <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[B.8]** Post-PCA Factor: <span style="color: #FF0000">Year</span>
+|      **[B.9]** Post-PCA Factor: <span style="color: #FF0000">Picture</span>
+|
+| **[C]** Correspondence Analysis: Contingency table with the following variables:
+|      **[C.1]** Qualitative CA Descriptor: <span style="color: #FF0000">Genre</span>
+|      **[C.2]** Qualitative CA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[C.3]** Qualitative CA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[C.4]** Qualitative CA Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[C.5]** Qualitative CA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|
+| **[D]** Multiple Correspondence Analysis: Matrix data with the following variables:
+|      **[D.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[D.2]** Qualitative MCA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[D.3]** Qualitative MCA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[D.4]** Qualitative MCA Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[D.5]** Qualitative MCA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|      **[D.6]** Post-MCA Factor: <span style="color: #FF0000">Year</span>
+|      **[D.7]** Post-MCA Factor: <span style="color: #FF0000">Picture</span>
+|
+| **[E]** Multiple Factor Analysis: Matrix data with the following groups and variables:
+|      **[E.1]** Row Labels: <span style="color: #FF0000">Film</span>
+|      **[E.2]** MFA Descriptor Group: <span style="color: #FF0000">Recognitions</span>
+|             **[E.2.1]** Quantitative MFA Descriptor: <span style="color: #FF0000">Nominations_Total</span>
+|             **[E.2.2]** Quantitative MFA Descriptor: <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[E.3]** MFA Descriptor Group: <span style="color: #FF0000">Technicalities</span>
+|             **[E.3.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Picture</span>
+|             **[E.3.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|             **[E.3.3]** Qualitative MFA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[E.4]** MFA Descriptor Group : <span style="color: #FF0000">Storytelling</span>
+|             **[E.4.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Editing</span>
+|             **[E.4.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|             **[E.4.3]** Qualitative MFA Descriptor: <span style="color: #FF0000">Acting</span>
+|      **[E.5]** MFA Descriptor Group : <span style="color: #FF0000">Aesthetics</span>
+|             **[E.5.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Design</span>
+|             **[E.5.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Sound</span>
+|
+| **[F]** Factor Analysis of Mixed Data: Matrix data with the following variables:
+|      **[F.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[F.2]** Quantitative FAMD Descriptor: <span style="color: #FF0000">Tomatometer_Critic</span>
+|      **[F.3]** Quantitative FAMD Descriptor: <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[F.4]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Picture</span>
+|      **[F.5]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[F.6]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[F.7]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[F.8]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Screenplay</span>
 |
 ```{r section_1.3.1, warning=FALSE, message=FALSE}
 ##################################
@@ -2413,6 +2471,36 @@ Picture <- as.factor(SD_MFA[,"Picture"])
 ###  1.5.5 Factor Analysis of Mixed Data (FAMD)
 |
 | [Factor Analysis of Mixed Data](http://archive.numdam.org/item/RSA_2004__52_4_93_0/) reduces data dimensionality to identify nearness between both quantitative and qualitative variables, as well as the proximity between the observations by combining the Principal Component Analysis (PCA) and Multiple Correspondence Analysis (MCA). The method employs a series of statistical transformations, including calculations of the correlation matrix, eigenvalues and eigenvectors, on a set of qualitative and/or quantitative variables in order to project them on a vector space generated by orthogonal components.
+|
+| **[A]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
+|      **[A.1]** <span style="color: #FF0000">PC1</span> = 54%
+|      **[A.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 82%
+|      **[A.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 100%
+| 
+| **[B]** With eigenvalues sufficiently greater than 1, only <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> were used in the subsequent exploratory analysis.
+|      **[B.1]** <span style="color: #FF0000">PC1</span> = 1.60
+|      **[B.1]** <span style="color: #FF0000">PC2</span> = 1.00
+|
+| **[C]** <span style="color: #FF0000">PC1</span> can be described as having a higher number of awards won including best picture, as characterized by the following descriptor variables, ranked based on contribution and statistical significance:
+|      **[C.1]** <span style="color: #FF0000">Picture=WON</span> = 40.90%
+|      **[C.2]** High <span style="color: #FF0000">Nomination_SuccessRate</span> = 40.01%
+| 
+| **[D]** <span style="color: #FF0000">PC2</span> can be described a high number of oscar nominations, as characterized by the following descriptor variables, ranked based on importance and statistical significance:
+|      **[D.1]** High <span style="color: #FF0000">Nominations_Total</span> = 80.81%
+|
+| **[E]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
+|      **[E.1]** All descriptor variables were well-represented for both principal components.
+|             **[E.1.1]** <span style="color: #FF0000">Picture</span>
+|             **[E.1.2]** <span style="color: #FF0000">Nomination_SuccessRate</span>
+|             **[E.1.3]** <span style="color: #FF0000">Nominations_Total</span>
+|      **[E.2]** Descriptor variables demonstrated correlation and clustered around two groups:
+|             **[E.2.1]** Cluster 1 (<span style="color: #FF0000">Picture</span>, <span style="color: #FF0000">Nomination_SuccessRate</span>) indicates that best picture winners also won most awards.
+|             **[E.2.2]** Cluster 2 (<span style="color: #FF0000">Nominations_Total</span>) indicates that best picture nominees can have a high number of nominations without actually winning most awards including best picture.
+|
+| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
+|      **[F.1]** Best picture winners are also associated with winning for best screenplay (e.g. The Hurt Locker, The King's Speech, Argo, 12 Years a Slave, Birdman or (The Unexpected Virtue of Ignorance), Spotlight, Moonlight, Green Book, Parasite, CODA, Everything Everywhere All at Once).
+|      **[F.2]** Best picture winners are also associated with winning for best directing (e.g. The Hurt Locker, The King's Speech, The Artist, Birdman or (The Unexpected Virtue of Ignorance), The Shape of Water, Parasite, Nomadland, Everything Everywhere All at Once).
+|      **[F.3]** Best picture winners are not readily associated with winning for best editing or cinematography. 
 |
 ```{r section_1.5.5, warning=FALSE, message=FALSE}
 ##################################
