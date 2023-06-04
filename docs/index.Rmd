@@ -771,7 +771,7 @@ DR_PCA_VAR$contrib
                                          col.var = "cos2", 
                                          gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
                                          legend.title = "Squared Coordinates") +
-  labs(title = "Principal Component Analysis : Squared Correlation Circle",
+  labs(title = "Principal Component Analysis : Squared Coordinate Plot",
        subtitle = "Descriptor Variable Representation Quality",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -795,7 +795,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
                                          col.var = DR_PCA_KMEANS_CLUSTER, 
                                          palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
                                          legend.title = "Cluster") +
-  labs(title = "Principal Component Analysis : Correlation Circle",
+  labs(title = "Principal Component Analysis : Factorial Map of Quantitative Variables",
        subtitle = "Principal Components Versus Descriptor Variable Clusters",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -909,7 +909,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
              repel = TRUE, 
              legend.title = "Picture",
               addEllipses = FALSE) +
-  labs(title = "Principal Component Analysis : Correlation Circle",
+  labs(title = "Principal Component Analysis : Factorial Map of Individuals",
        subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -928,7 +928,7 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
              repel = TRUE, 
              legend.title = "Year",
               addEllipses = FALSE) +
-  labs(title = "Principal Component Analysis : Correlation Circle",
+  labs(title = "Principal Component Analysis : Factorial Map of Individuals",
        subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2045,7 +2045,7 @@ DR_MCA_VAR$contrib
                                          col.var = "cos2", 
                                          gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
                                          legend.title = "Squared Coordinates") +
-  labs(title = "Multiple Correspondence Analysis : Squared Correlation Circle",
+  labs(title = "Multiple Correspondence Analysis : Squared Coordinate Plot",
        subtitle = "Descriptor Variable Representation Quality",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2069,7 +2069,7 @@ DR_MCA_KMEANS_CLUSTER <- as.factor(DR_MCA_KMEANS$cluster)
                                          col.var = DR_MCA_KMEANS_CLUSTER, 
                                          palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
                                          legend.title = "Cluster") +
-  labs(title = "Multiple Correspondence Analysis : Correlation Circle",
+  labs(title = "Multiple Correspondence Analysis : Correlation Chart",
        subtitle = "Principal Components Versus Descriptor Variable Clusters",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2183,7 +2183,7 @@ DR_MCA_IND$contrib[,c("Dim 1","Dim 2")]
              repel = TRUE,
              legend.title = "Picture",
               addEllipses = FALSE) +
-  labs(title = "Multiple Correspondence Analysis : Correlation Circle",
+  labs(title = "Multiple Correspondence Analysis : Factorial Map of Individuals",
        subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2202,7 +2202,7 @@ DR_MCA_IND$contrib[,c("Dim 1","Dim 2")]
              repel = TRUE,
              legend.title = "Year",
               addEllipses = FALSE) +
-  labs(title = "Multiple Correspondence Analysis : Correlation Circle",
+  labs(title = "Multiple Correspondence Analysis : Factorial Map of Individuals",
        subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2390,7 +2390,7 @@ DR_MFA_VAR$contrib
 ##################################
 (DR_MFA_VariableGroups <- fviz_mfa_var(DR_MFA, 
                                        choice = "group") +
-  labs(title = "Multiple Factor Analysis : Variable Groups",
+  labs(title = "Multiple Factor Analysis : Factorial Map of Variable Groups",
        subtitle = "Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2404,7 +2404,7 @@ DR_MFA_VAR$contrib
 ##################################
 (DR_MFA_QuantitativeVariableGroups <- fviz_mfa_var(DR_MFA, 
                                        choice = "quanti.var") +
-  labs(title = "Multiple Factor Analysis : Quantitative Variable Groups",
+  labs(title = "Multiple Factor Analysis : Correlation Plot of Quantitative Variables",
        subtitle = "Quantitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2423,7 +2423,7 @@ DR_MFA_VAR$contrib
                                        habillage = SD_MFA$Picture, 
                                        palette = c("#888888","#5544FF"),
                                        legend.title = "Picture") +
-  labs(title = "Multiple Factor Analysis : Individuals for Qualitative Variable Groups",
+  labs(title = "Multiple Factor Analysis : Factorial Map of Individuals",
        subtitle = "Qualitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2438,7 +2438,7 @@ DR_MFA_VAR$contrib
 (DR_MFA_QualitativeVariableGroups <- fviz_mfa_var(DR_MFA, 
                                        choice = "quali.var",
                                        geom = "text") +
-  labs(title = "Multiple Factor Analysis : Qualitative Variable Groups",
+  labs(title = "Multiple Factor Analysis : Factorial Map of Qualitative Variables",
        subtitle = "Qualitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2584,7 +2584,7 @@ DR_FAMD_VAR$contrib
                                          col.var = "cos2", 
                                          gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
                                          legend.title = "Squared Coordinates") +
-  labs(title = "Factor Analysis of Mixed Data : Squared Correlation Circle",
+  labs(title = "Factor Analysis of Mixed Data : Squared Coordinate Plot",
        subtitle = "Descriptor Variable Representation Quality",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2609,7 +2609,7 @@ DR_FAMD_KMEANS_CLUSTER <- as.factor(DR_FAMD_KMEANS$cluster)
                                          palette = c("#0073C2FF", 
                                                      "#EFC000FF"),
                                          legend.title = "Cluster") +
-  labs(title = "Factor Analysis of Mixed Data : Correlation Circle",
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Variables",
        subtitle = "Principal Components Versus Descriptor Variable Clusters",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2724,7 +2724,7 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
              col.quali.var = "#FF0000",
              legend.title = "Cinematography",
              addEllipses = FALSE) +
-  labs(title = "Factor Analysis of Mixed Data : Individual Graph (Cinematography)",
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Individuals (Cinematography)",
        subtitle = "Individuals by Qualitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2739,7 +2739,7 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
              col.quali.var = "#FF0000",
              legend.title = "Directing",
              addEllipses = FALSE) +
-  labs(title = "Factor Analysis of Mixed Data : Individual Graph (Directing)",
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Individuals (Directing)",
        subtitle = "Individuals by Qualitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2754,7 +2754,7 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
              col.quali.var = "#FF0000",
              legend.title = "Editing",
              addEllipses = FALSE) +
-  labs(title = "Factor Analysis of Mixed Data : Individual Graph (Editing)",
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Individuals (Editing)",
        subtitle = "Individuals by Qualitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2769,7 +2769,7 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
              col.quali.var = "#FF0000",
              legend.title = "Screenplay",
              addEllipses = FALSE) +
-  labs(title = "Factor Analysis of Mixed Data : Individual Graph (Screenplay)",
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Individuals (Screenplay)",
        subtitle = "Individuals by Qualitative Descriptor Variable Principal Components",
        y = "Principal Component 2",
        x = "Principal Component 1") +
