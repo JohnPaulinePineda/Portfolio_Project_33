@@ -1954,34 +1954,43 @@ DR_CA_Screenplay_COL$contrib
 |
 | [Multiple Correspondence Analysis](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) performs a series of transformations which allows for the computation of the coordinates of the categories of the qualitative variables, as well as the coordinates of the observations in a representation space that is optimal for a criterion based on inertia. The method, which is a generalization of the Correspondence Analysis (CA) to multiple qualitative variables, assigns optimal scale values (category quantifications) to each category of each variable in such a way that overall, on average, the categories have maximum spread. Because categories of a variable receive as many scorings as there are dimensions, the variables in the analysis are assumed to be multiple nominal in optimal scaling level. It also assigns scores to the objects in the analysis in such a way that the category quantifications are the averages, or centroids, of the object scores of objects in that category. The resulting solution shows objects within the same category plotted close together and objects in different categories plotted far apart. Each object is as close as possible to the category points of categories that apply to the object. In this way, the categories divide the objects into homogeneous subgroups. Variables are considered homogeneous when they classify objects in the same categories into the same subgroups.
 |
-| **[A]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
-|      **[A.1]** <span style="color: #FF0000">PC1</span> = 20%
-|      **[A.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 37%
-|      **[A.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 52%
+| **[A]** Input data is a matrix containing the following variables:
+|      **[A.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[A.2]** Qualitative MCA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[A.3]** Qualitative MCA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[A.4]** Qualitative MCA Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[A.5]** Qualitative MCA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|      **[A.6]** Post-MCA Factor: <span style="color: #FF0000">Year</span>
+|      **[A.7]** Post-MCA Factor: <span style="color: #FF0000">Picture</span>
 |
-| **[B]** Due to the high number of descriptors and levels, no eigenvalue was sufficiently greater than 1. Nevertheless, all subsequent analysis was only proceeded for <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span>.
+| **[B]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
+|      **[B.1]** <span style="color: #FF0000">PC1</span> = 20%
+|      **[B.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 37%
+|      **[B.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 52%
 |
-| **[C]** <span style="color: #FF0000">PC1</span> can be described as having been collectively awarded in the directing and cinematography categories, as characterized by the following descriptor variables, ranked based on contribution:
-|      **[C.1]** <span style="color: #FF0000">Directing=WON</span> = 31.74%
-|      **[C.2]** <span style="color: #FF0000">Cinematography=WON</span> = 13.58%
+| **[C]** Due to the high number of descriptors and levels, no eigenvalue was sufficiently greater than 1. Nevertheless, all subsequent analysis was only proceeded for <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span>.
 |
-| **[D]** <span style="color: #FF0000">PC2</span> can be described as having been awarded in the editing category but was not nominated in the screenplay category, as characterized by the following descriptor variables, ranked based on contribution:
-|      **[D.1]** <span style="color: #FF0000">Screenplay=NNOM</span> = 29.12%
-|      **[D.2]** <span style="color: #FF0000">Editing=WON</span> = 18.01%
+| **[D]** <span style="color: #FF0000">PC1</span> can be described as having been collectively awarded in the directing and cinematography categories, as characterized by the following descriptor variables, ranked based on contribution:
+|      **[D.1]** <span style="color: #FF0000">Directing=WON</span> = 31.74%
+|      **[D.2]** <span style="color: #FF0000">Cinematography=WON</span> = 13.58%
 |
-| **[E]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
-|      **[E.1]** The most represented descriptor variables and their corresponding levels are as follows:
-|             **[E.1.1]** <span style="color: #FF0000">Directing=WON</span>
-|             **[E.1.2]** <span style="color: #FF0000">Cinematography=WON</span>
-|             **[E.1.3]** <span style="color: #FF0000">Screenplay=NNOM</span>
-|             **[E.1.4]** <span style="color: #FF0000">Editing=WON</span>
-|      **[E.2]** Descriptor variables demonstrated correlation and clustered around two groups:
-|             **[E.2.1]** Cluster 1 (<span style="color: #FF0000">Directing=WON</span>, <span style="color: #FF0000">Cinematography=WON</span>) indicates that winning the directing award is associated with equally winning the cinematography.
-|             **[E.2.2]** Cluster 2 (<span style="color: #FF0000">Editing=WON</span>, <span style="color: #FF0000">Screenplay=NNOM</span>) indicates that winners awarded with best in editing will not be nominated for screenplay.
+| **[E]** <span style="color: #FF0000">PC2</span> can be described as having been awarded in the editing category but was not nominated in the screenplay category, as characterized by the following descriptor variables, ranked based on contribution:
+|      **[E.1]** <span style="color: #FF0000">Screenplay=NNOM</span> = 29.12%
+|      **[E.2]** <span style="color: #FF0000">Editing=WON</span> = 18.01%
 |
-| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
-|      **[F.1]** Movies which won for direction also won for cinematography (e.g. Life of Pi, Gravity, Birdman or (The Unexpected Virtue of Ignorance), The Revenant, La La Land and Roma).
-|      **[F.2]** Movies which won for editing are most associated with the absence of a nomination for screenplay (e.g. Gravity, Mad Max: Fury Road, Hacksaw Ridge, Dunkirk, Bohemian Rhapsody and Ford v Ferrari).
+| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
+|      **[F.1]** The most represented descriptor variables and their corresponding levels are as follows:
+|             **[F.1.1]** <span style="color: #FF0000">Directing=WON</span>
+|             **[F.1.2]** <span style="color: #FF0000">Cinematography=WON</span>
+|             **[F.1.3]** <span style="color: #FF0000">Screenplay=NNOM</span>
+|             **[F.1.4]** <span style="color: #FF0000">Editing=WON</span>
+|      **[F.2]** Descriptor variables demonstrated correlation and clustered around two groups:
+|             **[F.2.1]** Cluster 1 (<span style="color: #FF0000">Directing=WON</span>, <span style="color: #FF0000">Cinematography=WON</span>) indicates that winning the directing award is associated with equally winning the cinematography.
+|             **[F.2.2]** Cluster 2 (<span style="color: #FF0000">Editing=WON</span>, <span style="color: #FF0000">Screenplay=NNOM</span>) indicates that winners awarded with best in editing will not be nominated for screenplay.
+|
+| **[G]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
+|      **[G.1]** Movies which won for direction also won for cinematography (e.g. Life of Pi, Gravity, Birdman or (The Unexpected Virtue of Ignorance), The Revenant, La La Land and Roma).
+|      **[G.2]** Movies which won for editing are most associated with the absence of a nomination for screenplay (e.g. Gravity, Mad Max: Fury Road, Hacksaw Ridge, Dunkirk, Bohemian Rhapsody and Ford v Ferrari).
 |
 ```{r section_1.5.3, warning=FALSE, message=FALSE}
 ##################################
@@ -2303,30 +2312,47 @@ DR_MCA_IND$contrib[,c("Dim 1","Dim 2")]
 |
 | [Multiple Factor Analysis](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) evaluates several groups of variables simultaneously, and to obtain results, in particular, charts, that allow studying the relationship between the observations, the variables, and groups. Within a group, the variables must be of the same type (quantitative table, qualitative table or frequency table), but the groups can be of different types. The method is a synthesis of the PCA (Principal Component Analysis) for quantitative tables, the MCA (Multiple Correspondence Analysis) for qualitative tables and the CA (Correspondence Analysis) for frequency tables. The process involves successively carrying out for each table a PCA, an MCA or a CA according to the type of the variables of the table. The method stores the value of the first eigenvalue of each analysis to then weight the various tables in the second part of the analysis. A weighted PCA is carried out a  on the columns of all the tables, knowing that the tables of qualitative variables are transformed into complete disjunctive tables, each indicator variable having a weight that is a function of the frequency of the corresponding category. The weighting of the tables prevents that the tables which include more variables weight too much in the analysis. The method allows visualization in a two or three-dimensional space, the groups (each group being represented by a point), the variables, the principal axes of the analyses of the first phase, and the individuals. In addition, one can study the impact of the other tables on an observation by simultaneously visualizing the observation described by all the variables and the projected observations described by the variables of only one group.
 |
-| **[A]** Among the assigned group of descriptor variables, relationships observed are as follows:
-|      **[A.1]** Association between two groups of descriptors were noted = <span style="color: #FF0000">Group=Technicalities</span> comprised of <span style="color: #FF0000">Picture</span>, <span style="color: #FF0000">Cinematography</span> and <span style="color: #FF0000">Directing</span>; and <span style="color: #FF0000">Group=Aesthetics</span> comprised of <span style="color: #FF0000">Design</span> and <span style="color: #FF0000">Sound</span>.
-|      **[A.2]** <span style="color: #FF0000">Group=Recognitions</span> comprised of <span style="color: #FF0000">Nominations_Total</span> and <span style="color: #FF0000">Nomination_SuccessRate</span> was not associated with other groups.
-|      **[A.3]** <span style="color: #FF0000">Group=Storytelling</span> comprised of <span style="color: #FF0000">Editing</span>, <span style="color: #FF0000">Acting</span>and <span style="color: #FF0000">Screenplay</span> was not associated with other groups.
+| **[A]** Input data is a matrix with the following groups and variables:
+|      **[A.1]** Row Labels: <span style="color: #FF0000">Film</span>
+|      **[A.2]** MFA Descriptor Group: <span style="color: #FF0000">Recognitions</span>
+|             **[A.2.1]** Quantitative MFA Descriptor: <span style="color: #FF0000">Nominations_Total</span>
+|             **[A.2.2]** Quantitative MFA Descriptor: <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[A.3]** MFA Descriptor Group: <span style="color: #FF0000">Technicalities</span>
+|             **[A.3.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Picture</span>
+|             **[A.3.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|             **[A.3.3]** Qualitative MFA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[A.4]** MFA Descriptor Group : <span style="color: #FF0000">Storytelling</span>
+|             **[A.4.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Editing</span>
+|             **[A.4.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|             **[A.4.3]** Qualitative MFA Descriptor: <span style="color: #FF0000">Acting</span>
+|      **[A.5]** MFA Descriptor Group : <span style="color: #FF0000">Aesthetics</span>
+|             **[A.5.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Design</span>
+|             **[A.5.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Sound</span>
 |
-| **[B]** <span style="color: #FF0000">PC1</span> can be described as having been collectively awarded in all categories, as characterized by the following descriptor variables:
-|      **[B.1]** High <span style="color: #FF0000">Nomination_SuccessRate</span>
-|      **[B.2]** High <span style="color: #FF0000">Nominations_Total</span>
-|      **[B.3]** <span style="color: #FF0000">Picture=WON</span>
-|      **[B.4]** <span style="color: #FF0000">Editing=WON</span>
-|      **[B.5]** <span style="color: #FF0000">Sound=WON</span>
-|      **[B.6]** <span style="color: #FF0000">Directing=WON</span>
-|      **[B.7]** <span style="color: #FF0000">Cinematography=WON</span>
-|      **[B.7]** <span style="color: #FF0000">Design=WON</span>
+| **[B]** Among the assigned group of descriptor variables, relationships observed are as follows:
+|      **[B.1]** Association between two groups of descriptors were noted = <span style="color: #FF0000">Group=Technicalities</span> comprised of <span style="color: #FF0000">Picture</span>, <span style="color: #FF0000">Cinematography</span> and <span style="color: #FF0000">Directing</span>; and <span style="color: #FF0000">Group=Aesthetics</span> comprised of <span style="color: #FF0000">Design</span> and <span style="color: #FF0000">Sound</span>.
+|      **[B.2]** <span style="color: #FF0000">Group=Recognitions</span> comprised of <span style="color: #FF0000">Nominations_Total</span> and <span style="color: #FF0000">Nomination_SuccessRate</span> was not associated with other groups.
+|      **[B.3]** <span style="color: #FF0000">Group=Storytelling</span> comprised of <span style="color: #FF0000">Editing</span>, <span style="color: #FF0000">Acting</span>and <span style="color: #FF0000">Screenplay</span> was not associated with other groups.
 |
-| **[C]** <span style="color: #FF0000">PC2</span> can be described as having won best picture as well as editing and sound awards, but with a few number of nominations but won directing, cinematography and design awards, as characterized by the following descriptor variables:
-|      **[C.1]** High <span style="color: #FF0000">Nomination_SuccessRate</span> with:
-|             **[C.1.1]** <span style="color: #FF0000">Picture=WON</span>
-|             **[C.1.2]** <span style="color: #FF0000">Editing=WON</span>
-|             **[C.1.3]** <span style="color: #FF0000">Sound=WON</span>
-|      **[C.2]** Low <span style="color: #FF0000">Nominations_Total</span> with:
-|             **[C.2.1]** <span style="color: #FF0000">Directing=WON</span>
-|             **[C.2.2]** <span style="color: #FF0000">Cinematography=WON</span>
-|             **[C.2.3]** <span style="color: #FF0000">Design=WON</span>
+| **[C]** <span style="color: #FF0000">PC1</span> can be described as having been collectively awarded in all categories, as characterized by the following descriptor variables:
+|      **[C.1]** High <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[C.2]** High <span style="color: #FF0000">Nominations_Total</span>
+|      **[C.3]** <span style="color: #FF0000">Picture=WON</span>
+|      **[C.4]** <span style="color: #FF0000">Editing=WON</span>
+|      **[C.5]** <span style="color: #FF0000">Sound=WON</span>
+|      **[C.6]** <span style="color: #FF0000">Directing=WON</span>
+|      **[C.7]** <span style="color: #FF0000">Cinematography=WON</span>
+|      **[C.7]** <span style="color: #FF0000">Design=WON</span>
+|
+| **[D]** <span style="color: #FF0000">PC2</span> can be described as having won best picture as well as editing and sound awards, but with a few number of nominations but won directing, cinematography and design awards, as characterized by the following descriptor variables:
+|      **[D.1]** High <span style="color: #FF0000">Nomination_SuccessRate</span> with:
+|             **[D.1.1]** <span style="color: #FF0000">Picture=WON</span>
+|             **[D.1.2]** <span style="color: #FF0000">Editing=WON</span>
+|             **[D.1.3]** <span style="color: #FF0000">Sound=WON</span>
+|      **[D.2]** Low <span style="color: #FF0000">Nominations_Total</span> with:
+|             **[D.2.1]** <span style="color: #FF0000">Directing=WON</span>
+|             **[D.2.2]** <span style="color: #FF0000">Cinematography=WON</span>
+|             **[D.2.3]** <span style="color: #FF0000">Design=WON</span>
 |
 ```{r section_1.5.4, warning=FALSE, message=FALSE}
 
@@ -2495,35 +2521,45 @@ Picture <- as.factor(SD_MFA[,"Picture"])
 |
 | [Factor Analysis of Mixed Data](http://archive.numdam.org/item/RSA_2004__52_4_93_0/) reduces data dimensionality to identify nearness between both quantitative and qualitative variables, as well as the proximity between the observations by combining the Principal Component Analysis (PCA) and Multiple Correspondence Analysis (MCA). The method employs a series of statistical transformations, including calculations of the correlation matrix, eigenvalues and eigenvectors, on a set of qualitative and/or quantitative variables in order to project them on a vector space generated by orthogonal components.
 |
-| **[A]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
-|      **[A.1]** <span style="color: #FF0000">PC1</span> = 54%
-|      **[A.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 82%
-|      **[A.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 100%
+| **[A]** Input data is a matrix with the following variables:
+|      **[A.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[A.2]** Quantitative FAMD Descriptor: <span style="color: #FF0000">Tomatometer_Critic</span>
+|      **[A.3]** Quantitative FAMD Descriptor: <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[A.4]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Picture</span>
+|      **[A.5]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[A.6]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[A.7]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[A.8]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Screenplay</span>
+|
+| **[B]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
+|      **[B.1]** <span style="color: #FF0000">PC1</span> = 54%
+|      **[B.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 82%
+|      **[B.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 100%
 | 
-| **[B]** With eigenvalues sufficiently greater than 1, only <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> were used in the subsequent exploratory analysis.
-|      **[B.1]** <span style="color: #FF0000">PC1</span> = 1.60
-|      **[B.1]** <span style="color: #FF0000">PC2</span> = 1.00
+| **[C]** With eigenvalues sufficiently greater than 1, only <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> were used in the subsequent exploratory analysis.
+|      **[C.1]** <span style="color: #FF0000">PC1</span> = 1.60
+|      **[C.2]** <span style="color: #FF0000">PC2</span> = 1.00
 |
-| **[C]** <span style="color: #FF0000">PC1</span> can be described as having a higher number of awards won including best picture, as characterized by the following descriptor variables, ranked based on contribution and statistical significance:
-|      **[C.1]** <span style="color: #FF0000">Picture=WON</span> = 40.90%
-|      **[C.2]** High <span style="color: #FF0000">Nomination_SuccessRate</span> = 40.01%
+| **[D]** <span style="color: #FF0000">PC1</span> can be described as having a higher number of awards won including best picture, as characterized by the following descriptor variables, ranked based on contribution and statistical significance:
+|      **[D.1]** <span style="color: #FF0000">Picture=WON</span> = 40.90%
+|      **[D.2]** High <span style="color: #FF0000">Nomination_SuccessRate</span> = 40.01%
 | 
-| **[D]** <span style="color: #FF0000">PC2</span> can be described a high number of oscar nominations, as characterized by the following descriptor variables, ranked based on importance and statistical significance:
-|      **[D.1]** High <span style="color: #FF0000">Nominations_Total</span> = 80.81%
+| **[E]** <span style="color: #FF0000">PC2</span> can be described a high number of oscar nominations, as characterized by the following descriptor variables, ranked based on importance and statistical significance:
+|      **[E.1]** High <span style="color: #FF0000">Nominations_Total</span> = 80.81%
 |
-| **[E]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
-|      **[E.1]** All descriptor variables were well-represented for both principal components.
-|             **[E.1.1]** <span style="color: #FF0000">Picture</span>
-|             **[E.1.2]** <span style="color: #FF0000">Nomination_SuccessRate</span>
-|             **[E.1.3]** <span style="color: #FF0000">Nominations_Total</span>
-|      **[E.2]** Descriptor variables demonstrated correlation and clustered around two groups:
-|             **[E.2.1]** Cluster 1 (<span style="color: #FF0000">Picture</span>, <span style="color: #FF0000">Nomination_SuccessRate</span>) indicates that best picture winners also won most awards.
-|             **[E.2.2]** Cluster 2 (<span style="color: #FF0000">Nominations_Total</span>) indicates that best picture nominees can have a high number of nominations without actually winning most awards including best picture.
+| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
+|      **[F.1]** All descriptor variables were well-represented for both principal components.
+|             **[F.1.1]** <span style="color: #FF0000">Picture</span>
+|             **[F.1.2]** <span style="color: #FF0000">Nomination_SuccessRate</span>
+|             **[F.1.3]** <span style="color: #FF0000">Nominations_Total</span>
+|      **[F.2]** Descriptor variables demonstrated correlation and clustered around two groups:
+|             **[F.2.1]** Cluster 1 (<span style="color: #FF0000">Picture</span>, <span style="color: #FF0000">Nomination_SuccessRate</span>) indicates that best picture winners also won most awards.
+|             **[F.2.2]** Cluster 2 (<span style="color: #FF0000">Nominations_Total</span>) indicates that best picture nominees can have a high number of nominations without actually winning most awards including best picture.
 |
-| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
-|      **[F.1]** Best picture winners are also associated with winning for best screenplay (e.g. The Hurt Locker, The King's Speech, Argo, 12 Years a Slave, Birdman or (The Unexpected Virtue of Ignorance), Spotlight, Moonlight, Green Book, Parasite, CODA, Everything Everywhere All at Once).
-|      **[F.2]** Best picture winners are also associated with winning for best directing (e.g. The Hurt Locker, The King's Speech, The Artist, Birdman or (The Unexpected Virtue of Ignorance), The Shape of Water, Parasite, Nomadland, Everything Everywhere All at Once).
-|      **[F.3]** Best picture winners are not readily associated with winning for best editing or cinematography. 
+| **[G]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
+|      **[G.1]** Best picture winners are also associated with winning for best screenplay (e.g. The Hurt Locker, The King's Speech, Argo, 12 Years a Slave, Birdman or (The Unexpected Virtue of Ignorance), Spotlight, Moonlight, Green Book, Parasite, CODA, Everything Everywhere All at Once).
+|      **[G.2]** Best picture winners are also associated with winning for best directing (e.g. The Hurt Locker, The King's Speech, The Artist, Birdman or (The Unexpected Virtue of Ignorance), The Shape of Water, Parasite, Nomadland, Everything Everywhere All at Once).
+|      **[G.3]** Best picture winners are not readily associated with winning for best editing or cinematography. 
 |
 ```{r section_1.5.5, warning=FALSE, message=FALSE}
 ##################################
