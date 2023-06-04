@@ -639,47 +639,58 @@ EDA.PropTable.Function <- function(FactorVar) {
 |
 | [Principal Component Analysis](https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0071325) employs a linear transformation that is based on preserving the most variance in the data using the least number of dimensions. The original data set in a higher dimensional space is mapped to a lower dimension space with maximum variance. The process involves the construction of the covariance matrix of the original data set. The eigenvectors of the covariance matrix of the data are referred to as principal axes, and the projection of the data instances on to these principal axes are called the principal components. Dimensionality reduction is obtained by only retaining the axes (dimensions) that account for most of the variance, and discarding all others.
 |
-| **[A]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
-|      **[A.1]** <span style="color: #FF0000">PC1</span> = 37%
-|      **[A.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 65%
-|      **[A.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 82%
+| **[A]** Input data is a matrix containing the following variables:
+|      **[A.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[A.2]** Quantitative PCA Descriptor: <span style="color: #FF0000">Tomatometer_Critic</span>
+|      **[A.3]** Quantitative PCA Descriptor: <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[A.4]** Quantitative PCA Descriptor: <span style="color: #FF0000">IMDB_Critic</span>
+|      **[A.5]** Quantitative PCA Descriptor: <span style="color: #FF0000">IMDB_Audience</span>
+|      **[A.6]** Quantitative PCA Descriptor: <span style="color: #FF0000">Nominations_Total</span>
+|      **[A.7]** Quantitative PCA Descriptor: <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[A.8]** Post-PCA Factor: <span style="color: #FF0000">Year</span>
+|      **[A.9]** Post-PCA Factor: <span style="color: #FF0000">Picture</span>
+|
+| **[B]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
+|      **[B.1]** <span style="color: #FF0000">PC1</span> = 37%
+|      **[B.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 65%
+|      **[B.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 82%
 | 
-| **[B]** With eigenvalues sufficiently greater than 1, only <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> were used in the subsequent exploratory analysis.
-|      **[B.1]** <span style="color: #FF0000">PC1</span> = 2.22
-|      **[B.1]** <span style="color: #FF0000">PC2</span> = 1.67
+| **[C]** With eigenvalues sufficiently greater than 1, only <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> were used in the subsequent exploratory analysis.
+|      **[C.1]** <span style="color: #FF0000">PC1</span> = 2.22
+|      **[C.2]** <span style="color: #FF0000">PC2</span> = 1.67
 |
-| **[C]** <span style="color: #FF0000">PC1</span> can be described as having a collectively high or low critic and audience scores, oscar nominations and oscar winnability rate, as characterized by the following descriptor variables, ranked based on contribution and statistical significance:
-|      **[C.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 23.09%
-|      **[C.2]** High <span style="color: #FF0000">IMDB_Audience</span> = 22.92%
-|      **[C.3]** High <span style="color: #FF0000">Tomatometer_Audience</span> = 19.56%
-|      **[C.4]** High <span style="color: #FF0000">IMDB_Critic</span> = 14.87%
-|      **[C.5]** High <span style="color: #FF0000">Nomination_SuccessRate</span> = 13.73%
-|      **[C.6]** High <span style="color: #FF0000">Nominations_Total</span> = 5.82%
+| **[D]** <span style="color: #FF0000">PC1</span> can be described as having a collectively high or low critic and audience scores, oscar nominations and oscar winnability rate, as characterized by the following descriptor variables, ranked based on contribution and statistical significance:
+|      **[D.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 23.09%
+|      **[D.2]** High <span style="color: #FF0000">IMDB_Audience</span> = 22.92%
+|      **[D.3]** High <span style="color: #FF0000">Tomatometer_Audience</span> = 19.56%
+|      **[D.4]** High <span style="color: #FF0000">IMDB_Critic</span> = 14.87%
+|      **[D.5]** High <span style="color: #FF0000">Nomination_SuccessRate</span> = 13.73%
+|      **[D.6]** High <span style="color: #FF0000">Nominations_Total</span> = 5.82%
 | 
-| **[D]** <span style="color: #FF0000">PC2</span> can be described as having high critic scores but low audience scores and oscar winnability rate, or having low critic scores but high audience scores and oscar winnability rate, as characterized by the following descriptor variables, ranked based on importance and statistical significance:
-|      **[D.1]** High <span style="color: #FF0000">IMDB_Critic</span> = 36.44%
-|      **[D.2]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 22.50%
-|      **[D.3]** Low <span style="color: #FF0000">IMDB_Audience</span> = 16.37%
-|      **[D.4]** Low <span style="color: #FF0000">Tomatometer_Audience</span> = 15.68%
-|      **[D.5]** Low <span style="color: #FF0000">Nomination_SuccessRate</span> = 8.54%
+| **[E]** <span style="color: #FF0000">PC2</span> can be described as having high critic scores but low audience scores and oscar winnability rate, or having low critic scores but high audience scores and oscar winnability rate, as characterized by the following descriptor variables, ranked based on importance and statistical significance:
+|      **[E.1]** High <span style="color: #FF0000">IMDB_Critic</span> = 36.44%
+|      **[E.2]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 22.50%
+|      **[E.3]** Low <span style="color: #FF0000">IMDB_Audience</span> = 16.37%
+|      **[E.4]** Low <span style="color: #FF0000">Tomatometer_Audience</span> = 15.68%
+|      **[E.5]** Low <span style="color: #FF0000">Nomination_SuccessRate</span> = 8.54%
 |
-| **[E]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
-|      **[E.1]** Critic and audience scores are the most represented descriptor variables for both principal components.
-|             **[E.1.1]** <span style="color: #FF0000">IMDB_Critic</span>
-|             **[E.1.2]** <span style="color: #FF0000">Tomatometer_Critic</span>
-|             **[E.1.3]** <span style="color: #FF0000">IMDB_Audience</span>
-|             **[E.1.4]** <span style="color: #FF0000">Tomatometer_Audience</span>
-|      **[E.2]** Descriptor variables demonstrated correlation and clustered around three groups:
-|             **[E.2.1]** Cluster 1 (<span style="color: #FF0000">IMDB_Critic</span>, <span style="color: #FF0000">Tomatometer_Critic</span>) indicates that critic scores are consistent for both sources (Tomatometer and IMDB).
-|             **[E.2.2]** Cluster 2 (<span style="color: #FF0000">IMDB_Audience</span>, <span style="color: #FF0000">Tomatometer_Audience</span>, <span style="color: #FF0000">Nomination_SuccessRate</span>) indicates that audience scores are consistent for both sources (Tomatometer and IMDB) and are positively correlated with oscar winnability rate.
-|             **[E.2.3]** Cluster 3 (<span style="color: #FF0000">Nominations_Total</span>) indicates that the number of oscar nominations is not correlated with critic and audience scores, as well as oscar winnability rate.
+| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
+|      **[F.1]** Critic and audience scores are the most represented descriptor variables for both principal components.
+|             **[F.1.1]** <span style="color: #FF0000">IMDB_Critic</span>
+|             **[F.1.2]** <span style="color: #FF0000">Tomatometer_Critic</span>
+|             **[F.1.3]** <span style="color: #FF0000">IMDB_Audience</span>
+|             **[F.1.4]** <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[F.2]** Descriptor variables demonstrated correlation and clustered around three groups:
+|             **[F.2.1]** Cluster 1 (<span style="color: #FF0000">IMDB_Critic</span>, <span style="color: #FF0000">Tomatometer_Critic</span>) indicates that critic scores are consistent for both sources (Tomatometer and IMDB).
+|             **[F.2.2]** Cluster 2 (<span style="color: #FF0000">IMDB_Audience</span>, <span style="color: #FF0000">Tomatometer_Audience</span>, <span style="color: #FF0000">Nomination_SuccessRate</span>) indicates that audience scores are consistent for both sources (Tomatometer and IMDB) and are positively correlated with oscar winnability rate.
+|             **[F.2.3]** Cluster 3 (<span style="color: #FF0000">Nominations_Total</span>) indicates that the number of oscar nominations is not correlated with critic and audience scores, as well as oscar winnability rate.
 |
-| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
-|      **[F.1]** Movies which won the oscar best picture award (e.g. Parasite, The King's Speech, 12 Years a Slave, Spotlight, The Artist, Argo, The Hurt Locker and Everything Everywhere All At Once) generally had higher critic scores, audience scores, oscar nominations and oscar winnability rate, than those movies which were not given such an award. Other movie nominees which had the same characteristics included Toy Story 3, The Grand Budapest Hotel, The Father, La La Land, Gravity and Up.
-|      **[F.2]** Other Movies which won the oscar best picture award (e.g. Moonlight and The Shape of Water) had higher critic scores but generally lower audience scores. Other movie nominees which had the same characteristics included Roma, Boyhood, Drive My Car, The Irishman, Minari and Manchester by the Sea.
-|      **[F.3]** Other Movies which won the oscar best picture award (e.g. Green Book and CODA) had higher audience scores but generally lower critic scores. Other movie nominees which had the same characteristics included Inception, Dune, Top Gun: Maverick, Django Unchaied, Ford V Ferrari and Dallas Buyers Club.
-|      **[F.4]** Movie nominees which had both generally lower critic and audience scores including Extremely Loud & Incredibly Close, Don't Look Up, Vice and Triangle of Sadness highly contributed the variances captured by <span style="color: #FF0000">PC1</span>. Movie nominees which had had extremely lower critic scores but reasonably audience scores including Bohemian Rhapsody, The Blind Side and Joker highly contributed the variances captured by <span style="color: #FF0000">PC2</span>.
-|      **[F.5]** There is no clear pattern in characteristics when movies are grouped by the year of release.
+| **[G]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
+|      **[G.1]** Movies which won the oscar best picture award (e.g. Parasite, The King's Speech, 12 Years a Slave, Spotlight, The Artist, Argo, The Hurt Locker and Everything Everywhere All At Once) generally had higher critic scores, audience scores, oscar nominations and oscar winnability rate, than those movies which were not given such an award. Other movie nominees which had the same characteristics included Toy Story 3, The Grand Budapest Hotel, The Father, La La Land, Gravity and Up.
+|      **[G.2]** Other Movies which won the oscar best picture award (e.g. Moonlight and The Shape of Water) had higher critic scores but generally lower audience scores. Other movie nominees which had the same characteristics included Roma, Boyhood, Drive My Car, The Irishman, Minari and Manchester by the Sea.
+|      **[G.3]** Other Movies which won the oscar best picture award (e.g. Green Book and CODA) had higher audience scores but generally lower critic scores. Other movie nominees which had the same characteristics included Inception, Dune, Top Gun: Maverick, Django Unchaied, Ford V Ferrari and Dallas Buyers Club.
+|      **[G.4]** Movie nominees which had both generally lower critic and audience scores including Extremely Loud & Incredibly Close, Don't Look Up, Vice and Triangle of Sadness highly contributed the variances captured by <span style="color: #FF0000">PC1</span>. Movie nominees which had had extremely lower critic scores but reasonably audience scores including Bohemian Rhapsody, The Blind Side and Joker highly contributed the variances captured by <span style="color: #FF0000">PC2</span>.
+|      **[G.5]** There is no clear pattern in characteristics when movies are grouped by the year of release.
 |
 ```{r section_1.5.1, warning=FALSE, message=FALSE}
 ##################################
