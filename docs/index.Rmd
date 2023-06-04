@@ -770,7 +770,8 @@ DR_PCA_VAR$contrib
 (DR_PCA_VariableSquaredCorrelationCircle <- fviz_pca_var(DR_PCA, 
                                          col.var = "cos2", 
                                          gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                                         legend.title = "Squared Coordinates") +
+                                         legend.title = "Squared Coordinates",
+                                         repel = TRUE) +
   labs(title = "Principal Component Analysis : Squared Coordinate Plot",
        subtitle = "Descriptor Variable Representation Quality",
        y = "Principal Component 2",
@@ -794,7 +795,8 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
 (DR_PCA_VariableCorrelationCircle <- fviz_pca_var(DR_PCA, 
                                          col.var = DR_PCA_KMEANS_CLUSTER, 
                                          palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
-                                         legend.title = "Cluster") +
+                                         legend.title = "Cluster",
+                                         repel = TRUE) +
   labs(title = "Principal Component Analysis : Correlation Plot of Quantitative Variables",
        subtitle = "Principal Components Versus Descriptor Variable Clusters",
        y = "Principal Component 2",
@@ -1217,7 +1219,7 @@ DR_CA_Cinematography_COL$contrib
 # descriptor variable loadings
 # for the Top 1 and Top 2 principal components
 ##################################
-(DR_CA_SymmetricBiplot <- fviz_ca_biplot(DR_CA_Cinematography, 
+(DR_CA_SymmetricBiplot_Cinematography <- fviz_ca_biplot(DR_CA_Cinematography, 
               label="all",
               geom = "text",
               repel = TRUE) +
@@ -1233,7 +1235,7 @@ DR_CA_Cinematography_COL$contrib
 # descriptor variable loadings
 # for the Top 1 and Top 2 principal components
 ##################################
-(DR_CA_SymmetricBiplot <- fviz_ca_biplot(DR_CA_Cinematography, 
+(DR_CA_AsymmetricBiplot_Cinematography <- fviz_ca_biplot(DR_CA_Cinematography, 
               label="all",
               geom = "text",
               repel = TRUE,
@@ -1445,7 +1447,7 @@ DR_CA_Directing_COL$contrib
 # descriptor variable loadings
 # for the Top 1 and Top 2 principal components
 ##################################
-(DR_CA_SymmetricBiplot <- fviz_ca_biplot(DR_CA_Directing, 
+(DR_CA_SymmetricBiplot_Directing <- fviz_ca_biplot(DR_CA_Directing, 
               label="all",
               geom = "text",
               repel = TRUE) +
@@ -1461,7 +1463,7 @@ DR_CA_Directing_COL$contrib
 # descriptor variable loadings
 # for the Top 1 and Top 2 principal components
 ##################################
-(DR_CA_SymmetricBiplot <- fviz_ca_biplot(DR_CA_Directing, 
+(DR_CA_AsymmetricBiplot_Directing <- fviz_ca_biplot(DR_CA_Directing, 
               label="all",
               geom = "text",
               repel = TRUE,
@@ -1673,7 +1675,7 @@ DR_CA_Editing_COL$contrib
 # descriptor variable loadings
 # for the Top 1 and Top 2 principal components
 ##################################
-(DR_CA_SymmetricBiplot <- fviz_ca_biplot(DR_CA_Editing, 
+(DR_CA_SymmetricBiplot_Editing <- fviz_ca_biplot(DR_CA_Editing, 
               label="all",
               geom = "text",
               repel = TRUE) +
@@ -1689,7 +1691,7 @@ DR_CA_Editing_COL$contrib
 # descriptor variable loadings
 # for the Top 1 and Top 2 principal components
 ##################################
-(DR_CA_SymmetricBiplot <- fviz_ca_biplot(DR_CA_Editing, 
+(DR_CA_AsymmetricBiplot_Editing <- fviz_ca_biplot(DR_CA_Editing, 
               label="all",
               geom = "text",
               repel = TRUE,
@@ -1901,7 +1903,7 @@ DR_CA_Screenplay_COL$contrib
 # descriptor variable loadings
 # for the Top 1 and Top 2 principal components
 ##################################
-(DR_CA_SymmetricBiplot <- fviz_ca_biplot(DR_CA_Screenplay, 
+(DR_CA_SymmetricBiplot_Screenplay <- fviz_ca_biplot(DR_CA_Screenplay, 
               label="all",
               geom = "text",
               repel = TRUE) +
@@ -1917,7 +1919,7 @@ DR_CA_Screenplay_COL$contrib
 # descriptor variable loadings
 # for the Top 1 and Top 2 principal components
 ##################################
-(DR_CA_SymmetricBiplot <- fviz_ca_biplot(DR_CA_Screenplay, 
+(DR_CA_AsymmetricBiplot_Screenplay <- fviz_ca_biplot(DR_CA_Screenplay, 
               label="all",
               geom = "text",
               repel = TRUE,
@@ -2044,7 +2046,8 @@ DR_MCA_VAR$contrib
 (DR_MCA_VariableSquaredCorrelationCircle <- fviz_mca_var(DR_MCA, 
                                          col.var = "cos2", 
                                          gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                                         legend.title = "Squared Coordinates") +
+                                         legend.title = "Squared Coordinates",
+                                         repel = TRUE) +
   labs(title = "Multiple Correspondence Analysis : Squared Coordinate Plot",
        subtitle = "Descriptor Variable Representation Quality",
        y = "Principal Component 2",
@@ -2067,6 +2070,7 @@ DR_MCA_KMEANS_CLUSTER <- as.factor(DR_MCA_KMEANS$cluster)
 ##################################
 (DR_MCA_VariableCorrelationCircle <- fviz_mca_var(DR_MCA, 
                                          col.var = DR_MCA_KMEANS_CLUSTER, 
+                                         repel = TRUE,
                                          palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
                                          legend.title = "Cluster") +
   labs(title = "Multiple Correspondence Analysis : Factorial Map of Qualitative Variables",
@@ -2389,7 +2393,8 @@ DR_MFA_VAR$contrib
 # on the factor map 
 ##################################
 (DR_MFA_VariableGroups <- fviz_mfa_var(DR_MFA, 
-                                       choice = "group") +
+                                       choice = "group",
+                                       repel = TRUE) +
   labs(title = "Multiple Factor Analysis : Factorial Map of Variable Groups",
        subtitle = "Descriptor Variable Principal Components",
        y = "Principal Component 2",
@@ -2583,7 +2588,8 @@ DR_FAMD_VAR$contrib
 (DR_FAMD_VariableSquaredCorrelationCircle <- fviz_famd_var(DR_FAMD, 
                                          col.var = "cos2", 
                                          gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-                                         legend.title = "Squared Coordinates") +
+                                         legend.title = "Squared Coordinates",
+                                         repel = TRUE) +
   labs(title = "Factor Analysis of Mixed Data : Squared Coordinate Plot",
        subtitle = "Descriptor Variable Representation Quality",
        y = "Principal Component 2",
@@ -2608,7 +2614,8 @@ DR_FAMD_KMEANS_CLUSTER <- as.factor(DR_FAMD_KMEANS$cluster)
                                          col.var = DR_FAMD_KMEANS_CLUSTER, 
                                          palette = c("#0073C2FF", 
                                                      "#EFC000FF"),
-                                         legend.title = "Cluster") +
+                                         legend.title = "Cluster",
+                                         repel = TRUE) +
   labs(title = "Factor Analysis of Mixed Data : Factorial Map of Quantitative and Qualitative Variables",
        subtitle = "Principal Components Versus Descriptor Variable Clusters",
        y = "Principal Component 2",
@@ -2781,6 +2788,22 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 ##  1.6 Algorithm Comparison Summary
 |
 ```{r section_1.6, warning=FALSE, message=FALSE}
+
+##################################
+# Gathering all factorial maps
+# and biplots for all methods
+##################################
+grid.arrange(DR_PCA_VariableCorrelationCircle, 
+             DR_MCA_VariableCorrelationCircle,
+             DR_MFA_VariableGroups,
+             DR_FAMD_VariableCorrelationCircle,
+             ncol = 2)
+
+grid.arrange(DR_CA_SymmetricBiplot_Cinematography,
+             DR_CA_SymmetricBiplot_Directing,
+             DR_CA_SymmetricBiplot_Editing,
+             DR_CA_SymmetricBiplot_Screenplay,
+             ncol = 2)
 
 ```
 
