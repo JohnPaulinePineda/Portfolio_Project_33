@@ -795,7 +795,7 @@ DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster)
                                          col.var = DR_PCA_KMEANS_CLUSTER, 
                                          palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
                                          legend.title = "Cluster") +
-  labs(title = "Principal Component Analysis : Factorial Map of Quantitative Variables",
+  labs(title = "Principal Component Analysis : Correlation Plot of Quantitative Variables",
        subtitle = "Principal Components Versus Descriptor Variable Clusters",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2069,7 +2069,7 @@ DR_MCA_KMEANS_CLUSTER <- as.factor(DR_MCA_KMEANS$cluster)
                                          col.var = DR_MCA_KMEANS_CLUSTER, 
                                          palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
                                          legend.title = "Cluster") +
-  labs(title = "Multiple Correspondence Analysis : Correlation Chart",
+  labs(title = "Multiple Correspondence Analysis : Factorial Map of Qualitative Variables",
        subtitle = "Principal Components Versus Descriptor Variable Clusters",
        y = "Principal Component 2",
        x = "Principal Component 1") +
@@ -2609,7 +2609,7 @@ DR_FAMD_KMEANS_CLUSTER <- as.factor(DR_FAMD_KMEANS$cluster)
                                          palette = c("#0073C2FF", 
                                                      "#EFC000FF"),
                                          legend.title = "Cluster") +
-  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Variables",
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Quantitative and Qualitative Variables",
        subtitle = "Principal Components Versus Descriptor Variable Clusters",
        y = "Principal Component 2",
        x = "Principal Component 1") +
