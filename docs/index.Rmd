@@ -2787,11 +2787,32 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 
 ##  1.6 Algorithm Comparison Summary
 |
+| Algorithm performance comparison:
+|
+| **[A]** The dimensionality algorithms from the <mark style="background-color: #CCECFF">**factoextra**</mark>, <mark style="background-color: #CCECFF">**stats**</mark> and <mark style="background-color: #CCECFF">**FactoMineR**</mark> packages all address the common objective of reducing the number of features in a data set while retaining as much information as possible from the original variables for purposes of lessening the complexity of the model, improving the performance of the learning algorithm or for formulating a more intuitive visualization of the data. However, each method utilize different forms of data input and thus generate varying types of visualization results :
+|      **[A.1]** PCA: Principal Component Analysis
+|             **[A.1.1]** Descriptors : Matrix of quantitative variables
+|      **[A.2]** CA: Correspondence Analysis
+|             **[A.2.1]** Descriptors : Contingency table of qualitative variables
+|      **[A.3]** MCA: Multiple Correspondence Analysis
+|             **[A.3.1]** Descriptors : Matrix of qualitative variables
+|      **[A.4]** MFA: Multiple Factor Analysis
+|             **[A.4.1]** Descriptors : Matrix of quantitative and qualitative variables with inherent groupings among variables of the same type
+|      **[A.5]** FAMD: Factor Analysis of Mixed Data
+|             **[A.5.1]** Descriptors : Matrix of quantitative and qualitative variables
+|      **[A.6]** The most important charts for analysis include the following:
+|             **[A.6.1]** Correlation Plot : Describes the importance and association among quantitative descriptors
+|             **[A.6.2]** Factorial Map : Describes the importance and association among qualitative descriptors, as well as among groups of qualitative predictors, or between qualitative and quantitative descriptors or among levels of qualitative descriptors, as applicable
+|             **[A.6.3]** Biplot : Describes the importance and association among individuals and descriptors
+|             **[A.6.4]** Symmetric/Asymmetric Biplot : Describes the importance and association among levels of qualitative descriptors
+|
+|
 ```{r section_1.6, warning=FALSE, message=FALSE}
 
 ##################################
 # Gathering all factorial maps
-# and biplots for all methods
+# and biplots for each individual method
+# used in the analysis
 ##################################
 grid.arrange(DR_PCA_VariableCorrelationCircle, 
              DR_MCA_VariableCorrelationCircle,
