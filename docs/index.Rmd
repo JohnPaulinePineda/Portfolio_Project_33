@@ -54,6 +54,9 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=15, fig.height=10)
 |             **[B.4.16]** <span style="color: #FF0000">Sound</span> (factor)
 |     
 | 
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
 ```{r section_1.1, warning=FALSE, message=FALSE}
 ##################################
 # Loading R libraries
@@ -139,6 +142,8 @@ PDA <- Oscars
 
 ```
 
+</details>
+
 ##  1.2 Data Quality Assessment
 |
 | Data quality assessment:
@@ -154,6 +159,10 @@ PDA <- Oscars
 |
 | **[E]** Considering the unsupervised learning nature of the analysis, no data pre-processing was proceeded to address the data quality issue identified.
 |
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
 ```{r section_1.2, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset
@@ -370,6 +379,8 @@ if (length(names(DQA.Descriptors.Numeric))==0) {
 }
 ```
 
+</details>
+
 ##  1.3 Data Preprocessing
 
 ###  1.3.1 Dataset Formulation
@@ -432,6 +443,10 @@ if (length(names(DQA.Descriptors.Numeric))==0) {
 |      **[F.7]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Editing</span>
 |      **[F.8]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Screenplay</span>
 |
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
 ```{r section_1.3.1, warning=FALSE, message=FALSE}
 ##################################
 # Formulating dataset versions
@@ -535,6 +550,8 @@ summary(Oscars.FAMD)
 
 ```
 
+</details>
+
 ## 1.4 Data Exploration
 |
 | Exploratory data analysis:
@@ -551,6 +568,10 @@ summary(Oscars.FAMD)
 |      **[B.4]** High <span style="color: #FF0000">Nominations_Total</span> and <span style="color: #FF0000">Nomination_SuccessRate</span> scores
 |      **[B.5]** Winners for the <span style="color: #FF0000">Directing</span> and <span style="color: #FF0000">Screenplay</span> categories
 |
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
 ```{r section_1.4, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset
@@ -634,6 +655,8 @@ EDA.PropTable.Function <- function(FactorVar) {
 
 ```
 
+</details>
+
 ## 1.5 Dimensionality Reduction
 
 ###  1.5.1 Principal Component Analysis (PCA)
@@ -693,6 +716,10 @@ EDA.PropTable.Function <- function(FactorVar) {
 |      **[G.4]** Movie nominees which had both generally lower critic and audience scores including Extremely Loud & Incredibly Close, Don't Look Up, Vice and Triangle of Sadness highly contributed the variances captured by <span style="color: #FF0000">PC1</span>. Movie nominees which had had extremely lower critic scores but reasonably audience scores including Bohemian Rhapsody, The Blind Side and Joker highly contributed the variances captured by <span style="color: #FF0000">PC2</span>.
 |      **[G.5]** There is no clear pattern in characteristics when movies are grouped by the year of release.
 |
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
 ```{r section_1.5.1, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset
@@ -1017,6 +1044,8 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
 
 ```
 
+</details>
+
 ###  1.5.2 Correspondence Analysis (CA)
 |
 | [Correspondence Analysis](https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/abs/connection-between-correlation-and-contingency/D3A75249B56AF5DDC436938F1B6EABD1) employs a statistical method for summarizing tables and analyzing the relationship between two or more categorical variables. It is a data visualization technique that aims to find patterns and associations between the categories of different variables. A contingency table is created to represent the frequencies or counts of the categories of the variables. The contingency table is then transformed into a matrix of proportions or percentages to normalize the data by computing row and column averages, expected values and residuals. The method then calculates the principal components of the normalized matrix and maps the variables and categories onto a two-dimensional plot based on their proximity to each other. The plot displays the patterns and associations between the variables and categories, with closer proximity indicating a stronger relationship.
@@ -1036,6 +1065,10 @@ DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
 |
 | **[E]** Evaluating both <span style="color: #FF0000">Screenplay</span> and <span style="color: #FF0000">Genre</span> descriptors, <span style="color: #FF0000">Screenplay=WON</span> was observed to be associated with <span style="color: #FF0000">Genre=LGBTQ+</span>, <span style="color: #FF0000">Genre=Thriller</span> and <span style="color: #FF0000">Genre=Comedy</span>. These included LGBTQ+ movies like Moonlight and Call me By Your Name; thriller movies like Get Out, Parasite and Promising Young Woman; and comedy movies like The Descendants, Her, Birdman or (The Unexpected Virtue of Ignorance), The Big Short, BlacKkKlansman, Green Book, Jojo Rabbit and Everything Everywhere All at Once.
 |
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
 ```{r section_1.5.2, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset for Cinematography
@@ -1951,6 +1984,8 @@ DR_CA_Screenplay_COL$contrib
 
 ```
 
+</details>
+
 ###  1.5.3 Multiple Correspondence Analysis (MCA)
 |
 | [Multiple Correspondence Analysis](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) performs a series of transformations which allows for the computation of the coordinates of the categories of the qualitative variables, as well as the coordinates of the observations in a representation space that is optimal for a criterion based on inertia. The method, which is a generalization of the Correspondence Analysis (CA) to multiple qualitative variables, assigns optimal scale values (category quantifications) to each category of each variable in such a way that overall, on average, the categories have maximum spread. Because categories of a variable receive as many scorings as there are dimensions, the variables in the analysis are assumed to be multiple nominal in optimal scaling level. It also assigns scores to the objects in the analysis in such a way that the category quantifications are the averages, or centroids, of the object scores of objects in that category. The resulting solution shows objects within the same category plotted close together and objects in different categories plotted far apart. Each object is as close as possible to the category points of categories that apply to the object. In this way, the categories divide the objects into homogeneous subgroups. Variables are considered homogeneous when they classify objects in the same categories into the same subgroups.
@@ -1993,6 +2028,10 @@ DR_CA_Screenplay_COL$contrib
 |      **[G.1]** Movies which won for direction also won for cinematography (e.g. Life of Pi, Gravity, Birdman or (The Unexpected Virtue of Ignorance), The Revenant, La La Land and Roma).
 |      **[G.2]** Movies which won for editing are most associated with the absence of a nomination for screenplay (e.g. Gravity, Mad Max: Fury Road, Hacksaw Ridge, Dunkirk, Bohemian Rhapsody and Ford v Ferrari).
 |
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
 ```{r section_1.5.3, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset
@@ -2309,6 +2348,8 @@ DR_MCA_IND$contrib[,c("Dim 1","Dim 2")]
 
 ```
 
+</details>
+
 ###  1.5.4 Multiple Factor Analysis (MFA)
 |
 | [Multiple Factor Analysis](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) evaluates several groups of variables simultaneously, and to obtain results, in particular, charts, that allow studying the relationship between the observations, the variables, and groups. Within a group, the variables must be of the same type (quantitative table, qualitative table or frequency table), but the groups can be of different types. The method is a synthesis of the PCA (Principal Component Analysis) for quantitative tables, the MCA (Multiple Correspondence Analysis) for qualitative tables and the CA (Correspondence Analysis) for frequency tables. The process involves successively carrying out for each table a PCA, an MCA or a CA according to the type of the variables of the table. The method stores the value of the first eigenvalue of each analysis to then weight the various tables in the second part of the analysis. A weighted PCA is carried out a  on the columns of all the tables, knowing that the tables of qualitative variables are transformed into complete disjunctive tables, each indicator variable having a weight that is a function of the frequency of the corresponding category. The weighting of the tables prevents that the tables which include more variables weight too much in the analysis. The method allows visualization in a two or three-dimensional space, the groups (each group being represented by a point), the variables, the principal axes of the analyses of the first phase, and the individuals. In addition, one can study the impact of the other tables on an observation by simultaneously visualizing the observation described by all the variables and the projected observations described by the variables of only one group.
@@ -2355,6 +2396,10 @@ DR_MCA_IND$contrib[,c("Dim 1","Dim 2")]
 |             **[D.2.2]** <span style="color: #FF0000">Cinematography=WON</span>
 |             **[D.2.3]** <span style="color: #FF0000">Design=WON</span>
 |
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
 ```{r section_1.5.4, warning=FALSE, message=FALSE}
 
 ##################################
@@ -2518,6 +2563,8 @@ Picture <- as.factor(SD_MFA[,"Picture"])
 
 ```
 
+</details>
+
 ###  1.5.5 Factor Analysis of Mixed Data (FAMD)
 |
 | [Factor Analysis of Mixed Data](http://archive.numdam.org/item/RSA_2004__52_4_93_0/) reduces data dimensionality to identify nearness between both quantitative and qualitative variables, as well as the proximity between the observations by combining the Principal Component Analysis (PCA) and Multiple Correspondence Analysis (MCA). The method employs a series of statistical transformations, including calculations of the correlation matrix, eigenvalues and eigenvectors, on a set of qualitative and/or quantitative variables in order to project them on a vector space generated by orthogonal components.
@@ -2562,6 +2609,10 @@ Picture <- as.factor(SD_MFA[,"Picture"])
 |      **[G.2]** Best picture winners are also associated with winning for best directing (e.g. The Hurt Locker, The King's Speech, The Artist, Birdman or (The Unexpected Virtue of Ignorance), The Shape of Water, Parasite, Nomadland, Everything Everywhere All at Once).
 |      **[G.3]** Best picture winners are not readily associated with winning for best editing or cinematography. 
 |
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
 ```{r section_1.5.5, warning=FALSE, message=FALSE}
 ##################################
 # Loading dataset
@@ -2840,6 +2891,8 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 
 ```
 
+</details>
+
 ##  1.6 Algorithm Comparison Summary
 |
 | Algorithm performance comparison:
@@ -2862,7 +2915,10 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 |             **[A.6.4]** **Symmetric/Asymmetric Biplot** : Describes the importance and association among levels of qualitative descriptors
 |
 |
-```{r section_1.6, warning=FALSE, message=FALSE}
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.6, warning=FALSE, message=FALSE, dev='png'}
 
 ##################################
 # Gathering all factorial maps
@@ -2883,6 +2939,8 @@ grid.arrange(DR_CA_SymmetricBiplot_Cinematography,
 
 ```
 
+</details>
+|
 # **2. References**
 |
 | **[Book]** [Multiple Factor Analysis by Example Using R](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) by Jerome Pages
