@@ -1,5 +1,5 @@
 ---
-title: 'R : Exploring and Visualizing Extracted Dimensions from Principal Component Algorithms'
+title: 'Unsupervised Learning : Exploring and Visualizing Extracted Dimensions from Principal Component Algorithms'
 author: "John Pauline Pineda"
 date: "June 4, 2023"
 output: 
