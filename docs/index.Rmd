@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width=15, fig.height=10)
 
 # **1. Table of Contents**
 |
-| This project explores different principal component-based dimensionality reduction algorithms for extracting and visualizing information using various helpful packages in <mark style="background-color: #CCECFF">**R**</mark>. Methods applied in the analysis to transform and reduce high dimensional data included the **Principal Component Analysis**, **Correspondence Analysis**, **Multiple Correspondence Analysis**, **Multiple Factor Analysis** and **Factor Analysis of Mixed Data**. The algorithms were separately applied on different iterations of the original dataset as appropriate to the given method, with the correlation plots, factorial maps and biplots (as applicable) formulated for a more intuitive visualization of the extracted dimensions.
+| This project explores different principal component-based dimensionality reduction algorithms for extracting and visualizing information using various helpful packages in <mark style="background-color: #CCECFF">**R**</mark>. Methods applied in the analysis to transform and reduce high dimensional data included the **Principal Component Analysis**, **Correspondence Analysis**, **Multiple Correspondence Analysis**, **Multiple Factor Analysis** and **Factor Analysis of Mixed Data**. The algorithms were separately applied on different iterations of the original dataset as appropriate to the given method, with the correlation plots, factorial maps and biplots (as applicable) formulated for a more intuitive visualization of the extracted dimensions. All results were consolidated in a [<span style="color: #FF0000">**Summary**</span>](#summary) presented at the end of the document.
 |
 | Dimensionality reduction is a form of unsupervised learning method aimed at reducing the number of features in a data set while retaining as much information as possible for purposes of lessening the complexity of the model, improving the performance of the learning algorithm or for formulating a more intuitive visualization of the data. The algorithms applied in this study (mostly contained in the <mark style="background-color: #CCECFF">**factoextra**</mark>, <mark style="background-color: #CCECFF">**stats**</mark> and <mark style="background-color: #CCECFF">**FactoMineR**</mark> packages) attempt to transform and project the data onto a lower-dimensional space while exploring visualization alternatives for the extracted dimensions.
 |
@@ -145,8 +145,6 @@ PDA <- Oscars
 </details>
 
 ##  1.2 Data Quality Assessment
-|
-| Data quality assessment:
 |
 | **[A]** No missing observations noted for any variable.
 |
@@ -385,8 +383,6 @@ if (length(names(DQA.Descriptors.Numeric))==0) {
 
 ###  1.3.1 Dataset Formulation
 |
-| Data Preparation:
-|
 | **[A]** Different data formats and descriptor variables were considered depending on the dimensionality reduction method used in the analysis.
 |
 | **[B]** Principal Component Analysis: Matrix data with the following variables:
@@ -553,8 +549,6 @@ summary(Oscars.FAMD)
 </details>
 
 ## 1.4 Data Exploration
-|
-| Exploratory data analysis:
 |
 | **[A]** Critic and audience scores including their gaps from both sources were correlated.
 |      **[A.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> = High <span style="color: #FF0000">IMDB_Critic</span>
@@ -2893,9 +2887,7 @@ DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
 
 </details>
 
-##  1.6 Algorithm Comparison Summary
-|
-| Algorithm performance comparison:
+##  1.6 Consolidated Findings
 |
 | **[A]** The dimensionality algorithms from the <mark style="background-color: #CCECFF">**factoextra**</mark>, <mark style="background-color: #CCECFF">**stats**</mark> and <mark style="background-color: #CCECFF">**FactoMineR**</mark> packages all address the common objective of reducing the number of features in a data set while retaining as much information as possible from the original variables for purposes of lessening the complexity of the model, improving the performance of the learning algorithm or for formulating a more intuitive visualization of the data. However, each method utilize different forms of data input and thus generate varying types of visualization results :
 |      **[A.1]** **PCA: Principal Component Analysis**
@@ -2941,7 +2933,11 @@ grid.arrange(DR_CA_SymmetricBiplot_Cinematography,
 
 </details>
 |
-# **2. References**
+# **2. Summary** <a name="summary"></a>
+|
+| ![](D:/Github_Codes/ProjectPortfolio/Portfolio_Project_33/docs/Project33_Summary.png)
+|
+# **3. References**
 |
 | **[Book]** [Multiple Factor Analysis by Example Using R](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) by Jerome Pages
 | **[Book]** [Nonlinear Principal Component Analysis and Its Applications](https://link.springer.com/book/10.1007/978-981-10-0159-8#toc) by Yuichi Mori, Masahiro Kuroda and Naomichi Makino
