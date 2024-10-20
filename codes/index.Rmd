@@ -1,0 +1,3004 @@
+---
+title: 'Unsupervised Learning : Exploring and Visualizing Extracted Dimensions from Principal Component Algorithms'
+author: "John Pauline Pineda"
+date: "June 4, 2023"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    theme: readable
+    highlight: tango
+    css: doc.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width=15, fig.height=10)
+```
+
+# **1. Table of Contents**
+|
+| This project explores different principal component-based dimensionality reduction algorithms for extracting and visualizing information using various helpful packages in <mark style="background-color: #CCECFF">**R**</mark>. Methods applied in the analysis to transform and reduce high dimensional data included the **Principal Component Analysis**, **Correspondence Analysis**, **Multiple Correspondence Analysis**, **Multiple Factor Analysis** and **Factor Analysis of Mixed Data**. The algorithms were separately applied on different iterations of the original dataset as appropriate to the given method, with the correlation plots, factorial maps and biplots (as applicable) formulated for a more intuitive visualization of the extracted dimensions. All results were consolidated in a [<span style="color: #FF0000">**Summary**</span>](#summary) presented at the end of the document.
+|
+| Dimensionality reduction is a form of unsupervised learning method aimed at reducing the number of features in a data set while retaining as much information as possible for purposes of lessening the complexity of the model, improving the performance of the learning algorithm or for formulating a more intuitive visualization of the data. The algorithms applied in this study (mostly contained in the <mark style="background-color: #CCECFF">**factoextra**</mark>, <mark style="background-color: #CCECFF">**stats**</mark> and <mark style="background-color: #CCECFF">**FactoMineR**</mark> packages) attempt to transform and project the data onto a lower-dimensional space while exploring visualization alternatives for the extracted dimensions.
+|
+##  1.1 Sample Data
+|
+| The [<mark style="background-color: #EEEEEE;color: #FF0000">**Oscars**</mark>](https://www.kaggle.com/datasets/unanimad/the-oscar-award), [<mark style="background-color: #EEEEEE;color: #FF0000">**Tomatometer**</mark>](https://www.kaggle.com/datasets/andrezaza/clapper-massive-rotten-tomatoes-movies-and-reviews) and [<mark style="background-color: #EEEEEE;color: #FF0000">**IMDB**</mark>](https://www.kaggle.com/datasets/sankha1998/tmdb-top-10000-popular-movies-dataset) datasets obtained from the  <mark style="background-color: #CCECFF">**Kaggle**</mark> website were used for this illustrated example.   
+|
+| Preliminary dataset assessment:
+|
+| **[A]** 126 rows (observations)
+| 
+| **[B]** 19 columns (variables)
+|      **[B.1]** 1/19 instance = <span style="color: #FF0000">Film</span> variable (character)
+|      **[B.2]** 1/19 labels = <span style="color: #FF0000">Year</span> variable (factor)
+|      **[B.3]** 1/19 labels = <span style="color: #FF0000">Picture</span> variable (factor)
+|             **[B.3.1]** Category 1 = <span style="color: #FF0000">Picture=WON</span> 
+|             **[B.3.2]** Category 2 = <span style="color: #FF0000">Picture=NOM</span> 
+|      **[B.4]** 16/19 descriptors = 8/16 numeric + 8/16 factor 
+|             **[B.4.1]** <span style="color: #FF0000">Tomatometer_Critic</span> (numeric)
+|             **[B.4.2]** <span style="color: #FF0000">Tomatometer_Audience</span> (numeric)
+|             **[B.4.3]** <span style="color: #FF0000">Tomatometer_Critic_Audience_Gap</span> (numeric)
+|             **[B.4.4]** <span style="color: #FF0000">IMDB_Critic</span> (numeric)
+|             **[B.4.5]** <span style="color: #FF0000">IMDB_Audience</span> (numeric)
+|             **[B.4.6]** <span style="color: #FF0000">IMDB_Critic_Audience_Gap</span> (numeric)
+|             **[B.4.7]** <span style="color: #FF0000">Nominations_Total</span> (numeric)
+|             **[B.4.8]** <span style="color: #FF0000">Nomination_SuccessRate</span> (numeric)
+|             **[B.4.9]** <span style="color: #FF0000">Genre</span> (factor)
+|             **[B.4.10]** <span style="color: #FF0000">Cinematography</span> (factor)
+|             **[B.4.11]** <span style="color: #FF0000">Directing</span> (factor)
+|             **[B.4.12]** <span style="color: #FF0000">Editing</span> (factor)
+|             **[B.4.13]** <span style="color: #FF0000">Screenplay</span> (factor)
+|             **[B.4.14]** <span style="color: #FF0000">Acting</span> (factor)
+|             **[B.4.15]** <span style="color: #FF0000">Design</span> (factor)
+|             **[B.4.16]** <span style="color: #FF0000">Sound</span> (factor)
+|     
+| 
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.1, warning=FALSE, message=FALSE}
+##################################
+# Loading R libraries
+##################################
+library(AppliedPredictiveModeling)
+library(caret)
+library(rpart)
+library(lattice)
+library(dplyr)
+library(tidyr)
+library(moments)
+library(skimr)
+library(RANN)
+library(pls)
+library(corrplot)
+library(tidyverse)
+library(lares)
+library(DMwR)
+library(gridExtra)
+library(rattle)
+library(RColorBrewer)
+library(stats)
+library(factoextra)
+library(FactoMineR)
+library(gplots)
+
+##################################
+# Loading source and
+# formulating the analysis set
+##################################
+Oscars <- read.csv("Oscars.csv",
+                   na.strings=c("NA","NaN"," ",""),
+                   stringsAsFactors = FALSE)
+Oscars <- as.data.frame(Oscars)
+
+##################################
+# Performing a general exploration of the data set
+##################################
+dim(Oscars)
+str(Oscars)
+summary(Oscars)
+
+##################################
+# Transforming to appropriate data types
+##################################
+Oscars$Year <- factor(Oscars$Year,
+                      levels = c("2010",
+                                 "2011",
+                                 "2012",
+                                 "2013",
+                                 "2014",
+                                 "2015",
+                                 "2016",
+                                 "2017",
+                                 "2018",
+                                 "2019",
+                                 "2020",
+                                 "2021",
+                                 "2022",
+                                 "2023"))
+
+Oscars$Genre          <- as.factor(Oscars$Genre)
+Oscars$SideGenre      <- as.factor(Oscars$SideGenre)
+Oscars$Picture        <- as.factor(Oscars$Picture)
+Oscars$Cinematography <- as.factor(Oscars$Cinematography)
+Oscars$Directing      <- as.factor(Oscars$Directing)
+Oscars$Editing        <- as.factor(Oscars$Editing)
+Oscars$Screenplay     <- as.factor(Oscars$Screenplay)
+Oscars$Acting         <- as.factor(Oscars$Acting)
+Oscars$Design         <- as.factor(Oscars$Design)
+Oscars$Sound          <- as.factor(Oscars$Sound)
+
+##################################
+# Formulating a data type assessment summary
+##################################
+PDA <- Oscars
+(PDA.Summary <- data.frame(
+  Column.Index=c(1:length(names(PDA))),
+  Column.Name= names(PDA), 
+  Column.Type=sapply(PDA, function(x) class(x)), 
+  row.names=NULL)
+)
+
+```
+
+</details>
+
+##  1.2 Data Quality Assessment
+|
+| **[A]** No missing observations noted for any variable.
+|
+| **[B]** Low variance observed for 1 variable with First.Second.Mode.Ratio>5.
+|      **[B.1]** <span style="color: #FF0000">Picture</span> variable (factor)
+|
+| **[C]** No low variance observed for any variable with Unique.Count.Ratio<0.01.
+|
+| **[D]** No high skewness observed for any variable with Skewness>3 or Skewness<(-3).
+|
+| **[E]** Considering the unsupervised learning nature of the analysis, no data pre-processing was proceeded to address the data quality issue identified.
+|
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.2, warning=FALSE, message=FALSE}
+##################################
+# Loading dataset
+##################################
+DQA <- Oscars[,c(3:11,13:19)]
+
+##################################
+# Formulating an overall data quality assessment summary
+##################################
+(DQA.Summary <- data.frame(
+  Column.Index=c(1:length(names(DQA))),
+  Column.Name= names(DQA),
+  Column.Type=sapply(DQA, function(x) class(x)),
+  Row.Count=sapply(DQA, function(x) nrow(DQA)),
+  NA.Count=sapply(DQA,function(x)sum(is.na(x))),
+  Fill.Rate=sapply(DQA,function(x)format(round((sum(!is.na(x))/nrow(DQA)),3),nsmall=3)),
+  row.names=NULL)
+)
+
+##################################
+# Listing all descriptors
+##################################
+DQA.Descriptors <- DQA
+
+##################################
+# Listing all numeric Descriptors
+##################################
+DQA.Descriptors.Numeric <- DQA.Descriptors[,sapply(DQA.Descriptors, is.numeric)]
+
+if (length(names(DQA.Descriptors.Numeric))>0) {
+    print(paste0("There are ",
+               (length(names(DQA.Descriptors.Numeric))),
+               " numeric descriptor variable(s)."))
+} else {
+  print("There are no numeric descriptor variables.")
+}
+
+##################################
+# Listing all factor Descriptors
+##################################
+DQA.Descriptors.Factor <- DQA.Descriptors[,sapply(DQA.Descriptors, is.factor)]
+
+if (length(names(DQA.Descriptors.Factor))>0) {
+    print(paste0("There are ",
+               (length(names(DQA.Descriptors.Factor))),
+               " factor descriptor variable(s)."))
+} else {
+  print("There are no factor descriptor variables.")
+}
+
+##################################
+# Formulating a data quality assessment summary for factor Descriptors
+##################################
+if (length(names(DQA.Descriptors.Factor))>0) {
+
+  ##################################
+  # Formulating a function to determine the first mode
+  ##################################
+  FirstModes <- function(x) {
+    ux <- unique(na.omit(x))
+    tab <- tabulate(match(x, ux))
+    ux[tab == max(tab)]
+  }
+
+  ##################################
+  # Formulating a function to determine the second mode
+  ##################################
+  SecondModes <- function(x) {
+    ux <- unique(na.omit(x))
+    tab <- tabulate(match(x, ux))
+    fm = ux[tab == max(tab)]
+    sm = x[!(x %in% fm)]
+    usm <- unique(sm)
+    tabsm <- tabulate(match(sm, usm))
+    ifelse(is.na(usm[tabsm == max(tabsm)])==TRUE,
+           return("x"),
+           return(usm[tabsm == max(tabsm)]))
+  }
+
+  (DQA.Descriptors.Factor.Summary <- data.frame(
+  Column.Name= names(DQA.Descriptors.Factor),
+  Column.Type=sapply(DQA.Descriptors.Factor, function(x) class(x)),
+  Unique.Count=sapply(DQA.Descriptors.Factor, function(x) length(unique(x))),
+  First.Mode.Value=sapply(DQA.Descriptors.Factor, function(x) as.character(FirstModes(x)[1])),
+  Second.Mode.Value=sapply(DQA.Descriptors.Factor, function(x) as.character(SecondModes(x)[1])),
+  First.Mode.Count=sapply(DQA.Descriptors.Factor, function(x) sum(na.omit(x) == FirstModes(x)[1])),
+  Second.Mode.Count=sapply(DQA.Descriptors.Factor, function(x) sum(na.omit(x) == SecondModes(x)[1])),
+  Unique.Count.Ratio=sapply(DQA.Descriptors.Factor, function(x) format(round((length(unique(x))/nrow(DQA.Descriptors.Factor)),3), nsmall=3)),
+  First.Second.Mode.Ratio=sapply(DQA.Descriptors.Factor, function(x) format(round((sum(na.omit(x) == FirstModes(x)[1])/sum(na.omit(x) == SecondModes(x)[1])),3), nsmall=3)),
+  row.names=NULL)
+  )
+
+}
+
+##################################
+# Formulating a data quality assessment summary for numeric Descriptors
+##################################
+if (length(names(DQA.Descriptors.Numeric))>0) {
+
+  ##################################
+  # Formulating a function to determine the first mode
+  ##################################
+  FirstModes <- function(x) {
+    ux <- unique(na.omit(x))
+    tab <- tabulate(match(x, ux))
+    ux[tab == max(tab)]
+  }
+
+  ##################################
+  # Formulating a function to determine the second mode
+  ##################################
+  SecondModes <- function(x) {
+    ux <- unique(na.omit(x))
+    tab <- tabulate(match(x, ux))
+    fm = ux[tab == max(tab)]
+    sm = na.omit(x)[!(na.omit(x) %in% fm)]
+    usm <- unique(sm)
+    tabsm <- tabulate(match(sm, usm))
+    ifelse(is.na(usm[tabsm == max(tabsm)])==TRUE,
+           return(0.00001),
+           return(usm[tabsm == max(tabsm)]))
+  }
+
+  (DQA.Descriptors.Numeric.Summary <- data.frame(
+  Column.Name= names(DQA.Descriptors.Numeric),
+  Column.Type=sapply(DQA.Descriptors.Numeric, function(x) class(x)),
+  Unique.Count=sapply(DQA.Descriptors.Numeric, function(x) length(unique(x))),
+  Unique.Count.Ratio=sapply(DQA.Descriptors.Numeric, function(x) format(round((length(unique(x))/nrow(DQA.Descriptors.Numeric)),3), nsmall=3)),
+  First.Mode.Value=sapply(DQA.Descriptors.Numeric, function(x) format(round((FirstModes(x)[1]),3),nsmall=3)),
+  Second.Mode.Value=sapply(DQA.Descriptors.Numeric, function(x) format(round((SecondModes(x)[1]),3),nsmall=3)),
+  First.Mode.Count=sapply(DQA.Descriptors.Numeric, function(x) sum(na.omit(x) == FirstModes(x)[1])),
+  Second.Mode.Count=sapply(DQA.Descriptors.Numeric, function(x) sum(na.omit(x) == SecondModes(x)[1])),
+  First.Second.Mode.Ratio=sapply(DQA.Descriptors.Numeric, function(x) format(round((sum(na.omit(x) == FirstModes(x)[1])/sum(na.omit(x) == SecondModes(x)[1])),3), nsmall=3)),
+  Minimum=sapply(DQA.Descriptors.Numeric, function(x) format(round(min(x,na.rm = TRUE),3), nsmall=3)),
+  Mean=sapply(DQA.Descriptors.Numeric, function(x) format(round(mean(x,na.rm = TRUE),3), nsmall=3)),
+  Median=sapply(DQA.Descriptors.Numeric, function(x) format(round(median(x,na.rm = TRUE),3), nsmall=3)),
+  Maximum=sapply(DQA.Descriptors.Numeric, function(x) format(round(max(x,na.rm = TRUE),3), nsmall=3)),
+  Skewness=sapply(DQA.Descriptors.Numeric, function(x) format(round(skewness(x,na.rm = TRUE),3), nsmall=3)),
+  Kurtosis=sapply(DQA.Descriptors.Numeric, function(x) format(round(kurtosis(x,na.rm = TRUE),3), nsmall=3)),
+  Percentile25th=sapply(DQA.Descriptors.Numeric, function(x) format(round(quantile(x,probs=0.25,na.rm = TRUE),3), nsmall=3)),
+  Percentile75th=sapply(DQA.Descriptors.Numeric, function(x) format(round(quantile(x,probs=0.75,na.rm = TRUE),3), nsmall=3)),
+  row.names=NULL)
+  )
+
+}
+
+##################################
+# Identifying potential data quality issues
+##################################
+
+##################################
+# Checking for missing observations
+##################################
+if ((nrow(DQA.Summary[DQA.Summary$NA.Count>0,]))>0){
+  print(paste0("Missing observations noted for ",
+               (nrow(DQA.Summary[DQA.Summary$NA.Count>0,])),
+               " variable(s) with NA.Count>0 and Fill.Rate<1.0."))
+  DQA.Summary[DQA.Summary$NA.Count>0,]
+} else {
+  print("No missing observations noted.")
+}
+
+##################################
+# Checking for zero or near-zero variance Descriptors
+##################################
+if (length(names(DQA.Descriptors.Factor))==0) {
+  print("No factor descriptors noted.")
+} else if (nrow(DQA.Descriptors.Factor.Summary[as.numeric(as.character(DQA.Descriptors.Factor.Summary$First.Second.Mode.Ratio))>5,])>0){
+  print(paste0("Low variance observed for ",
+               (nrow(DQA.Descriptors.Factor.Summary[as.numeric(as.character(DQA.Descriptors.Factor.Summary$First.Second.Mode.Ratio))>5,])),
+               " factor variable(s) with First.Second.Mode.Ratio>5."))
+  DQA.Descriptors.Factor.Summary[as.numeric(as.character(DQA.Descriptors.Factor.Summary$First.Second.Mode.Ratio))>5,]
+} else {
+  print("No low variance factor descriptors due to high first-second mode ratio noted.")
+}
+
+if (length(names(DQA.Descriptors.Numeric))==0) {
+  print("No numeric descriptors noted.")
+} else if (nrow(DQA.Descriptors.Numeric.Summary[as.numeric(as.character(DQA.Descriptors.Numeric.Summary$First.Second.Mode.Ratio))>5,])>0){
+  print(paste0("Low variance observed for ",
+               (nrow(DQA.Descriptors.Numeric.Summary[as.numeric(as.character(DQA.Descriptors.Numeric.Summary$First.Second.Mode.Ratio))>5,])),
+               " numeric variable(s) with First.Second.Mode.Ratio>5."))
+  DQA.Descriptors.Numeric.Summary[as.numeric(as.character(DQA.Descriptors.Numeric.Summary$First.Second.Mode.Ratio))>5,]
+} else {
+  print("No low variance numeric descriptors due to high first-second mode ratio noted.")
+}
+
+if (length(names(DQA.Descriptors.Numeric))==0) {
+  print("No numeric descriptors noted.")
+} else if (nrow(DQA.Descriptors.Numeric.Summary[as.numeric(as.character(DQA.Descriptors.Numeric.Summary$Unique.Count.Ratio))<0.01,])>0){
+  print(paste0("Low variance observed for ",
+               (nrow(DQA.Descriptors.Numeric.Summary[as.numeric(as.character(DQA.Descriptors.Numeric.Summary$Unique.Count.Ratio))<0.01,])),
+               " numeric variable(s) with Unique.Count.Ratio<0.01."))
+  DQA.Descriptors.Numeric.Summary[as.numeric(as.character(DQA.Descriptors.Numeric.Summary$Unique.Count.Ratio))<0.01,]
+} else {
+  print("No low variance numeric descriptors due to low unique count ratio noted.")
+}
+
+##################################
+# Checking for skewed Descriptors
+##################################
+if (length(names(DQA.Descriptors.Numeric))==0) {
+  print("No numeric descriptors noted.")
+} else if (nrow(DQA.Descriptors.Numeric.Summary[as.numeric(as.character(DQA.Descriptors.Numeric.Summary$Skewness))>3 |
+                                               as.numeric(as.character(DQA.Descriptors.Numeric.Summary$Skewness))<(-3),])>0){
+  print(paste0("High skewness observed for ",
+  (nrow(DQA.Descriptors.Numeric.Summary[as.numeric(as.character(DQA.Descriptors.Numeric.Summary$Skewness))>3 |
+                                               as.numeric(as.character(DQA.Descriptors.Numeric.Summary$Skewness))<(-3),])),
+  " numeric variable(s) with Skewness>3 or Skewness<(-3)."))
+  DQA.Descriptors.Numeric.Summary[as.numeric(as.character(DQA.Descriptors.Numeric.Summary$Skewness))>3 |
+                                 as.numeric(as.character(DQA.Descriptors.Numeric.Summary$Skewness))<(-3),]
+} else {
+  print("No skewed numeric descriptors noted.")
+}
+```
+
+</details>
+
+##  1.3 Data Preprocessing
+
+###  1.3.1 Dataset Formulation
+|
+| **[A]** Different data formats and descriptor variables were considered depending on the dimensionality reduction method used in the analysis.
+|
+| **[B]** Principal Component Analysis: Matrix data with the following variables:
+|      **[B.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[B.2]** Quantitative PCA Descriptor: <span style="color: #FF0000">Tomatometer_Critic</span>
+|      **[B.3]** Quantitative PCA Descriptor: <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[B.4]** Quantitative PCA Descriptor: <span style="color: #FF0000">IMDB_Critic</span>
+|      **[B.5]** Quantitative PCA Descriptor: <span style="color: #FF0000">IMDB_Audience</span>
+|      **[B.6]** Quantitative PCA Descriptor: <span style="color: #FF0000">Nominations_Total</span>
+|      **[B.7]** Quantitative PCA Descriptor: <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[B.8]** Post-PCA Factor: <span style="color: #FF0000">Year</span>
+|      **[B.9]** Post-PCA Factor: <span style="color: #FF0000">Picture</span>
+|
+| **[C]** Correspondence Analysis: Contingency table with the following variables:
+|      **[C.1]** Qualitative CA Descriptor: <span style="color: #FF0000">Genre</span>
+|      **[C.2]** Qualitative CA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[C.3]** Qualitative CA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[C.4]** Qualitative CA Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[C.5]** Qualitative CA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|
+| **[D]** Multiple Correspondence Analysis: Matrix data with the following variables:
+|      **[D.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[D.2]** Qualitative MCA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[D.3]** Qualitative MCA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[D.4]** Qualitative MCA Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[D.5]** Qualitative MCA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|      **[D.6]** Post-MCA Factor: <span style="color: #FF0000">Year</span>
+|      **[D.7]** Post-MCA Factor: <span style="color: #FF0000">Picture</span>
+|
+| **[E]** Multiple Factor Analysis: Matrix data with the following groups and variables:
+|      **[E.1]** Row Labels: <span style="color: #FF0000">Film</span>
+|      **[E.2]** MFA Descriptor Group: <span style="color: #FF0000">Recognitions</span>
+|             **[E.2.1]** Quantitative MFA Descriptor: <span style="color: #FF0000">Nominations_Total</span>
+|             **[E.2.2]** Quantitative MFA Descriptor: <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[E.3]** MFA Descriptor Group: <span style="color: #FF0000">Technicalities</span>
+|             **[E.3.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Picture</span>
+|             **[E.3.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|             **[E.3.3]** Qualitative MFA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[E.4]** MFA Descriptor Group : <span style="color: #FF0000">Storytelling</span>
+|             **[E.4.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Editing</span>
+|             **[E.4.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|             **[E.4.3]** Qualitative MFA Descriptor: <span style="color: #FF0000">Acting</span>
+|      **[E.5]** MFA Descriptor Group : <span style="color: #FF0000">Aesthetics</span>
+|             **[E.5.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Design</span>
+|             **[E.5.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Sound</span>
+|
+| **[F]** Factor Analysis of Mixed Data: Matrix data with the following variables:
+|      **[F.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[F.2]** Quantitative FAMD Descriptor: <span style="color: #FF0000">Tomatometer_Critic</span>
+|      **[F.3]** Quantitative FAMD Descriptor: <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[F.4]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Picture</span>
+|      **[F.5]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[F.6]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[F.7]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[F.8]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Screenplay</span>
+|
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.3.1, warning=FALSE, message=FALSE}
+##################################
+# Formulating dataset versions
+# for the different principal component algorithms
+##################################
+
+##################################
+# Formulating dataset for
+# Principal Component Analysis
+##################################
+Oscars.PCA <- Oscars[,c("Tomatometer_Critic",
+                        "Tomatometer_Audience",
+                        "IMDB_Critic",
+                        "IMDB_Audience",
+                        "Nominations_Total",
+                        "Nomination_SuccessRate",
+                        "Year",
+                        "Picture")]
+row.names(Oscars.PCA) <- Oscars$Film
+dim(Oscars.PCA)
+str(Oscars.PCA)
+summary(Oscars.PCA)
+
+##################################
+# Formulating dataset for
+# Correspondence Analysis
+##################################
+Oscars.CA.Cinematography <- Oscars[,c("Genre",
+                       "Cinematography")]
+
+(Oscars.CA.Cinematography <- as.data.frame.matrix(
+  table(Oscars.CA.Cinematography$Genre,Oscars.CA.Cinematography$Cinematography)))
+
+Oscars.CA.Directing <- Oscars[,c("Genre",
+                       "Directing")]
+
+(Oscars.CA.Directing <- as.data.frame.matrix(
+  table(Oscars.CA.Directing$Genre,Oscars.CA.Directing$Directing)))
+
+Oscars.CA.Editing <- Oscars[,c("Genre",
+                       "Editing")]
+
+(Oscars.CA.Editing <- as.data.frame.matrix(
+  table(Oscars.CA.Editing$Genre,Oscars.CA.Editing$Editing)))
+
+Oscars.CA.Screenplay <- Oscars[,c("Genre",
+                       "Screenplay")]
+
+(Oscars.CA.Screenplay <- as.data.frame.matrix(
+  table(Oscars.CA.Screenplay$Genre,Oscars.CA.Screenplay$Screenplay)))
+
+##################################
+# Formulating dataset for
+# Multiple Correspondence Analysis
+##################################
+Oscars.MCA <- Oscars[,c("Cinematography",
+                        "Directing",
+                        "Editing",
+                        "Screenplay",
+                        "Year",
+                        "Picture")]
+row.names(Oscars.MCA) <- Oscars$Film
+dim(Oscars.MCA)
+str(Oscars.MCA)
+summary(Oscars.MCA)
+
+##################################
+# Formulating dataset for
+# Multiple Factor Analysis
+##################################
+Oscars.MFA <- Oscars[,c("Nominations_Total",
+                        "Nomination_SuccessRate",
+                        "Picture",
+                        "Cinematography",
+                        "Directing",
+                        "Editing",
+                        "Screenplay",
+                        "Acting",
+                        "Design",
+                        "Sound")]
+row.names(Oscars.MFA) <- Oscars$Film
+dim(Oscars.MFA)
+str(Oscars.MFA)
+summary(Oscars.MFA)
+
+##################################
+# Formulating dataset for
+# Factor Analysis of Mixed Data
+##################################
+Oscars.FAMD <- Oscars[,c("Nominations_Total",
+                        "Nomination_SuccessRate",
+                        "Picture",
+                        "Cinematography",
+                        "Directing",
+                        "Editing",
+                        "Screenplay")]
+row.names(Oscars.FAMD) <- Oscars$Film
+dim(Oscars.FAMD)
+str(Oscars.FAMD)
+summary(Oscars.FAMD)
+
+```
+
+</details>
+
+## 1.4 Data Exploration
+|
+| **[A]** Critic and audience scores including their gaps from both sources were correlated.
+|      **[A.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> = High <span style="color: #FF0000">IMDB_Critic</span>
+|      **[A.2]** High <span style="color: #FF0000">Tomatometer_Audience</span> = High <span style="color: #FF0000">IMDB_Audience</span>
+|      **[A.3]** Low <span style="color: #FF0000">Tomatometer_Critic_Audience_Gap</span> = Low <span style="color: #FF0000">IMDB_Critic_Audience_Gap</span>
+|
+| **[B]** Movies which won the best picture award generally had the following characteristics:
+|      **[B.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> and <span style="color: #FF0000">IMDB_Critic</span> scores
+|      **[B.2]** High <span style="color: #FF0000">Tomatometer_Audience</span> and <span style="color: #FF0000">IMDB_Audience</span> scores
+|      **[B.3]** Low <span style="color: #FF0000">Tomatometer_Critic_Audience_Gap</span> and <span style="color: #FF0000">IMDB_Critic_Audience_Gap</span> scores
+|      **[B.4]** High <span style="color: #FF0000">Nominations_Total</span> and <span style="color: #FF0000">Nomination_SuccessRate</span> scores
+|      **[B.5]** Winners for the <span style="color: #FF0000">Directing</span> and <span style="color: #FF0000">Screenplay</span> categories
+|
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.4, warning=FALSE, message=FALSE}
+##################################
+# Loading dataset
+##################################
+EDA_Oscars <- Oscars
+str(EDA_Oscars)
+
+##################################
+# Exploratory analysis
+# among quantitative descriptors
+# grouped by Picture
+##################################
+splom(~EDA_Oscars[,c(3:10)],
+      groups = EDA_Oscars$Picture,
+      pch = 16,
+      cex = 1,
+      alpha = 0.45,
+      varnames = c("T_CTC", "T_AUD", "T_GAP",
+                  "I_CTC", "I_AUD", "I_GAP",
+                  "NOM", "WIN%"),
+      auto.key = list(points = TRUE, space = "right"),
+      main = "Exploratory Analysis Between Picture and Quantitative Descriptors",
+      xlab = "Scatterplot Matrix of Quantitative Descriptors")
+
+##################################
+# Exploratory analysis
+# among quantitative descriptors
+# grouped by Year
+##################################
+splom(~EDA_Oscars[,c(3:10)],
+      groups = EDA_Oscars$Year,
+      pch = 16,
+      cex = 1,
+      alpha = 0.45,
+      varnames = c("T_CTC", "T_AUD", "T_GAP",
+                  "I_CTC", "I_AUD", "I_GAP",
+                  "NOM", "WIN%"),
+      auto.key = list(points = TRUE, space = "right"),
+      main = "Exploratory Analysis Between Year and Quantitative Descriptors",
+      xlab = "Scatterplot Matrix of Quantitative Descriptors")
+
+##################################
+# Exploratory analysis
+# among qualitative descriptors
+# grouped by Picture
+##################################
+
+##################################
+# Creating a function to formulate
+# the proportions table
+##################################
+EDA.PropTable.Function <- function(FactorVar) {
+  EDA.Bar.Source.FactorVar <- EDA_Oscars[,c("Picture",
+                                          FactorVar)]
+  EDA.Bar.Source.FactorVar.Prop <- as.data.frame(prop.table(table(EDA.Bar.Source.FactorVar), 2))
+  names(EDA.Bar.Source.FactorVar.Prop)[2] <- "Status"
+  EDA.Bar.Source.FactorVar.Prop$Variable <- rep(FactorVar,nrow(EDA.Bar.Source.FactorVar.Prop))
+  
+  return(EDA.Bar.Source.FactorVar.Prop)
+}
+
+(EDA.Bar.Source.FactorVar.Prop <- rbind(EDA.PropTable.Function(names(EDA_Oscars)[14]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[15]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[16]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[17]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[18]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[19]),
+                                       EDA.PropTable.Function(names(EDA_Oscars)[20])))
+
+(EDA.Barchart.FactorVar <- barchart(EDA.Bar.Source.FactorVar.Prop[,3] ~
+                                      EDA.Bar.Source.FactorVar.Prop[,2] |
+                                      EDA.Bar.Source.FactorVar.Prop[,4],
+                                      data=EDA.Bar.Source.FactorVar.Prop,
+                                      groups = EDA.Bar.Source.FactorVar.Prop[,1],
+                                      stack=TRUE,
+                                      ylab = "Proportion",
+                                      layout=(c(3,3)),
+      auto.key = list(points = TRUE, space = "right"),
+      main = "Exploratory Analysis Between Picture and Qualitative Descriptors",
+      xlab = "Bar Chart of Qualitative Descriptors"))
+
+```
+
+</details>
+
+## 1.5 Dimensionality Reduction
+
+###  1.5.1 Principal Component Analysis (PCA)
+|
+| [Principal Component Analysis](https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0071325) employs a linear transformation that is based on preserving the most variance in the data using the least number of dimensions. The original data set in a higher dimensional space is mapped to a lower dimension space with maximum variance. The process involves the construction of the covariance matrix of the original data set. The eigenvectors of the covariance matrix of the data are referred to as principal axes, and the projection of the data instances on to these principal axes are called the principal components. Dimensionality reduction is obtained by only retaining the axes (dimensions) that account for most of the variance, and discarding all others.
+|
+| **[A]** Input data is a matrix containing the following variables:
+|      **[A.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[A.2]** Quantitative PCA Descriptor: <span style="color: #FF0000">Tomatometer_Critic</span>
+|      **[A.3]** Quantitative PCA Descriptor: <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[A.4]** Quantitative PCA Descriptor: <span style="color: #FF0000">IMDB_Critic</span>
+|      **[A.5]** Quantitative PCA Descriptor: <span style="color: #FF0000">IMDB_Audience</span>
+|      **[A.6]** Quantitative PCA Descriptor: <span style="color: #FF0000">Nominations_Total</span>
+|      **[A.7]** Quantitative PCA Descriptor: <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[A.8]** Post-PCA Factor: <span style="color: #FF0000">Year</span>
+|      **[A.9]** Post-PCA Factor: <span style="color: #FF0000">Picture</span>
+|
+| **[B]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
+|      **[B.1]** <span style="color: #FF0000">PC1</span> = 37%
+|      **[B.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 65%
+|      **[B.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 82%
+| 
+| **[C]** With eigenvalues sufficiently greater than 1, only <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> were used in the subsequent exploratory analysis.
+|      **[C.1]** <span style="color: #FF0000">PC1</span> = 2.22
+|      **[C.2]** <span style="color: #FF0000">PC2</span> = 1.67
+|
+| **[D]** <span style="color: #FF0000">PC1</span> can be described as having a collectively high or low critic and audience scores, oscar nominations and oscar winnability rate, as characterized by the following descriptor variables, ranked based on contribution and statistical significance:
+|      **[D.1]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 23.09%
+|      **[D.2]** High <span style="color: #FF0000">IMDB_Audience</span> = 22.92%
+|      **[D.3]** High <span style="color: #FF0000">Tomatometer_Audience</span> = 19.56%
+|      **[D.4]** High <span style="color: #FF0000">IMDB_Critic</span> = 14.87%
+|      **[D.5]** High <span style="color: #FF0000">Nomination_SuccessRate</span> = 13.73%
+|      **[D.6]** High <span style="color: #FF0000">Nominations_Total</span> = 5.82%
+| 
+| **[E]** <span style="color: #FF0000">PC2</span> can be described as having high critic scores but low audience scores and oscar winnability rate, or having low critic scores but high audience scores and oscar winnability rate, as characterized by the following descriptor variables, ranked based on importance and statistical significance:
+|      **[E.1]** High <span style="color: #FF0000">IMDB_Critic</span> = 36.44%
+|      **[E.2]** High <span style="color: #FF0000">Tomatometer_Critic</span> = 22.50%
+|      **[E.3]** Low <span style="color: #FF0000">IMDB_Audience</span> = 16.37%
+|      **[E.4]** Low <span style="color: #FF0000">Tomatometer_Audience</span> = 15.68%
+|      **[E.5]** Low <span style="color: #FF0000">Nomination_SuccessRate</span> = 8.54%
+|
+| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
+|      **[F.1]** Critic and audience scores are the most represented descriptor variables for both principal components.
+|             **[F.1.1]** <span style="color: #FF0000">IMDB_Critic</span>
+|             **[F.1.2]** <span style="color: #FF0000">Tomatometer_Critic</span>
+|             **[F.1.3]** <span style="color: #FF0000">IMDB_Audience</span>
+|             **[F.1.4]** <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[F.2]** Descriptor variables demonstrated correlation and clustered around three groups:
+|             **[F.2.1]** Cluster 1 (<span style="color: #FF0000">IMDB_Critic</span>, <span style="color: #FF0000">Tomatometer_Critic</span>) indicates that critic scores are consistent for both sources (Tomatometer and IMDB).
+|             **[F.2.2]** Cluster 2 (<span style="color: #FF0000">IMDB_Audience</span>, <span style="color: #FF0000">Tomatometer_Audience</span>, <span style="color: #FF0000">Nomination_SuccessRate</span>) indicates that audience scores are consistent for both sources (Tomatometer and IMDB) and are positively correlated with oscar winnability rate.
+|             **[F.2.3]** Cluster 3 (<span style="color: #FF0000">Nominations_Total</span>) indicates that the number of oscar nominations is not correlated with critic and audience scores, as well as oscar winnability rate.
+|
+| **[G]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
+|      **[G.1]** Movies which won the oscar best picture award (e.g. Parasite, The King's Speech, 12 Years a Slave, Spotlight, The Artist, Argo, The Hurt Locker and Everything Everywhere All At Once) generally had higher critic scores, audience scores, oscar nominations and oscar winnability rate, than those movies which were not given such an award. Other movie nominees which had the same characteristics included Toy Story 3, The Grand Budapest Hotel, The Father, La La Land, Gravity and Up.
+|      **[G.2]** Other Movies which won the oscar best picture award (e.g. Moonlight and The Shape of Water) had higher critic scores but generally lower audience scores. Other movie nominees which had the same characteristics included Roma, Boyhood, Drive My Car, The Irishman, Minari and Manchester by the Sea.
+|      **[G.3]** Other Movies which won the oscar best picture award (e.g. Green Book and CODA) had higher audience scores but generally lower critic scores. Other movie nominees which had the same characteristics included Inception, Dune, Top Gun: Maverick, Django Unchaied, Ford V Ferrari and Dallas Buyers Club.
+|      **[G.4]** Movie nominees which had both generally lower critic and audience scores including Extremely Loud & Incredibly Close, Don't Look Up, Vice and Triangle of Sadness highly contributed the variances captured by <span style="color: #FF0000">PC1</span>. Movie nominees which had had extremely lower critic scores but reasonably audience scores including Bohemian Rhapsody, The Blind Side and Joker highly contributed the variances captured by <span style="color: #FF0000">PC2</span>.
+|      **[G.5]** There is no clear pattern in characteristics when movies are grouped by the year of release.
+|
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.5.1, warning=FALSE, message=FALSE}
+##################################
+# Loading dataset
+##################################
+SD_PCA <- Oscars.PCA
+str(SD_PCA)
+
+##################################
+# Performing PCA
+##################################
+DR_PCA <- PCA(SD_PCA[,c(1:6)],
+              scale.unit = TRUE,
+              graph = FALSE)
+
+##################################
+# Obtaining the PCA eigenvalues
+##################################
+(DR_PCA_EV <- get_eigenvalue(DR_PCA))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_PCA_VarianceScreePlot <- fviz_eig(DR_PCA, 
+                                      addlabels = TRUE, 
+                                      ylim = c(0, 100),
+                                      choice = c("variance")) +
+  labs(title = "Principal Component Analysis : Scree Plot of Explained Variances",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_PCA_EigenvalueScreePlot <- fviz_eig(DR_PCA, 
+                                      addlabels = TRUE, 
+                                      ylim = c(0, 6),
+                                      choice = c("eigenvalue")) +
+  labs(title = "Principal Component Analysis : Scree Plot of Eigenvalues",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the PCA 
+# descriptor variable loadings
+##################################
+DR_PCA_VAR <- get_pca_var(DR_PCA)
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the descriptor variables
+##################################
+DR_PCA_VAR$coord
+
+##################################
+# Extracting the correlations 
+# between the descriptor variables
+# and principal component dimensions
+##################################
+DR_PCA_VAR$cor
+
+##################################
+# Extracting the quality of representation
+# for the descriptor variables
+# on the factor map 
+##################################
+DR_PCA_VAR$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the descriptor variables
+# to the principal components
+##################################
+DR_PCA_VAR$contrib
+
+##################################
+# Extracting the quality of representation 
+# for the descriptor variables
+# on the factor map 
+##################################
+(DR_PCA_VariableSquaredCorrelationCircle <- fviz_pca_var(DR_PCA, 
+                                         col.var = "cos2", 
+                                         gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                                         legend.title = "Squared Coordinates",
+                                         repel = TRUE) +
+  labs(title = "Principal Component Analysis : Squared Coordinate Plot",
+       subtitle = "Descriptor Variable Representation Quality",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Formulating clusters of the
+# descriptor variables
+##################################
+set.seed(123)
+DR_PCA_KMEANS <- kmeans(DR_PCA_VAR$coord, centers=3, nstart=25)
+DR_PCA_KMEANS_CLUSTER <- as.factor(DR_PCA_KMEANS$cluster) 
+
+##################################
+# Extracting the correlation 
+# between the descriptor variables
+# and top principal components
+##################################
+(DR_PCA_VariableCorrelationCircle <- fviz_pca_var(DR_PCA, 
+                                         col.var = DR_PCA_KMEANS_CLUSTER, 
+                                         palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
+                                         legend.title = "Cluster",
+                                         repel = TRUE) +
+  labs(title = "Principal Component Analysis : Correlation Plot of Quantitative Variables",
+       subtitle = "Principal Components Versus Descriptor Variable Clusters",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_PCA_PCVariableContributors <- fviz_contrib(DR_PCA, 
+                                 choice = "var", 
+                                 axes = 1:2) +
+  labs(title = "Principal Component Analysis : Descriptor Variable Contribution",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+DR_PCA_VariableContributionTest <- dimdesc(DR_PCA, 
+                                           axes = c(1,2), 
+                                           proba = 0.05)
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+(DR_PCA_PC1VariableContributors <- fviz_contrib(DR_PCA, 
+                                 choice = "var", 
+                                 axes = 1) +
+  labs(title = "Principal Component Analysis : Descriptor Variable Contribution",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+DR_PCA_VariableContributionTest$Dim.1
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+(DR_PCA_PC2VariableContributors <- fviz_contrib(DR_PCA, 
+                                 choice = "var", 
+                                 axes = 2) +
+  labs(title = "Principal Component Analysis : Descriptor Variable Contribution",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+DR_PCA_VariableContributionTest$Dim.2
+
+##################################
+# Extracting the PCA individual scores
+##################################
+DR_PCA_IND <- get_pca_ind(DR_PCA)
+
+##################################
+# Extracting the coordinates
+# representing the scores
+# for the individuals
+##################################
+DR_PCA_IND$coord[,c("Dim.1","Dim.2")]
+
+##################################
+# Extracting the quality of representation
+# for the individuals
+# on the factor map 
+##################################
+DR_PCA_IND$cos2[,c("Dim.1","Dim.2")]
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the individuals
+# to the principal components
+##################################
+DR_PCA_IND$contrib[,c("Dim.1","Dim.2")]
+
+##################################
+# Extracting the correlation 
+# between the individual instances
+# grouped by Picture categories
+# and top principal components
+##################################
+(DR_PCA_IndividualCorrelationCircleByPicture <- fviz_pca_ind(DR_PCA,
+             geom.ind = "text",
+             col.ind = SD_PCA$Picture,
+             palette = c("#888888","#5544FF"),
+             repel = TRUE, 
+             legend.title = "Picture",
+              addEllipses = FALSE) +
+  labs(title = "Principal Component Analysis : Factorial Map of Individuals",
+       subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the correlation 
+# between the individual instances
+# grouped by Year categories
+# and top principal components
+##################################
+(DR_PCA_IndividualCorrelationCircleByYear <- fviz_pca_ind(DR_PCA,
+             geom.ind = "text",
+             col.ind = SD_PCA$Year,
+             repel = TRUE, 
+             legend.title = "Year",
+              addEllipses = FALSE) +
+  labs(title = "Principal Component Analysis : Factorial Map of Individuals",
+       subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_PCA_PCIndividualContributors <- fviz_contrib(DR_PCA, 
+              choice = "ind", 
+              axes = 1:2, 
+              top = 10) +
+  labs(title = "Principal Component Analysis : Individual Contribution",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+(DR_PCA_PC1IndividualContributors <- fviz_contrib(DR_PCA, 
+              choice = "ind", 
+              axes = 1, 
+              top = 10) +
+  labs(title = "Principal Component Analysis : Individual Contribution",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+(DR_PCA_PC2IndividualContributors <- fviz_contrib(DR_PCA, 
+              choice = "ind", 
+              axes = 2, 
+              top = 10) +
+  labs(title = "Principal Component Analysis : Individual Contribution",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Formulating the Biplot 
+# using the individual scores
+# and descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_PCA_Biplot <- fviz_pca_biplot(DR_PCA,
+              label = c("var","ind"),
+              repel = TRUE,
+              habillage = SD_PCA$Picture, 
+              palette = c("#888888","#5544FF"),
+              col.var = "#FF5050",
+              legend.title = "Picture",
+              addEllipses = FALSE) +
+  labs(title = "Principal Component Analysis : Biplot",
+       subtitle = "Individual Scores versus Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+```
+
+</details>
+
+###  1.5.2 Correspondence Analysis (CA)
+|
+| [Correspondence Analysis](https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/abs/connection-between-correlation-and-contingency/D3A75249B56AF5DDC436938F1B6EABD1) employs a statistical method for summarizing tables and analyzing the relationship between two or more categorical variables. It is a data visualization technique that aims to find patterns and associations between the categories of different variables. A contingency table is created to represent the frequencies or counts of the categories of the variables. The contingency table is then transformed into a matrix of proportions or percentages to normalize the data by computing row and column averages, expected values and residuals. The method then calculates the principal components of the normalized matrix and maps the variables and categories onto a two-dimensional plot based on their proximity to each other. The plot displays the patterns and associations between the variables and categories, with closer proximity indicating a stronger relationship.
+|
+| **[A]** Input data is a contingency table with the following variables:
+|      **[A.1]** Qualitative CA Descriptor: <span style="color: #FF0000">Genre</span>
+|      **[A.2]** Qualitative CA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[A.3]** Qualitative CA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[A.4]** Qualitative CA Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[A.5]** Qualitative CA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|
+| **[B]** Evaluating both <span style="color: #FF0000">Cinematography</span> and <span style="color: #FF0000">Genre</span> descriptors, <span style="color: #FF0000">Cinematography=WON</span> was observed to be associated with <span style="color: #FF0000">Genre=Sci-Fi</span> and <span style="color: #FF0000">Genre=Adventure</span>. These included Sci-Fi movies like Avatar, Inception, Gravity and Dune; and adventure movies like Life of Pi and Hugo.
+|
+| **[C]** Evaluating both <span style="color: #FF0000">Directing</span> and <span style="color: #FF0000">Genre</span> descriptors, <span style="color: #FF0000">Directing=WON</span> was observed to be associated with <span style="color: #FF0000">Genre=Western</span> and <span style="color: #FF0000">Genre=Musical</span>. These included Western movies like The Revenant and The Power of the Dog; and musical movies like La La Land.
+|
+| **[D]** Evaluating both <span style="color: #FF0000">Editing</span> and <span style="color: #FF0000">Genre</span> descriptors, <span style="color: #FF0000">Editing=WON</span> was observed to be associated with <span style="color: #FF0000">Genre=War</span> and <span style="color: #FF0000">Genre=Music</span>. These included war movies like The Hurt Locker, Hacksaw Ridge and Dunkirk; and music movies like Whiplash and The Sound of Metal.
+|
+| **[E]** Evaluating both <span style="color: #FF0000">Screenplay</span> and <span style="color: #FF0000">Genre</span> descriptors, <span style="color: #FF0000">Screenplay=WON</span> was observed to be associated with <span style="color: #FF0000">Genre=LGBTQ+</span>, <span style="color: #FF0000">Genre=Thriller</span> and <span style="color: #FF0000">Genre=Comedy</span>. These included LGBTQ+ movies like Moonlight and Call me By Your Name; thriller movies like Get Out, Parasite and Promising Young Woman; and comedy movies like The Descendants, Her, Birdman or (The Unexpected Virtue of Ignorance), The Big Short, BlacKkKlansman, Green Book, Jojo Rabbit and Everything Everywhere All at Once.
+|
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.5.2, warning=FALSE, message=FALSE}
+##################################
+# Loading dataset for Cinematography
+##################################
+SD_CA_Cinematography <- Oscars.CA.Cinematography
+str(SD_CA_Cinematography)
+
+balloonplot(t(as.table(as.matrix(SD_CA_Cinematography))),
+            main="Cinematography by Film Genre",
+            xlab="Cinematography",
+            ylab="Genre",
+            label=FALSE,
+            show.margins=FALSE)
+
+##################################
+# Conducting a Chi-Square Test
+##################################
+(SD_CA_Cinematography_CHSQ <- chisq.test(SD_CA_Cinematography))
+  
+##################################
+# Performing CA
+##################################
+DR_CA_Cinematography <- CA(SD_CA_Cinematography,
+                           graph = FALSE)
+
+##################################
+# Obtaining the CA eigenvalues
+##################################
+(DR_CA_Cinematography_EV <- get_eigenvalue(DR_CA_Cinematography))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_CA_Cinematography_VarianceScreePlot <- fviz_eig(DR_CA_Cinematography, 
+                                                    addlabels = TRUE, 
+                                                    ylim = c(0, 100),
+                                                    choice = c("variance")) +
+  labs(title = "Correspondence Analysis : Scree Plot of Explained Variances (Cinematography)",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_CA_Cinematography_EigenvalueScreePlot <- fviz_eig(DR_CA_Cinematography, 
+                                                      addlabels = TRUE,
+                                                      ylim = c(0, 6),
+                                                      choice = c("eigenvalue")) +
+  labs(title = "Correspondence Analysis : Scree Plot of Eigenvalues (Cinematography)",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the CA 
+# results for row descriptor variables
+##################################
+(DR_CA_Cinematography_ROW <- get_ca_row(DR_CA_Cinematography))
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the row descriptor variabless
+##################################
+DR_CA_Cinematography_ROW$coord
+
+##################################
+# Extracting the quality of representation
+# for the row descriptor variables
+# on the factor map 
+##################################
+DR_CA_Cinematography_ROW$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the row descriptor variables
+# to the principal components
+##################################
+DR_CA_Cinematography_ROW$contrib
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_CA_Cinematography_ROW_PCVariableContributors <- fviz_contrib(DR_CA_Cinematography, 
+                                                             choice = "row", 
+                                                             axes = 1:2) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Cinematography)",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 1 principal component
+##################################
+(DR_CA_Cinematography_ROW_PC1VariableContributors <- fviz_contrib(DR_CA_Cinematography, 
+                                                             choice = "row", 
+                                                             axes = 1) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Cinematography)",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 2 principal component
+##################################
+(DR_CA_Cinematography_ROW_PC2VariableContributors <- fviz_contrib(DR_CA_Cinematography, 
+                                                             choice = "row", 
+                                                             axes = 2) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Cinematography)",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the CA 
+# results for column descriptor variables
+##################################
+(DR_CA_Cinematography_COL <- get_ca_col(DR_CA_Cinematography))
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the column descriptor variabless
+##################################
+DR_CA_Cinematography_COL$coord
+
+##################################
+# Extracting the quality of representation
+# for the column descriptor variables
+# on the factor map 
+##################################
+DR_CA_Cinematography_COL$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the column descriptor variables
+# to the principal components
+##################################
+DR_CA_Cinematography_COL$contrib
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_CA_Cinematography_COL_PCVariableContributors <- fviz_contrib(DR_CA_Cinematography, 
+                                                             choice = "col", 
+                                                             axes = 1:2) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Cinematography)",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 1 principal component
+##################################
+(DR_CA_Cinematography_COL_PC1VariableContributors <- fviz_contrib(DR_CA_Cinematography, 
+                                                             choice = "col", 
+                                                             axes = 1) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Cinematography)",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 2 principal component
+##################################
+(DR_CA_Cinematography_COL_PC2VariableContributors <- fviz_contrib(DR_CA_Cinematography, 
+                                                             choice = "col", 
+                                                             axes = 2) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Cinematography)",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Formulating the Symmetric Biplot 
+# using the row and column
+# descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_CA_SymmetricBiplot_Cinematography <- fviz_ca_biplot(DR_CA_Cinematography, 
+              label="all",
+              geom = "text",
+              repel = TRUE) +
+  labs(title = "Correspondence Analysis : Symmetric Biplot (Cinematography)",
+       subtitle = "Row versus Column Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic())
+
+##################################
+# Formulating the Asymmetric Biplot 
+# using the row and column
+# descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_CA_AsymmetricBiplot_Cinematography <- fviz_ca_biplot(DR_CA_Cinematography, 
+              label="all",
+              geom = "text",
+              repel = TRUE,
+              map = "symbiplot") +
+  labs(title = "Correspondence Analysis : Asymmetric Biplot (Cinematography)",
+       subtitle = "Row versus Column Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic())
+
+##################################
+# Loading dataset for Directing
+##################################
+SD_CA_Directing <- Oscars.CA.Directing
+str(SD_CA_Directing)
+
+balloonplot(t(as.table(as.matrix(SD_CA_Directing))),
+            main="Directing by Film Genre",
+            xlab="Directing",
+            ylab="Genre",
+            label=FALSE,
+            show.margins=FALSE)
+
+##################################
+# Conducting a Chi-Square Test
+##################################
+(SD_CA_Directing_CHSQ <- chisq.test(SD_CA_Directing))
+  
+##################################
+# Performing CA
+##################################
+DR_CA_Directing <- CA(SD_CA_Directing,
+                           graph = FALSE)
+
+##################################
+# Obtaining the CA eigenvalues
+##################################
+(DR_CA_Directing_EV <- get_eigenvalue(DR_CA_Directing))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_CA_Directing_VarianceScreePlot <- fviz_eig(DR_CA_Directing, 
+                                                    addlabels = TRUE, 
+                                                    ylim = c(0, 100),
+                                                    choice = c("variance")) +
+  labs(title = "Correspondence Analysis : Scree Plot of Explained Variances (Directing)",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_CA_Directing_EigenvalueScreePlot <- fviz_eig(DR_CA_Directing, 
+                                                      addlabels = TRUE,
+                                                      ylim = c(0, 6),
+                                                      choice = c("eigenvalue")) +
+  labs(title = "Correspondence Analysis : Scree Plot of Eigenvalues (Directing)",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the CA 
+# results for row descriptor variables
+##################################
+(DR_CA_Directing_ROW <- get_ca_row(DR_CA_Directing))
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the row descriptor variabless
+##################################
+DR_CA_Directing_ROW$coord
+
+##################################
+# Extracting the quality of representation
+# for the row descriptor variables
+# on the factor map 
+##################################
+DR_CA_Directing_ROW$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the row descriptor variables
+# to the principal components
+##################################
+DR_CA_Directing_ROW$contrib
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_CA_Directing_ROW_PCVariableContributors <- fviz_contrib(DR_CA_Directing, 
+                                                             choice = "row", 
+                                                             axes = 1:2) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Directing)",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 1 principal component
+##################################
+(DR_CA_Directing_ROW_PC1VariableContributors <- fviz_contrib(DR_CA_Directing, 
+                                                             choice = "row", 
+                                                             axes = 1) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Directing)",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 2 principal component
+##################################
+(DR_CA_Directing_ROW_PC2VariableContributors <- fviz_contrib(DR_CA_Directing, 
+                                                             choice = "row", 
+                                                             axes = 2) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Directing)",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the CA 
+# results for column descriptor variables
+##################################
+(DR_CA_Directing_COL <- get_ca_col(DR_CA_Directing))
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the column descriptor variabless
+##################################
+DR_CA_Directing_COL$coord
+
+##################################
+# Extracting the quality of representation
+# for the column descriptor variables
+# on the factor map 
+##################################
+DR_CA_Directing_COL$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the column descriptor variables
+# to the principal components
+##################################
+DR_CA_Directing_COL$contrib
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_CA_Directing_COL_PCVariableContributors <- fviz_contrib(DR_CA_Directing, 
+                                                             choice = "col", 
+                                                             axes = 1:2) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Directing)",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 1 principal component
+##################################
+(DR_CA_Directing_COL_PC1VariableContributors <- fviz_contrib(DR_CA_Directing, 
+                                                             choice = "col", 
+                                                             axes = 1) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Directing)",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 2 principal component
+##################################
+(DR_CA_Directing_COL_PC2VariableContributors <- fviz_contrib(DR_CA_Directing, 
+                                                             choice = "col", 
+                                                             axes = 2) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Directing)",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Formulating the Symmetric Biplot 
+# using the row and column
+# descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_CA_SymmetricBiplot_Directing <- fviz_ca_biplot(DR_CA_Directing, 
+              label="all",
+              geom = "text",
+              repel = TRUE) +
+  labs(title = "Correspondence Analysis : Symmetric Biplot (Directing)",
+       subtitle = "Row versus Column Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic())
+
+##################################
+# Formulating the Asymmetric Biplot 
+# using the row and column
+# descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_CA_AsymmetricBiplot_Directing <- fviz_ca_biplot(DR_CA_Directing, 
+              label="all",
+              geom = "text",
+              repel = TRUE,
+              map = "symbiplot") +
+  labs(title = "Correspondence Analysis : Asymmetric Biplot (Directing)",
+       subtitle = "Row versus Column Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic())
+
+##################################
+# Loading dataset for Editing
+##################################
+SD_CA_Editing <- Oscars.CA.Editing
+str(SD_CA_Editing)
+
+balloonplot(t(as.table(as.matrix(SD_CA_Editing))),
+            main="Editing by Film Genre",
+            xlab="Editing",
+            ylab="Genre",
+            label=FALSE,
+            show.margins=FALSE)
+
+##################################
+# Conducting a Chi-Square Test
+##################################
+(SD_CA_Editing_CHSQ <- chisq.test(SD_CA_Editing))
+  
+##################################
+# Performing CA
+##################################
+DR_CA_Editing <- CA(SD_CA_Editing,
+                           graph = FALSE)
+
+##################################
+# Obtaining the CA eigenvalues
+##################################
+(DR_CA_Editing_EV <- get_eigenvalue(DR_CA_Editing))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_CA_Editing_VarianceScreePlot <- fviz_eig(DR_CA_Editing, 
+                                                    addlabels = TRUE, 
+                                                    ylim = c(0, 100),
+                                                    choice = c("variance")) +
+  labs(title = "Correspondence Analysis : Scree Plot of Explained Variances (Editing)",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_CA_Editing_EigenvalueScreePlot <- fviz_eig(DR_CA_Editing, 
+                                                      addlabels = TRUE,
+                                                      ylim = c(0, 6),
+                                                      choice = c("eigenvalue")) +
+  labs(title = "Correspondence Analysis : Scree Plot of Eigenvalues (Editing)",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the CA 
+# results for row descriptor variables
+##################################
+(DR_CA_Editing_ROW <- get_ca_row(DR_CA_Editing))
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the row descriptor variabless
+##################################
+DR_CA_Editing_ROW$coord
+
+##################################
+# Extracting the quality of representation
+# for the row descriptor variables
+# on the factor map 
+##################################
+DR_CA_Editing_ROW$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the row descriptor variables
+# to the principal components
+##################################
+DR_CA_Editing_ROW$contrib
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_CA_Editing_ROW_PCVariableContributors <- fviz_contrib(DR_CA_Editing, 
+                                                             choice = "row", 
+                                                             axes = 1:2) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Editing)",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 1 principal component
+##################################
+(DR_CA_Editing_ROW_PC1VariableContributors <- fviz_contrib(DR_CA_Editing, 
+                                                             choice = "row", 
+                                                             axes = 1) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Editing)",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 2 principal component
+##################################
+(DR_CA_Editing_ROW_PC2VariableContributors <- fviz_contrib(DR_CA_Editing, 
+                                                             choice = "row", 
+                                                             axes = 2) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Editing)",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the CA 
+# results for column descriptor variables
+##################################
+(DR_CA_Editing_COL <- get_ca_col(DR_CA_Editing))
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the column descriptor variabless
+##################################
+DR_CA_Editing_COL$coord
+
+##################################
+# Extracting the quality of representation
+# for the column descriptor variables
+# on the factor map 
+##################################
+DR_CA_Editing_COL$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the column descriptor variables
+# to the principal components
+##################################
+DR_CA_Editing_COL$contrib
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_CA_Editing_COL_PCVariableContributors <- fviz_contrib(DR_CA_Editing, 
+                                                             choice = "col", 
+                                                             axes = 1:2) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Editing)",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 1 principal component
+##################################
+(DR_CA_Editing_COL_PC1VariableContributors <- fviz_contrib(DR_CA_Editing, 
+                                                             choice = "col", 
+                                                             axes = 1) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Editing)",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 2 principal component
+##################################
+(DR_CA_Editing_COL_PC2VariableContributors <- fviz_contrib(DR_CA_Editing, 
+                                                             choice = "col", 
+                                                             axes = 2) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Editing)",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Formulating the Symmetric Biplot 
+# using the row and column
+# descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_CA_SymmetricBiplot_Editing <- fviz_ca_biplot(DR_CA_Editing, 
+              label="all",
+              geom = "text",
+              repel = TRUE) +
+  labs(title = "Correspondence Analysis : Symmetric Biplot (Editing)",
+       subtitle = "Row versus Column Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic())
+
+##################################
+# Formulating the Asymmetric Biplot 
+# using the row and column
+# descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_CA_AsymmetricBiplot_Editing <- fviz_ca_biplot(DR_CA_Editing, 
+              label="all",
+              geom = "text",
+              repel = TRUE,
+              map = "symbiplot") +
+  labs(title = "Correspondence Analysis : Asymmetric Biplot (Editing)",
+       subtitle = "Row versus Column Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic())
+
+##################################
+# Loading dataset for Screenplay
+##################################
+SD_CA_Screenplay <- Oscars.CA.Screenplay
+str(SD_CA_Screenplay)
+
+balloonplot(t(as.table(as.matrix(SD_CA_Screenplay))),
+            main="Screenplay by Film Genre",
+            xlab="Screenplay",
+            ylab="Genre",
+            label=FALSE,
+            show.margins=FALSE)
+
+##################################
+# Conducting a Chi-Square Test
+##################################
+(SD_CA_Screenplay_CHSQ <- chisq.test(SD_CA_Screenplay))
+  
+##################################
+# Performing CA
+##################################
+DR_CA_Screenplay <- CA(SD_CA_Screenplay,
+                           graph = FALSE)
+
+##################################
+# Obtaining the CA eigenvalues
+##################################
+(DR_CA_Screenplay_EV <- get_eigenvalue(DR_CA_Screenplay))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_CA_Screenplay_VarianceScreePlot <- fviz_eig(DR_CA_Screenplay, 
+                                                    addlabels = TRUE, 
+                                                    ylim = c(0, 100),
+                                                    choice = c("variance")) +
+  labs(title = "Correspondence Analysis : Scree Plot of Explained Variances (Screenplay)",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_CA_Screenplay_EigenvalueScreePlot <- fviz_eig(DR_CA_Screenplay, 
+                                                      addlabels = TRUE,
+                                                      ylim = c(0, 6),
+                                                      choice = c("eigenvalue")) +
+  labs(title = "Correspondence Analysis : Scree Plot of Eigenvalues (Screenplay)",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the CA 
+# results for row descriptor variables
+##################################
+(DR_CA_Screenplay_ROW <- get_ca_row(DR_CA_Screenplay))
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the row descriptor variabless
+##################################
+DR_CA_Screenplay_ROW$coord
+
+##################################
+# Extracting the quality of representation
+# for the row descriptor variables
+# on the factor map 
+##################################
+DR_CA_Screenplay_ROW$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the row descriptor variables
+# to the principal components
+##################################
+DR_CA_Screenplay_ROW$contrib
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_CA_Screenplay_ROW_PCVariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "row", 
+                                                             axes = 1:2) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 1 principal component
+##################################
+(DR_CA_Screenplay_ROW_PC1VariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "row", 
+                                                             axes = 1) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the row descriptor variables
+# for the the Top 2 principal component
+##################################
+(DR_CA_Screenplay_ROW_PC2VariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "row", 
+                                                             axes = 2) +
+  labs(title = "Correspondence Analysis : Row Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the CA 
+# results for column descriptor variables
+##################################
+(DR_CA_Screenplay_COL <- get_ca_col(DR_CA_Screenplay))
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the column descriptor variabless
+##################################
+DR_CA_Screenplay_COL$coord
+
+##################################
+# Extracting the quality of representation
+# for the column descriptor variables
+# on the factor map 
+##################################
+DR_CA_Screenplay_COL$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the column descriptor variables
+# to the principal components
+##################################
+DR_CA_Screenplay_COL$contrib
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_CA_Screenplay_COL_PCVariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "col", 
+                                                             axes = 1:2) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 1 principal component
+##################################
+(DR_CA_Screenplay_COL_PC1VariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "col", 
+                                                             axes = 1) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution 
+# of the column descriptor variables
+# for the the Top 2 principal component
+##################################
+(DR_CA_Screenplay_COL_PC2VariableContributors <- fviz_contrib(DR_CA_Screenplay, 
+                                                             choice = "col", 
+                                                             axes = 2) +
+  labs(title = "Correspondence Analysis : Column Descriptor Variable Contribution (Screenplay)",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Formulating the Symmetric Biplot 
+# using the row and column
+# descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_CA_SymmetricBiplot_Screenplay <- fviz_ca_biplot(DR_CA_Screenplay, 
+              label="all",
+              geom = "text",
+              repel = TRUE) +
+  labs(title = "Correspondence Analysis : Symmetric Biplot (Screenplay)",
+       subtitle = "Row versus Column Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic())
+
+##################################
+# Formulating the Asymmetric Biplot 
+# using the row and column
+# descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_CA_AsymmetricBiplot_Screenplay <- fviz_ca_biplot(DR_CA_Screenplay, 
+              label="all",
+              geom = "text",
+              repel = TRUE,
+              map = "symbiplot") +
+  labs(title = "Correspondence Analysis : Asymmetric Biplot (Screenplay)",
+       subtitle = "Row versus Column Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic())
+
+```
+
+</details>
+
+###  1.5.3 Multiple Correspondence Analysis (MCA)
+|
+| [Multiple Correspondence Analysis](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) performs a series of transformations which allows for the computation of the coordinates of the categories of the qualitative variables, as well as the coordinates of the observations in a representation space that is optimal for a criterion based on inertia. The method, which is a generalization of the Correspondence Analysis (CA) to multiple qualitative variables, assigns optimal scale values (category quantifications) to each category of each variable in such a way that overall, on average, the categories have maximum spread. Because categories of a variable receive as many scorings as there are dimensions, the variables in the analysis are assumed to be multiple nominal in optimal scaling level. It also assigns scores to the objects in the analysis in such a way that the category quantifications are the averages, or centroids, of the object scores of objects in that category. The resulting solution shows objects within the same category plotted close together and objects in different categories plotted far apart. Each object is as close as possible to the category points of categories that apply to the object. In this way, the categories divide the objects into homogeneous subgroups. Variables are considered homogeneous when they classify objects in the same categories into the same subgroups.
+|
+| **[A]** Input data is a matrix containing the following variables:
+|      **[A.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[A.2]** Qualitative MCA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[A.3]** Qualitative MCA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[A.4]** Qualitative MCA Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[A.5]** Qualitative MCA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|      **[A.6]** Post-MCA Factor: <span style="color: #FF0000">Year</span>
+|      **[A.7]** Post-MCA Factor: <span style="color: #FF0000">Picture</span>
+|
+| **[B]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
+|      **[B.1]** <span style="color: #FF0000">PC1</span> = 20%
+|      **[B.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 37%
+|      **[B.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 52%
+|
+| **[C]** Due to the high number of descriptors and levels, no eigenvalue was sufficiently greater than 1. Nevertheless, all subsequent analysis was only proceeded for <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span>.
+|
+| **[D]** <span style="color: #FF0000">PC1</span> can be described as having been collectively awarded in the directing and cinematography categories, as characterized by the following descriptor variables, ranked based on contribution:
+|      **[D.1]** <span style="color: #FF0000">Directing=WON</span> = 31.74%
+|      **[D.2]** <span style="color: #FF0000">Cinematography=WON</span> = 13.58%
+|
+| **[E]** <span style="color: #FF0000">PC2</span> can be described as having been awarded in the editing category but was not nominated in the screenplay category, as characterized by the following descriptor variables, ranked based on contribution:
+|      **[E.1]** <span style="color: #FF0000">Screenplay=NNOM</span> = 29.12%
+|      **[E.2]** <span style="color: #FF0000">Editing=WON</span> = 18.01%
+|
+| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
+|      **[F.1]** The most represented descriptor variables and their corresponding levels are as follows:
+|             **[F.1.1]** <span style="color: #FF0000">Directing=WON</span>
+|             **[F.1.2]** <span style="color: #FF0000">Cinematography=WON</span>
+|             **[F.1.3]** <span style="color: #FF0000">Screenplay=NNOM</span>
+|             **[F.1.4]** <span style="color: #FF0000">Editing=WON</span>
+|      **[F.2]** Descriptor variables demonstrated correlation and clustered around two groups:
+|             **[F.2.1]** Cluster 1 (<span style="color: #FF0000">Directing=WON</span>, <span style="color: #FF0000">Cinematography=WON</span>) indicates that winning the directing award is associated with equally winning the cinematography.
+|             **[F.2.2]** Cluster 2 (<span style="color: #FF0000">Editing=WON</span>, <span style="color: #FF0000">Screenplay=NNOM</span>) indicates that winners awarded with best in editing will not be nominated for screenplay.
+|
+| **[G]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
+|      **[G.1]** Movies which won for direction also won for cinematography (e.g. Life of Pi, Gravity, Birdman or (The Unexpected Virtue of Ignorance), The Revenant, La La Land and Roma).
+|      **[G.2]** Movies which won for editing are most associated with the absence of a nomination for screenplay (e.g. Gravity, Mad Max: Fury Road, Hacksaw Ridge, Dunkirk, Bohemian Rhapsody and Ford v Ferrari).
+|
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.5.3, warning=FALSE, message=FALSE}
+##################################
+# Loading dataset
+##################################
+SD_MCA <- Oscars.MCA
+str(SD_MCA)
+
+##################################
+# Performing MCA
+##################################
+DR_MCA <- MCA(SD_MCA[,c(1:4)],
+              graph = FALSE)
+
+##################################
+# Obtaining the MCA eigenvalues
+##################################
+(DR_MCA_EV <- get_eigenvalue(DR_MCA))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_MCA_VarianceScreePlot <- fviz_eig(DR_MCA, 
+                                      addlabels = TRUE, 
+                                      ylim = c(0, 100),
+                                      choice = c("variance")) +
+  labs(title = "Multiple Correspondence Analysis : Scree Plot of Explained Variances",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_MCA_EigenvalueScreePlot <- fviz_eig(DR_MCA, 
+                                      addlabels = TRUE, 
+                                      ylim = c(0, 6),
+                                      choice = c("eigenvalue")) +
+  labs(title = "Multiple Correspondence Analysis : Scree Plot of Eigenvalues",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the MCA 
+# descriptor variable loadings
+##################################
+DR_MCA_VAR <- get_mca_var(DR_MCA)
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the descriptor variables
+##################################
+DR_MCA_VAR$coord
+
+##################################
+# Extracting the quality of representation
+# for the descriptor variables
+# on the factor map 
+##################################
+DR_MCA_VAR$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the descriptor variables
+# to the principal components
+##################################
+DR_MCA_VAR$contrib
+
+##################################
+# Extracting the quality of representation 
+# for the descriptor variables
+# on the factor map 
+##################################
+(DR_MCA_VariableSquaredCorrelationCircle <- fviz_mca_var(DR_MCA, 
+                                         col.var = "cos2", 
+                                         gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                                         legend.title = "Squared Coordinates",
+                                         repel = TRUE) +
+  labs(title = "Multiple Correspondence Analysis : Squared Coordinate Plot",
+       subtitle = "Descriptor Variable Representation Quality",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Formulating clusters of the
+# descriptor variables
+##################################
+set.seed(123)
+DR_MCA_KMEANS <- kmeans(DR_MCA_VAR$coord, centers=3, nstart=25)
+DR_MCA_KMEANS_CLUSTER <- as.factor(DR_MCA_KMEANS$cluster) 
+
+##################################
+# Extracting the correlation 
+# between the descriptor variables
+# and top principal components
+##################################
+(DR_MCA_VariableCorrelationCircle <- fviz_mca_var(DR_MCA, 
+                                         col.var = DR_MCA_KMEANS_CLUSTER, 
+                                         repel = TRUE,
+                                         palette = c("#0073C2FF", "#EFC000FF", "#868686FF"),
+                                         legend.title = "Cluster") +
+  labs(title = "Multiple Correspondence Analysis : Factorial Map of Qualitative Variables",
+       subtitle = "Principal Components Versus Descriptor Variable Clusters",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_MCA_PCVariableContributors <- fviz_contrib(DR_MCA, 
+                                 choice = "var", 
+                                 axes = 1:2) +
+  labs(title = "Multiple Correspondence Analysis : Descriptor Variable Contribution",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+DR_MCA_VariableContributionTest <- dimdesc(DR_MCA, 
+                                           axes = c(1,2), 
+                                           proba = 0.05)
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+(DR_MCA_PC1VariableContributors <- fviz_contrib(DR_MCA, 
+                                 choice = "var", 
+                                 axes = 1) +
+  labs(title = "Multiple Correspondence Analysis : Descriptor Variable Contribution",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+DR_MCA_VariableContributionTest$'Dim 1'
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+(DR_MCA_PC2VariableContributors <- fviz_contrib(DR_MCA, 
+                                 choice = "var", 
+                                 axes = 2) +
+  labs(title = "Multiple Correspondence Analysis : Descriptor Variable Contribution",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+DR_MCA_VariableContributionTest$'Dim 2'
+
+##################################
+# Extracting the MCA individual scores
+##################################
+DR_MCA_IND <- get_mca_ind(DR_MCA)
+
+##################################
+# Extracting the coordinates
+# representing the scores
+# for the individuals
+##################################
+DR_MCA_IND$coord[,c("Dim 1","Dim 2")]
+
+##################################
+# Extracting the quality of representation
+# for the individuals
+# on the factor map
+##################################
+DR_MCA_IND$cos2[,c("Dim 1","Dim 2")]
+
+##################################
+# Extracting the contributions
+# (in percentage) of the individuals
+# to the principal components
+##################################
+DR_MCA_IND$contrib[,c("Dim 1","Dim 2")]
+
+##################################
+# Extracting the correlation
+# between the individual instances
+# grouped by Picture categories
+# and top principal components
+##################################
+(DR_MCA_IndividualCorrelationCircleByPicture <- fviz_mca_ind(DR_MCA,
+             geom.ind = "text",
+             col.ind = SD_MCA$Picture,
+             palette = c("#888888","#5544FF"),
+             repel = TRUE,
+             legend.title = "Picture",
+              addEllipses = FALSE) +
+  labs(title = "Multiple Correspondence Analysis : Factorial Map of Individuals",
+       subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the correlation
+# between the individual instances
+# grouped by Year categories
+# and top principal components
+##################################
+(DR_MCA_IndividualCorrelationCircleByYear <- fviz_mca_ind(DR_MCA,
+             geom.ind = "text",
+             col.ind = SD_MCA$Year,
+             repel = TRUE,
+             legend.title = "Year",
+              addEllipses = FALSE) +
+  labs(title = "Multiple Correspondence Analysis : Factorial Map of Individuals",
+       subtitle = "Principal Components Versus Individuals Grouped by Picture Categories",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the contribution
+# of the descriptor variables
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_MCA_PCIndividualContributors <- fviz_contrib(DR_MCA,
+              choice = "ind",
+              axes = 1:2,
+              top = 10) +
+  labs(title = "Multiple Correspondence Analysis : Individual Contribution",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+(DR_MCA_PC1IndividualContributors <- fviz_contrib(DR_MCA,
+              choice = "ind",
+              axes = 1,
+              top = 10) +
+  labs(title = "Multiple Correspondence Analysis : Individual Contribution",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Extracting the contribution
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+(DR_MCA_PC2IndividualContributors <- fviz_contrib(DR_MCA,
+              choice = "ind",
+              axes = 2,
+              top = 10) +
+  labs(title = "Multiple Correspondence Analysis : Individual Contribution",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Formulating the Biplot
+# using the individual scores
+# and descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+(DR_MCA_Biplot <- fviz_mca_biplot(DR_MCA,
+              label = c("var","ind"),
+              repel = TRUE,
+              habillage = SD_MCA$Picture,
+              palette = c("#888888","#5544FF"),
+              col.var = "#FF5050",
+              legend.title = "Picture",
+              addEllipses = FALSE) +
+  labs(title = "Multiple Correspondence Analysis : Biplot",
+       subtitle = "Individual Scores versus Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+```
+
+</details>
+
+###  1.5.4 Multiple Factor Analysis (MFA)
+|
+| [Multiple Factor Analysis](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) evaluates several groups of variables simultaneously, and to obtain results, in particular, charts, that allow studying the relationship between the observations, the variables, and groups. Within a group, the variables must be of the same type (quantitative table, qualitative table or frequency table), but the groups can be of different types. The method is a synthesis of the PCA (Principal Component Analysis) for quantitative tables, the MCA (Multiple Correspondence Analysis) for qualitative tables and the CA (Correspondence Analysis) for frequency tables. The process involves successively carrying out for each table a PCA, an MCA or a CA according to the type of the variables of the table. The method stores the value of the first eigenvalue of each analysis to then weight the various tables in the second part of the analysis. A weighted PCA is carried out a  on the columns of all the tables, knowing that the tables of qualitative variables are transformed into complete disjunctive tables, each indicator variable having a weight that is a function of the frequency of the corresponding category. The weighting of the tables prevents that the tables which include more variables weight too much in the analysis. The method allows visualization in a two or three-dimensional space, the groups (each group being represented by a point), the variables, the principal axes of the analyses of the first phase, and the individuals. In addition, one can study the impact of the other tables on an observation by simultaneously visualizing the observation described by all the variables and the projected observations described by the variables of only one group.
+|
+| **[A]** Input data is a matrix with the following groups and variables:
+|      **[A.1]** Row Labels: <span style="color: #FF0000">Film</span>
+|      **[A.2]** MFA Descriptor Group: <span style="color: #FF0000">Recognitions</span>
+|             **[A.2.1]** Quantitative MFA Descriptor: <span style="color: #FF0000">Nominations_Total</span>
+|             **[A.2.2]** Quantitative MFA Descriptor: <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[A.3]** MFA Descriptor Group: <span style="color: #FF0000">Technicalities</span>
+|             **[A.3.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Picture</span>
+|             **[A.3.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Cinematography</span>
+|             **[A.3.3]** Qualitative MFA Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[A.4]** MFA Descriptor Group : <span style="color: #FF0000">Storytelling</span>
+|             **[A.4.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Editing</span>
+|             **[A.4.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Screenplay</span>
+|             **[A.4.3]** Qualitative MFA Descriptor: <span style="color: #FF0000">Acting</span>
+|      **[A.5]** MFA Descriptor Group : <span style="color: #FF0000">Aesthetics</span>
+|             **[A.5.1]** Qualitative MFA Descriptor: <span style="color: #FF0000">Design</span>
+|             **[A.5.2]** Qualitative MFA Descriptor: <span style="color: #FF0000">Sound</span>
+|
+| **[B]** Among the assigned group of descriptor variables, relationships observed are as follows:
+|      **[B.1]** Association between two groups of descriptors were noted = <span style="color: #FF0000">Group=Technicalities</span> comprised of <span style="color: #FF0000">Picture</span>, <span style="color: #FF0000">Cinematography</span> and <span style="color: #FF0000">Directing</span>; and <span style="color: #FF0000">Group=Aesthetics</span> comprised of <span style="color: #FF0000">Design</span> and <span style="color: #FF0000">Sound</span>.
+|      **[B.2]** <span style="color: #FF0000">Group=Recognitions</span> comprised of <span style="color: #FF0000">Nominations_Total</span> and <span style="color: #FF0000">Nomination_SuccessRate</span> was not associated with other groups.
+|      **[B.3]** <span style="color: #FF0000">Group=Storytelling</span> comprised of <span style="color: #FF0000">Editing</span>, <span style="color: #FF0000">Acting</span>and <span style="color: #FF0000">Screenplay</span> was not associated with other groups.
+|
+| **[C]** <span style="color: #FF0000">PC1</span> can be described as having been collectively awarded in all categories, as characterized by the following descriptor variables:
+|      **[C.1]** High <span style="color: #FF0000">Nomination_SuccessRate</span>
+|      **[C.2]** High <span style="color: #FF0000">Nominations_Total</span>
+|      **[C.3]** <span style="color: #FF0000">Picture=WON</span>
+|      **[C.4]** <span style="color: #FF0000">Editing=WON</span>
+|      **[C.5]** <span style="color: #FF0000">Sound=WON</span>
+|      **[C.6]** <span style="color: #FF0000">Directing=WON</span>
+|      **[C.7]** <span style="color: #FF0000">Cinematography=WON</span>
+|      **[C.7]** <span style="color: #FF0000">Design=WON</span>
+|
+| **[D]** <span style="color: #FF0000">PC2</span> can be described as having won best picture as well as editing and sound awards, but with a few number of nominations but won directing, cinematography and design awards, as characterized by the following descriptor variables:
+|      **[D.1]** High <span style="color: #FF0000">Nomination_SuccessRate</span> with:
+|             **[D.1.1]** <span style="color: #FF0000">Picture=WON</span>
+|             **[D.1.2]** <span style="color: #FF0000">Editing=WON</span>
+|             **[D.1.3]** <span style="color: #FF0000">Sound=WON</span>
+|      **[D.2]** Low <span style="color: #FF0000">Nominations_Total</span> with:
+|             **[D.2.1]** <span style="color: #FF0000">Directing=WON</span>
+|             **[D.2.2]** <span style="color: #FF0000">Cinematography=WON</span>
+|             **[D.2.3]** <span style="color: #FF0000">Design=WON</span>
+|
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.5.4, warning=FALSE, message=FALSE}
+
+##################################
+# Loading dataset
+##################################
+SD_MFA <- Oscars.MFA
+str(SD_MFA)
+
+##################################
+# Performing MFA
+##################################
+DR_MFA <- MFA(SD_MFA[,c(1:10)],
+              group=c(2,3,3,2),
+              type =c("s","n","n","n"),
+              name.group = c("Recognitions","Technicalities","Storytelling","Aesthetics"),
+              graph = FALSE)
+
+##################################
+# Obtaining the MFA eigenvalues
+##################################
+(DR_MFA_EV <- get_eigenvalue(DR_MFA))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_MFA_VarianceScreePlot <- fviz_eig(DR_MFA,
+                                      addlabels = TRUE,
+                                      ylim = c(0, 100),
+                                      choice = c("variance")) +
+  labs(title = "Multiple Factor Analysis : Scree Plot of Explained Variances",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_MFA_EigenvalueScreePlot <- fviz_eig(DR_MFA,
+                                      addlabels = TRUE,
+                                      ylim = c(0, 6),
+                                      choice = c("eigenvalue")) +
+  labs(title = "Multiple Factor Analysis : Scree Plot of Eigenvalues",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the MFA 
+# descriptor variable loadings
+##################################
+DR_MFA_VAR <- get_mfa_var(DR_MFA)
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the descriptor variables
+##################################
+DR_MFA_VAR$coord
+
+##################################
+# Extracting the quality of representation
+# for the descriptor variables
+# on the factor map 
+##################################
+DR_MFA_VAR$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the descriptor variables
+# to the principal components
+##################################
+DR_MFA_VAR$contrib
+
+##################################
+# Extracting the dimensions
+# for the descriptor variables
+# on the factor map 
+##################################
+(DR_MFA_VariableGroups <- fviz_mfa_var(DR_MFA, 
+                                       choice = "group",
+                                       repel = TRUE) +
+  labs(title = "Multiple Factor Analysis : Factorial Map of Variable Groups",
+       subtitle = "Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the dimensions
+# for the qunatitative descriptor variables
+# on the factor map 
+##################################
+(DR_MFA_QuantitativeVariableGroups <- fviz_mfa_var(DR_MFA, 
+                                       choice = "quanti.var") +
+  labs(title = "Multiple Factor Analysis : Correlation Plot of Quantitative Variables",
+       subtitle = "Quantitative Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Graphing the individual instances
+# from qualitative descriptor variables
+# on the factor map 
+##################################
+(DR_MFA_QualitativeIndividualGroups <- fviz_mfa_ind(DR_MFA, 
+                                       partial = "all",
+                                       geom = "text",
+                                       repel = TRUE,
+                                       habillage = SD_MFA$Picture, 
+                                       palette = c("#888888","#5544FF"),
+                                       legend.title = "Picture") +
+  labs(title = "Multiple Factor Analysis : Factorial Map of Individuals",
+       subtitle = "Qualitative Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the dimensions
+# for the qualitative descriptor variables
+# on the factor map 
+##################################
+(DR_MFA_QualitativeVariableGroups <- fviz_mfa_var(DR_MFA, 
+                                       choice = "quali.var",
+                                       geom = "text") +
+  labs(title = "Multiple Factor Analysis : Factorial Map of Qualitative Variables",
+       subtitle = "Qualitative Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Formulating the Biplot
+# using the individual scores
+# and qualitative descriptor variable loadings
+# for the Top 1 and Top 2 principal components
+##################################
+Picture <- as.factor(SD_MFA[,"Picture"])
+(DR_MCA_QualitativeBiplot <- fviz_mfa_quali_biplot(DR_MFA,
+                                                   repel = TRUE,
+                                                   geom = "text",
+                                                   habillage = Picture,
+                                                   palette = c("#888888","#5544FF"),
+                                                   col.var = "#FF5050",
+                                                   legend.title = "Picture") +
+  labs(title = "Multiple Factor Analysis : Biplot",
+       subtitle = "Individual Scores versus Qualitative Descriptor Variable Loadings",
+       x = "Principal Component 1",
+       y = "Principal Component 2") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+```
+
+</details>
+
+###  1.5.5 Factor Analysis of Mixed Data (FAMD)
+|
+| [Factor Analysis of Mixed Data](http://archive.numdam.org/item/RSA_2004__52_4_93_0/) reduces data dimensionality to identify nearness between both quantitative and qualitative variables, as well as the proximity between the observations by combining the Principal Component Analysis (PCA) and Multiple Correspondence Analysis (MCA). The method employs a series of statistical transformations, including calculations of the correlation matrix, eigenvalues and eigenvectors, on a set of qualitative and/or quantitative variables in order to project them on a vector space generated by orthogonal components.
+|
+| **[A]** Input data is a matrix with the following variables:
+|      **[A.1]** Row Labels : <span style="color: #FF0000">Film</span>
+|      **[A.2]** Quantitative FAMD Descriptor: <span style="color: #FF0000">Tomatometer_Critic</span>
+|      **[A.3]** Quantitative FAMD Descriptor: <span style="color: #FF0000">Tomatometer_Audience</span>
+|      **[A.4]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Picture</span>
+|      **[A.5]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Cinematography</span>
+|      **[A.6]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Directing</span>
+|      **[A.7]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Editing</span>
+|      **[A.8]** Qualitative FAMD Descriptor: <span style="color: #FF0000">Screenplay</span>
+|
+| **[B]** The percentage contributions for each principal component derived from the analysis in explaining the variance in the dataset are given as follows:
+|      **[B.1]** <span style="color: #FF0000">PC1</span> = 54%
+|      **[B.2]** Combined <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> = 82%
+|      **[B.3]** Combined <span style="color: #FF0000">PC1</span>, <span style="color: #FF0000">PC2</span> and <span style="color: #FF0000">PC3</span> = 100%
+| 
+| **[C]** With eigenvalues sufficiently greater than 1, only <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> were used in the subsequent exploratory analysis.
+|      **[C.1]** <span style="color: #FF0000">PC1</span> = 1.60
+|      **[C.2]** <span style="color: #FF0000">PC2</span> = 1.00
+|
+| **[D]** <span style="color: #FF0000">PC1</span> can be described as having a higher number of awards won including best picture, as characterized by the following descriptor variables, ranked based on contribution and statistical significance:
+|      **[D.1]** <span style="color: #FF0000">Picture=WON</span> = 40.90%
+|      **[D.2]** High <span style="color: #FF0000">Nomination_SuccessRate</span> = 40.01%
+| 
+| **[E]** <span style="color: #FF0000">PC2</span> can be described a high number of oscar nominations, as characterized by the following descriptor variables, ranked based on importance and statistical significance:
+|      **[E.1]** High <span style="color: #FF0000">Nominations_Total</span> = 80.81%
+|
+| **[F]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among descriptor variables:
+|      **[F.1]** All descriptor variables were well-represented for both principal components.
+|             **[F.1.1]** <span style="color: #FF0000">Picture</span>
+|             **[F.1.2]** <span style="color: #FF0000">Nomination_SuccessRate</span>
+|             **[F.1.3]** <span style="color: #FF0000">Nominations_Total</span>
+|      **[F.2]** Descriptor variables demonstrated correlation and clustered around two groups:
+|             **[F.2.1]** Cluster 1 (<span style="color: #FF0000">Picture</span>, <span style="color: #FF0000">Nomination_SuccessRate</span>) indicates that best picture winners also won most awards.
+|             **[F.2.2]** Cluster 2 (<span style="color: #FF0000">Nominations_Total</span>) indicates that best picture nominees can have a high number of nominations without actually winning most awards including best picture.
+|
+| **[G]** With both <span style="color: #FF0000">PC1</span> and <span style="color: #FF0000">PC2</span> considered,the following relationships were observed among individual instances:
+|      **[G.1]** Best picture winners are also associated with winning for best screenplay (e.g. The Hurt Locker, The King's Speech, Argo, 12 Years a Slave, Birdman or (The Unexpected Virtue of Ignorance), Spotlight, Moonlight, Green Book, Parasite, CODA, Everything Everywhere All at Once).
+|      **[G.2]** Best picture winners are also associated with winning for best directing (e.g. The Hurt Locker, The King's Speech, The Artist, Birdman or (The Unexpected Virtue of Ignorance), The Shape of Water, Parasite, Nomadland, Everything Everywhere All at Once).
+|      **[G.3]** Best picture winners are not readily associated with winning for best editing or cinematography. 
+|
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.5.5, warning=FALSE, message=FALSE}
+##################################
+# Loading dataset
+##################################
+SD_FAMD <- Oscars.FAMD
+str(SD_FAMD)
+
+##################################
+# Performing FAMD
+##################################
+DR_FAMD <- FAMD(SD_FAMD[,c(1:3)],
+              graph = FALSE)
+
+##################################
+# Obtaining the FAMD eigenvalues
+##################################
+(DR_FAMD_EV <- get_eigenvalue(DR_FAMD))
+
+##################################
+# Formulating the Scree Plot
+# for the variances
+##################################
+(DR_FAMD_VarianceScreePlot <- fviz_eig(DR_FAMD,
+                                      addlabels = TRUE,
+                                      ylim = c(0, 100),
+                                      choice = c("variance")) +
+  labs(title = "Factor Analysis of Mixed Data : Scree Plot of Explained Variances",
+       subtitle = "Top 2 Principal Components",
+       y = "Percentage of Explained Variances",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Formulating the Scree Plot
+# for the eigenvalues
+##################################
+(DR_FAMD_EigenvalueScreePlot <- fviz_eig(DR_FAMD,
+                                      addlabels = TRUE,
+                                      ylim = c(0, 6),
+                                      choice = c("eigenvalue")) +
+  labs(title = "Factor Analysis of Mixed Data : Scree Plot of Eigenvalues",
+       subtitle = "Top 2 Principal Components",
+       y = "Eigenvalues",
+       x = "Principal Components") +
+  theme_classic())
+
+##################################
+# Extracting the FAMD 
+# descriptor variable loadings
+##################################
+DR_FAMD_VAR <- get_famd_var(DR_FAMD)
+
+##################################
+# Extracting the coordinates
+# representing the loadings
+# for the descriptor variables
+##################################
+DR_FAMD_VAR$coord
+
+##################################
+# Extracting the quality of representation
+# for the descriptor variables
+# on the factor map 
+##################################
+DR_FAMD_VAR$cos2
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the descriptor variables
+# to the principal components
+##################################
+DR_FAMD_VAR$contrib
+
+##################################
+# Extracting the quality of representation 
+# for the descriptor variables
+# on the factor map 
+##################################
+(DR_FAMD_VariableSquaredCorrelationCircle <- fviz_famd_var(DR_FAMD, 
+                                         col.var = "cos2", 
+                                         gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                                         legend.title = "Squared Coordinates",
+                                         repel = TRUE) +
+  labs(title = "Factor Analysis of Mixed Data : Squared Coordinate Plot",
+       subtitle = "Descriptor Variable Representation Quality",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Formulating clusters of the
+# descriptor variables
+##################################
+set.seed(123)
+DR_FAMD_KMEANS <- kmeans(DR_FAMD_VAR$coord, centers=2, nstart=25)
+DR_FAMD_KMEANS_CLUSTER <- as.factor(DR_FAMD_KMEANS$cluster) 
+
+##################################
+# Extracting the correlation 
+# between the descriptor variables
+# and top principal components
+##################################
+(DR_FAMD_VariableCorrelationCircle <- fviz_famd_var(DR_FAMD, 
+                                         col.var = DR_FAMD_KMEANS_CLUSTER, 
+                                         palette = c("#0073C2FF", 
+                                                     "#EFC000FF"),
+                                         legend.title = "Cluster",
+                                         repel = TRUE) +
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Quantitative and Qualitative Variables",
+       subtitle = "Principal Components Versus Descriptor Variable Clusters",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+(DR_FAMD_PCVariableContributors <- fviz_contrib(DR_FAMD, 
+                                 choice = "var", 
+                                 axes = 1:2) +
+  labs(title = "Factor Analysis of Mixed Data : Descriptor Variable Contribution",
+       subtitle = "Principal Components 1 and 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the the Top 1 and 2 principal components
+##################################
+DR_FAMD_VariableContributionTest <- dimdesc(DR_FAMD, 
+                                           axes = c(1,2), 
+                                           proba = 0.05)
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+(DR_FAMD_PC1VariableContributors <- fviz_contrib(DR_FAMD, 
+                                 choice = "var", 
+                                 axes = 1) +
+  labs(title = "Factor Analysis of Mixed Data : Descriptor Variable Contribution",
+       subtitle = "Principal Component 1 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the Top 1 principal component
+##################################
+DR_FAMD_VariableContributionTest$Dim.1
+
+##################################
+# Extracting the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+(DR_FAMD_PC2VariableContributors <- fviz_contrib(DR_FAMD, 
+                                 choice = "var", 
+                                 axes = 2) +
+  labs(title = "Factor Analysis of Mixed Data : Descriptor Variable Contribution",
+       subtitle = "Principal Component 2 Contributors",
+       x = "Descriptors") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90,hjust = 1)))
+
+##################################
+# Testing the statistical significance
+# of the contribution 
+# of the descriptor variables
+# for the Top 2 principal component
+##################################
+DR_FAMD_VariableContributionTest$Dim.2
+
+##################################
+# Extracting the FAMD individual scores
+##################################
+DR_FAMD_IND <- get_famd_ind(DR_FAMD)
+
+##################################
+# Extracting the coordinates
+# representing the scores
+# for the individuals
+##################################
+DR_FAMD_IND$coord[,c("Dim.1","Dim.2")]
+
+##################################
+# Extracting the quality of representation
+# for the individuals
+# on the factor map 
+##################################
+DR_FAMD_IND$cos2[,c("Dim.1","Dim.2")]
+
+##################################
+# Extracting the contributions 
+# (in percentage) of the individuals
+# to the principal components
+##################################
+DR_FAMD_IND$contrib[,c("Dim.1","Dim.2")]
+
+##################################
+# Extracting the correlation 
+# between the individual instances
+# and top principal components
+# for the qualitative descriptor variable
+##################################
+(DR_FAMD_IndividualFAMDGraphQualitativeVariable <- fviz_famd_ind(DR_FAMD,
+             geom.ind = "text",
+             col.ind = SD_FAMD$Cinematography,
+             palette = c("#888888","#5544FF","#F18EDE"),
+             repel = TRUE, 
+             col.quali.var = "#FF0000",
+             legend.title = "Cinematography",
+             addEllipses = FALSE) +
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Individuals (Cinematography)",
+       subtitle = "Individuals by Qualitative Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+(DR_FAMD_IndividualFAMDGraphQualitativeVariable <- fviz_famd_ind(DR_FAMD,
+             geom.ind = "text",
+             col.ind = SD_FAMD$Directing,
+             palette = c("#888888","#5544FF","#F18EDE"),
+             repel = TRUE, 
+             col.quali.var = "#FF0000",
+             legend.title = "Directing",
+             addEllipses = FALSE) +
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Individuals (Directing)",
+       subtitle = "Individuals by Qualitative Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+(DR_FAMD_IndividualFAMDGraphQualitativeVariable <- fviz_famd_ind(DR_FAMD,
+             geom.ind = "text",
+             col.ind = SD_FAMD$Editing,
+             palette = c("#888888","#5544FF","#F18EDE"),
+             repel = TRUE, 
+             col.quali.var = "#FF0000",
+             legend.title = "Editing",
+             addEllipses = FALSE) +
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Individuals (Editing)",
+       subtitle = "Individuals by Qualitative Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+(DR_FAMD_IndividualFAMDGraphQualitativeVariable <- fviz_famd_ind(DR_FAMD,
+             geom.ind = "text",
+             col.ind = SD_FAMD$Screenplay,
+             palette = c("#888888","#5544FF","#F18EDE"),
+             repel = TRUE, 
+             col.quali.var = "#FF0000",
+             legend.title = "Screenplay",
+             addEllipses = FALSE) +
+  labs(title = "Factor Analysis of Mixed Data : Factorial Map of Individuals (Screenplay)",
+       subtitle = "Individuals by Qualitative Descriptor Variable Principal Components",
+       y = "Principal Component 2",
+       x = "Principal Component 1") +
+  theme_classic() +
+  theme(legend.position="top"))
+
+```
+
+</details>
+
+##  1.6 Consolidated Findings
+|
+| **[A]** The dimensionality algorithms from the <mark style="background-color: #CCECFF">**factoextra**</mark>, <mark style="background-color: #CCECFF">**stats**</mark> and <mark style="background-color: #CCECFF">**FactoMineR**</mark> packages all address the common objective of reducing the number of features in a data set while retaining as much information as possible from the original variables for purposes of lessening the complexity of the model, improving the performance of the learning algorithm or for formulating a more intuitive visualization of the data. However, each method utilize different forms of data input and thus generate varying types of visualization results :
+|      **[A.1]** **PCA: Principal Component Analysis**
+|             **[A.1.1]** Descriptors : Matrix of quantitative variables
+|      **[A.2]** **CA: Correspondence Analysis**
+|             **[A.2.1]** Descriptors : Contingency table of qualitative variables
+|      **[A.3]** **MCA: Multiple Correspondence Analysis**
+|             **[A.3.1]** Descriptors : Matrix of qualitative variables
+|      **[A.4]** **MFA: Multiple Factor Analysis**
+|             **[A.4.1]** Descriptors : Matrix of quantitative and qualitative variables with inherent groupings among variables of the same type
+|      **[A.5]** **FAMD: Factor Analysis of Mixed Data**
+|             **[A.5.1]** Descriptors : Matrix of quantitative and qualitative variables
+|      **[A.6]** The most important charts for analysis include the following:
+|             **[A.6.1]** **Correlation Plot** : Describes the importance and association among quantitative descriptors
+|             **[A.6.2]** **Factorial Map** : Describes the importance and association among qualitative descriptors, as well as among groups of qualitative predictors, or between qualitative and quantitative descriptors or among levels of qualitative descriptors, as applicable
+|             **[A.6.3]** **Biplot** : Describes the importance and association among individuals and descriptors
+|             **[A.6.4]** **Symmetric/Asymmetric Biplot** : Describes the importance and association among levels of qualitative descriptors
+|
+|
+
+<details><summary><mark style="background-color: #000000;color: #FFFFFF">**Code Chunk | Output**</mark></summary>
+
+```{r section_1.6, warning=FALSE, message=FALSE, dev='png'}
+
+##################################
+# Gathering all factorial maps
+# and biplots for each individual method
+# used in the analysis
+##################################
+grid.arrange(DR_PCA_VariableCorrelationCircle, 
+             DR_MCA_VariableCorrelationCircle,
+             DR_MFA_VariableGroups,
+             DR_FAMD_VariableCorrelationCircle,
+             ncol = 2)
+
+grid.arrange(DR_CA_SymmetricBiplot_Cinematography,
+             DR_CA_SymmetricBiplot_Directing,
+             DR_CA_SymmetricBiplot_Editing,
+             DR_CA_SymmetricBiplot_Screenplay,
+             ncol = 2)
+
+```
+
+</details>
+|
+# **2. Summary** <a name="summary"></a>
+|
+| ![](D:/Github_Codes/ProjectPortfolio/Portfolio_Project_33/docs/Project33_Summary.png)
+|
+# **3. References**
+|
+| **[Book]** [Multiple Factor Analysis by Example Using R](https://www.oreilly.com/library/view/multiple-factor-analysis/9781498786690/) by Jerome Pages
+| **[Book]** [Nonlinear Principal Component Analysis and Its Applications](https://link.springer.com/book/10.1007/978-981-10-0159-8#toc) by Yuichi Mori, Masahiro Kuroda and Naomichi Makino
+| **[Book]** [Applied Predictive Modeling](http://appliedpredictivemodeling.com/) by Max Kuhn and Kjell Johnson
+| **[Book]** [An Introduction to Statistical Learning](https://www.statlearning.com/) by Gareth James, Daniela Witten, Trevor Hastie and Rob Tibshirani
+| **[Book]** [Multivariate Data Visualization with R](http://lmdvr.r-forge.r-project.org/figures/figures.html) by Deepayan Sarkar
+| **[Book]** [Machine Learning](https://bookdown.org/ssjackson300/Machine-Learning-Lecture-Notes/) by Samuel Jackson
+| **[Book]** [Data Modeling Methods](https://bookdown.org/larget_jacob/data-modeling-methods/) by Jacob Larget
+| **[Book]** [Introduction to R and Statistics](https://saestatsteaching.tech/) by University of Western Australia
+| **[Book]** [Feature Engineering and Selection: A Practical Approach for Predictive Models](http://www.feat.engineering/index.html) by Max Kuhn and Kjell Johnson
+| **[Book]** [Introduction to Research Methods](https://bookdown.org/ejvanholm/Textbook/) by Eric van Holm
+| **[R Package]** [AppliedPredictiveModeling](https://cran.r-project.org/web//packages/AppliedPredictiveModeling/AppliedPredictiveModeling.pdf) by Max Kuhn
+| **[R Package]** [caret](https://topepo.github.io/caret/index.html) by Max Kuhn
+| **[R Package]** [rpart](https://mran.microsoft.com/web/packages/rpart/rpart.pdf) by Terry Therneau and Beth Atkinson
+| **[R Package]** [lattice](https://cran.r-project.org/web/packages/lattice/lattice.pdf) by  Deepayan Sarkar
+| **[R Package]** [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html/) by Hadley Wickham
+| **[R Package]** [moments](https://cran.r-project.org/web/packages/moments/index.html) by Lukasz Komsta and Frederick
+| **[R Package]** [skimr](https://cran.r-project.org/web/packages/skimr/skimr.pdf) by  Elin Waring
+| **[R Package]** [RANN](https://cran.r-project.org/web/packages/RANN/RANN.pdf) by  Sunil Arya, David Mount, Samuel Kemp and Gregory Jefferis
+| **[R Package]** [corrplot](https://cran.r-project.org/web/packages/corrplot/corrplot.pdf) by Taiyun Wei
+| **[R Package]** [tidyverse](https://cran.r-project.org/web/packages/tidyverse/tidyverse.pdf) by Hadley Wickham
+| **[R Package]** [lares](https://cran.rstudio.com/web/packages/lares/lares.pdf) by Bernardo Lares
+| **[R Package]** [DMwR](https://mran.microsoft.com/snapshot/2016-05-02/web/packages/DMwR/DMwR.pdf) by Luis Torgo
+| **[R Package]** [gridExtra](https://cran.r-project.org/web/packages/gridExtra/gridExtra.pdf) by Baptiste Auguie and Anton Antonov
+| **[R Package]** [rattle](https://cran.r-project.org/web/packages/rattle/rattle.pdf) by Graham Williams
+| **[R Package]** [RColorBrewer](https://cran.r-project.org/web//packages/RColorBrewer/RColorBrewer.pdf) by Erich Neuwirth
+| **[R Package]** [stats](https://search.r-project.org/R/refmans/stats/html/00Index.html) by R Core Team
+| **[R Package]** [factoextra](https://cran.r-project.org/web/packages/factoextra/factoextra.pdf) by Alboukadel Kassambara and Fabian Mundt
+| **[R Package]** [FactoMineR](https://search.r-project.org/R/refmans/stats/html/00Index.html) by Francois Husson, Julie Josse, Sebastien Le and Jeremy Mazet
+| **[Article]** [6 Dimensionality Reduction Techniques in R (with Examples)](https://cmdlinetips.com/2022/07/dimensionality-reduction-techniques-in-r/) by CMDLineTips Team
+| **[Article]** [6 Dimensionality Reduction Algorithms With Python](https://machinelearningmastery.com/dimensionality-reduction-algorithms-with-python/) by Jason Brownlee
+| **[Article]** [Introduction to Dimensionality Reduction for Machine Learning](https://machinelearningmastery.com/dimensionality-reduction-for-machine-learning/) by Jason Brownlee
+| **[Article]** [Introduction to Dimensionality Reduction](https://www.geeksforgeeks.org/dimensionality-reduction/) by Geeks For Geeks
+| **[Article]** [Principal Component Analysis for Dimensionality Reduction in Python](https://machinelearningmastery.com/principal-components-analysis-for-dimensionality-reduction-in-python/) by Jason Brownlee
+| **[Article]** [Principal Component Analysis Explained Simply](https://blog.bioturing.com/2018/06/14/principal-component-analysis-explained-simply/) by Linh Ngo
+| **[Article]** [A Step-by-Step Explanation of Principal Component Analysis (PCA)](https://builtin.com/data-science/step-step-explanation-principal-component-analysis) by Zakaria Jaadi
+| **[Article]** [What Is Principal Component Analysis (PCA) and How It Is Used?](https://www.sartorius.com/en/knowledge/science-snippets/what-is-principal-component-analysis-pca-and-how-it-is-used-507186) by Sartorius Team
+| **[Article]** [Principal Components Analysis](https://online.stat.psu.edu/stat508/book/export/html/639) by Penn State Eberly College of Science
+| **[Article]** [Principal Component Analysis – How PCA Algorithms Works, The Concept, Math and Implementation](https://www.machinelearningplus.com/machine-learning/principal-components-analysis-pca-better-explained/) by Selva Prabhakaran
+| **[Article]** [How Correspondence Analysis Works (A Simple Explanation)](https://www.displayr.com/how-correspondence-analysis-works/) by Tim Bock
+| **[Article]** [Understanding Correspondence Analysis: A Comprehensive Guide for 2023](https://www.displayr.com/understanding-correspondence-analysis-a-comprehensive-guide/) by Matilda Sarah
+| **[Article]** [Correspondence Analysis: What is it, and how can I use it to measure my Brand? (Part 1 of 2)](https://www.qualtrics.com/eng/correspondence-analysis-what-is-it-and-how-can-i-use-it-to-measure-my-brand-part-1-of-2/) by Qualtrics Team
+| **[Article]** [Correspondence Analysis: What is it, and how can I use it to measure my Brand? (Part 2 of 2)](https://www.qualtrics.com/eng/correspondence-analysis-what-is-it-and-how-can-i-use-it-to-measure-my-brand-part-2-of-2/) by Qualtrics Team
+| **[Article]** [Correspondence Analysis Explained](https://everything.explained.today/Correspondence_analysis/) by Everything Explained Today Team
+| **[Article]** [Correspondence Analysis](https://www.ibm.com/docs/en/spss-statistics/28.0.0?topic=edition-correspondence-analysis) by IBM Team
+| **[Article]** [Understanding and Applying Correspondence Analysis](https://www.infoq.com/articles/knime-correspondence-analysis/) by Maarit Widmann and Alfredo Roccato
+| **[Article]** [Correspondence Analysis](https://www.ibm.com/docs/en/spss-statistics/28.0.0?topic=edition-correspondence-analysis) by IBM Team
+| **[Article]** [Multiple Correspondence Analysis (MCA)](https://www.xlstat.com/en/solutions/features/multiple-correspondence-analysis-mca) by XLSTAT Team
+| **[Article]** [Multiple Correspondence Analysis](https://www.ibm.com/docs/en/spss-statistics/25.0.0?topic=application-multiple-correspondence-analysis) by IBM Team
+| **[Article]** [Multiple Factor Analysis (MFA)](https://www.xlstat.com/en/solutions/features/multiple-factor-analysis-mfa) by XLSTAT Team
+| **[Article]** [FAMD - Factor Analysis of Mixed Data in R: Essentials](http://sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/115-famd-factor-analysis-of-mixed-data-in-r-essentials/) by Alboukadel Kassambara
+| **[Article]** [Factor Analysis of Mixed Data Explained](https://everything.explained.today/Factor_analysis_of_mixed_data/) by Everything Explained Today Team
+| **[Article]** [Factor Analysis of Mixed Data](https://rpubs.com/nchelaru/famd) by Nancy Chelaru
+| **[Article]** [Factorial Analysis of Mixed Data](https://www.xlstat.com/en/solutions/features/factorial-analysis-of-mixed-data) by XLSTAT Team
+| **[Article]** [Factor Analysis of Mixed Data](https://medium.com/m/global-identity-2?redirectUrl=https%3A%2F%2Ftowardsdatascience.com%2Ffactor-analysis-of-mixed-data-5ad5ce98663c) by Sohel Mahmood
+| **[Article]** [FAMD: How To Generalize PCA to Categorical and Numerical Data](https://www.xlstat.com/en/solutions/features/factorial-analysis-of-mixed-data) by William Blaufuks
+| **[Publication]** [Analysis of a Complex of Statistical Variables into Principal Components](https://psycnet.apa.org/doiLanding?doi=10.1037%2Fh0071325) by Harold Hotelling (Journal of Educational Psychology)
+| **[Publication]** [A Connection between Correlation and Contingency](https://www.cambridge.org/core/journals/mathematical-proceedings-of-the-cambridge-philosophical-society/article/abs/connection-between-correlation-and-contingency/D3A75249B56AF5DDC436938F1B6EABD1) by Herman Hartley Hirschfeld (Mathematical Proceedings of the Cambridge Philosophical Society)
+| **[Publication]** [Mixed Data for Factor Analysis](http://archive.numdam.org/item/RSA_2004__52_4_93_0/) by Jerome Pages (Journal of Applied Statistics)
+| **[Course]** [Applied Data Mining and Statistical Learning](https://online.stat.psu.edu/stat508/) by Penn State Eberly College of Science
+|
+|
+|
+|
